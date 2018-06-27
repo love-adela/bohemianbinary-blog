@@ -21,3 +21,4 @@ for tr in table.find_all('tr'):
         low_price = tds[3].text
         close_price = tds[4].text
         data.append([date, open_price, high_price, low_price, close_price])
+
