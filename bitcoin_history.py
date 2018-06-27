@@ -19,7 +19,15 @@ for tr in table.find_all('tr'):
     high_price = tds[2].text
     low_price = tds[3].text
     close_price = tds[4].text
-    data.append([date, open_price, high_price, low_price, close_price])
+    db.add(date, open_price, high_price, low_price, close_price)
 
+db.commit()
+#    data.append([date, open_price, high_price, low_price, close_price])
+
+'''
 print(data)
-#db.save(data)
+data[0][0]
+print(data[0][0])
+
+'''
+# db.save(data)
