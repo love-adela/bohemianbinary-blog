@@ -6,7 +6,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 dbuser = 'root'
 dbpass = 'root'
 dbhost = 'localhost'
-dbname = 'scrapyspiders'
+dbname = 'spiders'
 
 engine = create_engine('sqlite:///history.db' % (dbuser, dbpass, dbhost, dbname), echo=False, pool_recycle=1800)
 
