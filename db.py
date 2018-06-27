@@ -30,6 +30,11 @@ class History(Base):
         return "<History(date='%s', open_price ='%f', high_price='%f', low_price='%f', close_price='%f')>" % (
             self.date, self.open_price, self.high_price, self.low_price, self.close_price)
 
+
+def save(date, open_price, high_price, low_price, close_price):
+    h1 = History(date=date, open_price=open_price, high_price=high_price, low_price=low_price, close_price=close_price)
+    session.add(h1)
+
 '''
 print(repr(History.__table__))
 print(repr(History.__mapper__))
