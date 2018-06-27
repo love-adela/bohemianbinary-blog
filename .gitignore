@@ -71,6 +71,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+bitcoin_history.ipynb
 
 # pyenv
 .python-version
@@ -85,7 +86,7 @@ celerybeat-schedule
 .env
 .venv
 env/
-venv/
+myvenv/
 ENV/
 env.bak/
 venv.bak/
@@ -102,3 +103,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# pip
+Pipfile
+Pifile.lock
