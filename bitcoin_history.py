@@ -22,12 +22,3 @@ for tr in table.find_all('tr'):
     db.add(date, open_price, high_price, low_price, close_price)
 
 db.commit()
-#    data.append([date, open_price, high_price, low_price, close_price])
-
-'''
-print(data)
-data[0][0]
-print(data[0][0])
-
-'''
-# db.save(data)
