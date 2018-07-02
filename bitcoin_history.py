@@ -1,14 +1,22 @@
 # coding: utf-8
+
+import datetime
 import requests
 from bs4 import BeautifulSoup
 import db
 import sqlite3
+import json
 
 response = requests.get('https://coinmarketcap.com/currencies/bitcoin/historical-data/?start=20170626&end=20180626')
 soup = BeautifulSoup(response.content, 'html.parser')
 wrap = soup.find('div', {'id': 'historical-data'})
 table = wrap.find('table')
-data = []
+
+data = table.text
+print(data)
+jsonD = json.dumps(data)
+jsonL = json.loads(jsonD)
+#data = []
 
 for tr in table.find_all('tr'):
     tds = list(tr.find_all('td'))

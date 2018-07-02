@@ -8,6 +8,7 @@ Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
 
+
 class History(Base):
     __tablename__ = 'histories'
 
