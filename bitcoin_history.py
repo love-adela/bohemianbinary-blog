@@ -14,7 +14,7 @@ table = wrap.find('table')
 
 data = table.text
 print(data)
-jsonD = json.dumps(data)
+jsonD = json.dumps(datgi
 jsonL = json.loads(jsonD)
 #data = []
 

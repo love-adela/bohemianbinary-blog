@@ -4,7 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float
 import sqlite3
 import pandas as pd
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 engine = create_engine("sqlite:///history.db")
 Base = declarative_base()
@@ -42,8 +43,11 @@ def add(date, open_price, high_price, low_price, close_price):
 def commit():
     session.commit()
 
-
+# loaded sqlite database to pandas data frame
 conn = sqlite3.connect('history.db')
 query = "SELECT * FROM histories"
 df = pd.read_sql_query(query, conn)
 print(df)
+
+# visualize database
+ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
