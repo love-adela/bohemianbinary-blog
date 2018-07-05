@@ -1,11 +1,11 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, DateTime, Date
 import sqlite3
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 
 engine = create_engine("sqlite:///history.db")
 Base = declarative_base()
@@ -17,7 +17,7 @@ class History(Base):
     __tablename__ = 'histories'
 
     id = Column(Integer, primary_key=True)
-    date = Column(String)
+    date = Column(Date)
     open_price = Column(Float)
     high_price = Column(Float)
     low_price = Column(Float)
@@ -43,11 +43,78 @@ def add(date, open_price, high_price, low_price, close_price):
 def commit():
     session.commit()
 
-# loaded sqlite database to pandas data frame
-conn = sqlite3.connect('history.db')
-query = "SELECT * FROM histories"
-df = pd.read_sql_query(query, conn)
-print(df)
 
-# visualize database
-ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
+session = Session()
+for row in session.query(History).order_by(asc(History.date)).all():
+    print(f"low: {row.low_price} / high: {row.high_price} / open: {row.open_price} / close: {row.close_price} "
+          f"/ date: {row.date}")
+
+
+session = Session()
+result = session.query(History).order_by(asc(History.date)).all()
+data = []
+index = []
+for row in result:
+    index.append(row.date)
+    data.append(row.close_price)
+
+ts = pd.Series(data, index=index)
+ts.plot()
+
+low_price = []
+high_price = []
+open_price = []
+close_price = []
+index = []
+
+session = Session()
+for row in session.query(History).order_by(asc(History.date)).all():
+    low_price.append(row.low_price)
+    high_price.append(row.high_price)
+    open_price.append(row.open_price)
+    close_price.append(row.close_price)
+    index.append(pd.Timestamp(row.date))
+
+prices = {
+    'low': low_price,
+    'high': high_price,
+    'open': open_price,
+    'close': close_price
+}
+
+# print(prices)
+
+df = pd.DataFrame(prices, index=index)
+df.plot()
+
+gap = []
+half_gap = []
+
+for i in range(0, len(prices['low'])):
+    gap_row = prices['high'][i] - prices['low'][i]
+    half_gap_row = gap_row * 0.5
+
+    gap.append(gap_row)
+    half_gap.append(half_gap_row)
+
+prices['gap'] = gap
+prices['half_gap'] = half_gap
+
+# print(prices)
+
+df = pd.DataFrame(prices, index=index)
+df.plot()
+
+
+target = [-1]
+for i in range(1, len(prices['low'])):
+    target_row = prices['open'][i] + prices['gap'][i - 1]
+    target.append(target_row)
+
+
+prices['target'] = target
+
+df = pd.DataFrame({'close' : prices['close'], 'target' : prices['target']}, index)
+df.plot()
+
+
