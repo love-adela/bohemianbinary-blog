@@ -48,6 +48,7 @@ def get_data():
         'close': close_prices
     }
 
+
 def get_data_as_lists():
     session = db.Session()
     open_prices = []
@@ -70,11 +71,3 @@ def get_data_as_lists():
             'close': close_prices
         }
     )
-
-'''
-high, low, middle 세 개 값으로 그래프 그리기
-middle은 high와 low의 평균값
-
-double, high 출력
-double = high * 2
-'''
