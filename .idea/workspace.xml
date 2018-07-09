@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44a3292c-2168-49a9-9632-562f96a92c28" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MDD_CAGR.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MDD_CAGR.ipynb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,11 +33,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MDD_CAGR.ipynb" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MDD_CAGR.ipynb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MDD_CAGR.ipynb">
           <provider selected="true" editor-type-id="ipnb-editor">
             <state>
               <selected id="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GoldenCrossDeadCross.ipynb" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/GoldenCrossDeadCross.ipynb">
+          <provider selected="true" editor-type-id="ipnb-editor">
+            <state>
+              <selected id="0" />
             </state>
           </provider>
         </entry>
@@ -97,6 +107,7 @@
         <option value="$PROJECT_DIR$/coin_repository.py" />
         <option value="$PROJECT_DIR$/db.py" />
         <option value="$PROJECT_DIR$/MDD_CAGR.ipynb" />
+        <option value="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" />
       </list>
     </option>
   </component>
@@ -726,6 +737,13 @@
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
           <selected id="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GoldenCrossDeadCross.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="0" />
         </state>
       </provider>
     </entry>
