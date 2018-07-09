@@ -26,7 +26,7 @@ def populate():
         high_price = tds[2].text
         low_price = tds[3].text
         close_price = tds[4].text
-        session.add(db.History(date, open_price, high_price, low_price, close_price))
+        session.add(db.History(date, open_price, high_price, low_price, close_price, 'XRP'))
     session.commit()
 
 
@@ -36,7 +36,7 @@ def get_data():
     high_prices = {}
     low_prices = {}
     close_prices = {}
-    for row in session.query(db.History).order_by(db.asc(db.History.date)):
+    for row in session.query(db.History).filter(db.History.coin_type == 'XRP').order_by(db.asc(db.History.date)):
         open_prices[row.date] = row.open_price
         high_prices[row.date] = row.high_price
         low_prices[row.date] = row.low_price
@@ -56,7 +56,7 @@ def get_data_as_lists():
     low_prices = []
     close_prices = []
     index = []
-    for row in session.query(db.History).order_by(db.asc(db.History.date)):
+    for row in session.query(db.History).filter(db.History.coin_type == 'XRP').order_by(db.asc(db.History.date)):
         open_prices.append(row.open_price)
         high_prices.append(row.high_price)
         low_prices.append(row.low_price)

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, desc, asc
 from sqlalchemy.orm import sessionmaker, session
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, DateTime, Date
+from sqlalchemy import Column, Integer, String, Float, DateTime, Date, Text
 import sqlite3
 import pandas as pd
 import numpy as np
@@ -11,6 +11,8 @@ engine = create_engine("sqlite:///history.db")
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
+def create_db():
+    Base.metadata.create_all(engine)
 
 class History(Base):
     __tablename__ = 'histories'
@@ -21,13 +23,15 @@ class History(Base):
     high_price = Column(Float)
     low_price = Column(Float)
     close_price = Column(Float)
+    coin_type = Column(Text)
 
-    def __init__(self, date, open_price, high_price, low_price, close_price):
+    def __init__(self, date, open_price, high_price, low_price, close_price, coin_type):
         self.date = date
         self.open_price = open_price
         self.high_price = high_price
         self.low_price = low_price
         self.close_price = close_price
+        self.coin_type = coin_type
 
     def __repr__(self):
         return "<History(date='%s', open_price ='%f', high_price='%f', low_price='%f', close_price='%f')>" % (
@@ -41,6 +45,3 @@ def add(date, open_price, high_price, low_price, close_price):
 
 def commit():
     session.commit()
-
-
-# Base.metadata.create_all(engine)
