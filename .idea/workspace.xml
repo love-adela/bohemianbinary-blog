@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44a3292c-2168-49a9-9632-562f96a92c28" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MDD_CAGR.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MDD_CAGR.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MA차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MDD_CAGR.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OHLC차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coin_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/bitcoin_repository.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,8 +28,8 @@
       <file leaf-file-name="db.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/db.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="165">
+              <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
               <folding>
                 <element signature="e#0#47#0" expanded="true" />
               </folding>
@@ -33,29 +37,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MDD_CAGR.ipynb" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MDD_CAGR.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GoldenCrossDeadCross.ipynb" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/GoldenCrossDeadCross.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="0" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="coin_repository.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coin_repository.py">
+      <file leaf-file-name="bitcoin_repository.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bitcoin_repository.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="765">
               <caret line="51" selection-start-line="51" selection-end-line="72" selection-end-column="5" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ethereum_repository.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ethereum_repository.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="119" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="119" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -108,6 +106,7 @@
         <option value="$PROJECT_DIR$/db.py" />
         <option value="$PROJECT_DIR$/MDD_CAGR.ipynb" />
         <option value="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" />
+        <option value="$PROJECT_DIR$/ethereum_repository.py" />
       </list>
     </option>
   </component>
@@ -295,7 +294,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/coin_repository.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bitcoin_repository.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -385,7 +384,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="480" y="23" width="881" height="877" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.18210863" side_tool="true" visible="true" weight="0.32820514" />
@@ -456,7 +454,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coin_repository.py">
+    <entry file="file://$PROJECT_DIR$/bitcoin_repository.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="705">
           <caret line="50" column="21" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="21" />
@@ -490,7 +488,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coin_repository.py">
+    <entry file="file://$PROJECT_DIR$/bitcoin_repository.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="12" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="12" />
@@ -713,26 +711,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coin_repository.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="51" selection-start-line="51" selection-end-line="72" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/db.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MDD_CAGR.ipynb">
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
@@ -744,6 +722,36 @@
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
           <selected id="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bitcoin_repository.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="51" selection-start-line="51" selection-end-line="72" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ethereum_repository.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="119" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="119" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
