@@ -28,14 +28,14 @@ class CoinRepository:
     # repo.populate(now) => repo.populate(now, 365)
     # repo.populate(duration=30) => repo.poppulation(datetime.datetime.now(), 30)
 
-    def populate(self, end_date=datetime.datetime.now(), duration=365):
-        session = db.Session()
-        end_date = datetime.datetime.now()
-        duration = 365
+
+    def update_stock(self, end_date=datetime.datetime.now(), duration=365):
         start_date = end_date - datetime.timedelta(duration)
+
+        session = db.Session()
         response = requests.get(
             f"https://coinmarketcap.com/currencies/{self.coin_full_name}/historical-data/"
-            f"?start={end_date.strftime('%Y%m%d')}&end={start_date.strftime('%Y%m%d')}")
+            f"?start={start_date.strftime('%Y%m%d')}&end={end_date.strftime('%Y%m%d')}")
         soup = bs4.BeautifulSoup(response.content, 'html.parser')
         wrap = soup.find('div', {'id': 'historical-data'})
         table = wrap.find('table')
