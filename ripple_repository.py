@@ -1,9 +1,12 @@
 import db
+import coin_repo
 import bs4
 import requests
 import datetime
 
+coin_repo.print_stock()
 
+'''
 def print_stock():
     session = db.Session()
     for row in session.query(db.History).order_by(db.asc(db.History.date)).all():
@@ -11,6 +14,7 @@ def print_stock():
               f"/ date: {row.date}")
 
 
+# ripple 주소 불러오기
 def populate():
     session = db.Session()
     response = requests.get('https://coinmarketcap.com/currencies/ripple/historical-data/?start=20170626&end=20180626')
@@ -71,3 +75,4 @@ def get_data_as_lists():
             'close': close_prices
         }
     )
+'''
