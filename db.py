@@ -2,28 +2,25 @@ from sqlalchemy import create_engine, desc, asc
 from sqlalchemy.orm import sessionmaker, session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime, Date, Text
-import sqlite3
-import pandas as pd
-import numpy as np
-from matplotlib import pyplot as plt
 
 engine = create_engine("sqlite:///history.db")
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
+
 def create_db():
     Base.metadata.create_all(engine)
+
 
 class History(Base):
     __tablename__ = 'histories'
 
-    id = Column(Integer, primary_key=True)
-    date = Column(Date)
+    date = Column(Date, primary_key=True)
+    coin_type = Column(Text, primary_key=True)
     open_price = Column(Float)
     high_price = Column(Float)
     low_price = Column(Float)
     close_price = Column(Float)
-    coin_type = Column(Text)
 
     def __init__(self, date, open_price, high_price, low_price, close_price, coin_type):
         self.date = date

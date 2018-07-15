@@ -3,7 +3,8 @@ import requests
 import bs4
 import datetime
 
-class CoinRepo:
+
+class CoinRepository:
     def __init__(self, coin_type):
         self.coin_type = coin_type
         self.coin_full_name = {
@@ -12,6 +13,10 @@ class CoinRepo:
             'XRP': 'ripple'
         }[coin_type]
 
+    @staticmethod
+    def create_db():
+        db.create_db()
+
     def print_stock(self):
         session = db.Session()
         for row in session.query(db.History).filter(db.History.coin_type == self.coin_type).\
@@ -19,10 +24,18 @@ class CoinRepo:
             print(f"low: {row.low_price} / high: {row.high_price} / open: {row.open_price} / close: {row.close_price} "
                   f"/ date: {row.date}")
 
-    def populate(self):
+    # repo.populate() => repo.populate(datetime.datetime.now(), 365)
+    # repo.populate(now) => repo.populate(now, 365)
+    # repo.populate(duration=30) => repo.poppulation(datetime.datetime.now(), 30)
+
+    def populate(self, end_date=datetime.datetime.now(), duration=365):
         session = db.Session()
+        end_date = datetime.datetime.now()
+        duration = 365
+        start_date = end_date - datetime.timedelta(duration)
         response = requests.get(
-            f"https://coinmarketcap.com/currencies/{self.coin_full_name}/historical-data/?start=20170626&end=20180626")
+            f"https://coinmarketcap.com/currencies/{self.coin_full_name}/historical-data/"
+            f"?start={end_date.strftime('%Y%m%d')}&end={start_date.strftime('%Y%m%d')}")
         soup = bs4.BeautifulSoup(response.content, 'html.parser')
         wrap = soup.find('div', {'id': 'historical-data'})
         table = wrap.find('table')
@@ -35,7 +48,7 @@ class CoinRepo:
             high_price = tds[2].text
             low_price = tds[3].text
             close_price = tds[4].text
-            session.add(db.History(date, open_price, high_price, low_price, close_price, 'XRP'))
+            session.merge(db.History(date, open_price, high_price, low_price, close_price, f'{self.coin_full_name}'))
         session.commit()
 
     def get_data(self):
@@ -44,7 +57,8 @@ class CoinRepo:
         high_prices = {}
         low_prices = {}
         close_prices = {}
-        for row in session.query(db.History).filter(db.History.coin_type == 'XRP').order_by(db.asc(db.History.date)):
+        for row in session.query(db.History).filter(db.History.coin_type == f'{self.coin_full_name}')\
+                .order_by(db.asc(db.History.date)):
             open_prices[row.date] = row.open_price
             high_prices[row.date] = row.high_price
             low_prices[row.date] = row.low_price
@@ -63,7 +77,8 @@ class CoinRepo:
         low_prices = []
         close_prices = []
         index = []
-        for row in session.query(db.History).filter(db.History.coin_type == 'XRP').order_by(db.asc(db.History.date)):
+        for row in session.query(db.History).filter(db.History.coin_type == f'{self.coin_full_name}')\
+                .order_by(db.asc(db.History.date)):
             open_prices.append(row.open_price)
             high_prices.append(row.high_price)
             low_prices.append(row.low_price)
@@ -78,4 +93,3 @@ class CoinRepo:
                 'close': close_prices
             }
         )
-
