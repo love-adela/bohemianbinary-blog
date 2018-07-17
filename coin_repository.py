@@ -28,7 +28,6 @@ class CoinRepository:
     # repo.populate(now) => repo.populate(now, 365)
     # repo.populate(duration=30) => repo.poppulation(datetime.datetime.now(), 30)
 
-
     def update_stock(self, end_date=datetime.datetime.now(), duration=365):
         start_date = end_date - datetime.timedelta(duration)
 
