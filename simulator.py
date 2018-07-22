@@ -1,5 +1,5 @@
 import pandas as pd
-
+import strategies
 
 class Simulator:
     def __init__(self, strategy):
@@ -7,22 +7,29 @@ class Simulator:
         benefits = []
         drawdowns = []
         bought = False
-        max_close = -1
+        max_benefit = -1
 
         index = self.data_frame['close'].keys()
 
         for date in index:
             close_price = self.data_frame['close'][date]
 
-            if strategy.has_to_buy(date):
+            order_type, benefit = strategy.has_order(date)
+
+            if order_type == strategies.OrderType.buy:
                 bought = True
                 if len(benefits) == 0:
                     benefits.append(1)
                 else:
                     benefits.append(benefits[-1])
-            elif strategy.has_to_sell(date):
+            elif order_type == strategies.OrderType.sell:
                 bought = False
                 benefits.append(benefits[-1] * (close_price / strategy.get_previous_price(date)))
+            elif order_type == strategies.OrderType.day_trade:
+                if len(benefits) == 0:
+                    benefits.append(benefit)                    
+                else:
+                    benefits.append(benefits[-1] * benefit)
             else:
                 if len(benefits) == 0:
                     benefits.append(1)
@@ -31,10 +38,10 @@ class Simulator:
                 else:
                     benefits.append(benefits[-1])
 
-            if close_price > max_close:
-                max_close = close_price
+            if benefits[-1] > max_benefit:
+                max_benefit = benefits[-1]
 
-            drawdowns.append(1 - (close_price / max_close))
+            drawdowns.append(1 - (benefits[-1] / max_benefit))
 
         self.mdd = max(drawdowns)
         self.cagr = benefits[-1] - 1
