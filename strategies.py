@@ -1,11 +1,14 @@
 import datetime
 import enum
 import copy
+import coin_repository
+
 
 class OrderType(enum.Enum):
     buy = 1
     sell = 2
     day_trade = 3
+
 
 class Strategy:
     def __init__(self, repository):
@@ -60,13 +63,17 @@ class GcdcStrategy(Strategy):
         else:
             return None, None
 
+
 class VolatilityBreakoutStrategy(Strategy):
-    def __init__(self, repository, k_value=0.5):
+    def __init__(self, repository, k_value=0.5, k_factor=1):
         super(VolatilityBreakoutStrategy, self).__init__(repository)
         self.k_value = k_value
-    
+        self.ks = []
+        self.k_factor = k_factor
+
     def get_prices(self, date):
         yesterday = date + datetime.timedelta(days=-1)
+
         if yesterday < self.data_frame['close'].keys()[0]:
             return None, None, None, None, None, None, None
 
@@ -92,17 +99,26 @@ class VolatilityBreakoutStrategy(Strategy):
             return None, None
         
         gap = yesterday_high_price - yesterday_low_price
-        target_gap = gap * self.k_value
-        target_price = open_price + target_gap
+        if self.k_value == -1:
+            body_length = abs(yesterday_close_price - yesterday_open_price)
+            self.ks.append(1 - (body_length / gap))
+            if len(self.ks) > self.k_factor:
+                self.ks.pop(0)
+            k_value = sum(self.ks) / float(len(self.ks))
+        else:
+            k_value = self.k_value
 
+        target_gap = gap * k_value
+        target_price = open_price + target_gap
         if target_price > high_price:
             return None, None
         
         return OrderType.day_trade, close_price / target_price
 
-    def noise_proportion(self):
-        if k_value < -1:
-            k_value = 1 - abs(open-close)/(high-low)
-            return k_value
-        else:     
 
+if __name__ == "__main__":
+    # print("hello")
+    a = VolatilityBreakoutStrategy(coin_repository.CoinRepository('ETH'), 0.5)
+    a.get_prices(datetime.date(2018, 6, 6))
+    print(a.get_prices(datetime.date(2018, 6, 6)))
+    print(a.has_order(datetime.date(2018, 6, 6)))

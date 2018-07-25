@@ -1,11 +1,14 @@
 import pandas as pd
 import strategies
 
+
 class Simulator:
     def __init__(self, strategy):
         self.data_frame = strategy.get_data_frame()
         benefits = []
         drawdowns = []
+        self.won = 0
+        self.trade = 0
         bought = False
         max_benefit = -1
 
@@ -24,17 +27,28 @@ class Simulator:
                     benefits.append(benefits[-1])
             elif order_type == strategies.OrderType.sell:
                 bought = False
-                benefits.append(benefits[-1] * (close_price / strategy.get_previous_price(date)))
+                benefit = (close_price / strategy.get_previous_price(date))
+                benefits.append(benefits[-1] * benefit)
             elif order_type == strategies.OrderType.day_trade:
                 if len(benefits) == 0:
-                    benefits.append(benefit)                    
+                    if benefit > 1.0:
+                        self.won += 1
+                    self.trade += 1
+                    benefits.append(benefit)
                 else:
+                    if benefit > 1.0:
+                        self.won += 1
+                    self.trade += 1
                     benefits.append(benefits[-1] * benefit)
             else:
                 if len(benefits) == 0:
                     benefits.append(1)
                 elif bought:
-                    benefits.append(benefits[-1] * (close_price / strategy.get_previous_price(date)))
+                    benefit = (close_price / strategy.get_previous_price(date))
+                    if benefit > 1.0:
+                        self.won += 1
+                    self.trade += 1
+                    benefits.append(benefits[-1] * benefit)
                 else:
                     benefits.append(benefits[-1])
 
@@ -56,3 +70,6 @@ class Simulator:
 
     def get_cagr(self):
         return self.cagr
+
+    def get_winning_rate(self):
+        return self.won / float(self.trade)
