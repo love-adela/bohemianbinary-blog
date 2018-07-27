@@ -25,13 +25,8 @@ class CoinRepository:
             print(f"low: {row.low_price} / high: {row.high_price} / open: {row.open_price} / close: {row.close_price} "
                   f"/ date: {row.date}")
 
-    # repo.populate() => repo.populate(datetime.datetime.now(), 365)
-    # repo.populate(now) => repo.populate(now, 365)
-    # repo.populate(duration=30) => repo.poppulation(datetime.datetime.now(), 30)
-
     def update_stock(self, end_date=datetime.datetime.now(), duration=365):
         start_date = end_date - datetime.timedelta(duration)
-
         session = db.Session()
         response = requests.get(
             f"https://coinmarketcap.com/currencies/{self.coin_full_name}/historical-data/"
@@ -51,14 +46,29 @@ class CoinRepository:
             session.merge(db.History(date, open_price, high_price, low_price, close_price, f'{self.coin_full_name}'))
         session.commit()
 
-    def get_data_frame(self):
+    def get_data_frame(self, end_date=datetime.datetime.now(), duration=365):
+        start_date = end_date - datetime.timedelta(duration)
+
         session = db.Session()
         open_prices = {}
         high_prices = {}
         low_prices = {}
         close_prices = {}
-        for row in session.query(db.History).filter(db.History.coin_type == f'{self.coin_full_name}') \
-                .order_by(db.asc(db.History.date)):
+
+        query = self.query_data(session, start_date, end_date)
+        if query.count() > 0:
+            got_start_date, got_end_date = query[0].date, query[-1].date
+
+            is_same_start_date = start_date != got_start_date
+            is_same_end_date = end_date != got_end_date
+
+            if is_same_start_date or is_same_end_date:
+                self.update_stock(end_date, duration)
+                query = self.query_data(session, start_date, end_date)
+        else:
+            query = self.query_data(session, start_date, end_date)
+
+        for row in query:
             open_prices[row.date] = row.open_price
             high_prices[row.date] = row.high_price
             low_prices[row.date] = row.low_price
@@ -70,26 +80,9 @@ class CoinRepository:
             'close': close_prices
         })
 
-    # def get_data_as_lists(self):
-    #     session = db.Session()
-    #     open_prices = []
-    #     high_prices = []
-    #     low_prices = []
-    #     close_prices = []
-    #     index = []
-    #     for row in session.query(db.History).filter(db.History.coin_type == f'{self.coin_full_name}') \
-    #             .order_by(db.asc(db.History.date)):
-    #         open_prices.append(row.open_price)
-    #         high_prices.append(row.high_price)
-    #         low_prices.append(row.low_price)
-    #         close_prices.append(row.close_price)
-    #         index.append(row.date)
-    #     return (
-    #         index,
-    #         {
-    #             'open': open_prices,
-    #             'high': high_prices,
-    #             'low': low_prices,
-    #             'close': close_prices
-    #         }
-    #     )
+    def query_data(self, session, start_date, end_date):
+        return session.query(db.History)\
+            .filter(db.History.coin_type == f'{self.coin_full_name}')\
+            .filter(db.History.date >= start_date)\
+            .filter(db.History.date <= end_date)\
+            .order_by(db.asc(db.History.date))

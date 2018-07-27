@@ -2,15 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8ed9379-c5d7-465f-a495-37df2e28f024" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/anl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/anl.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/main-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/slnx.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/slnx.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bitcoin_GoldenCrossDeadCross.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Bitcoin_GoldenCrossDeadCross.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulator.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Bitcoin_GoldenCrossDeadCross-checkpoint.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Bitcoin_MDD_CAGR-checkpoint.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/coin_repository-checkpoint.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bitcoin_GoldenCrossDeadCross.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bitcoin_MA차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bitcoin_MDD_CAGR.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bitcoin_OHLC차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ethereum_GoldenCrossDeadCross.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ethereum_MA차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ethereum_MDD_CAGR.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ethereum_OHLC차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GoldenCrossDeadCross.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ripple_GoldenCrossDeadCross.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ripple_MA차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ripple_MDD_CAGR.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ripple_OHLC차트.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/btc_cagr_volatility_breakout.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/btc_cagr_volatility_breakout.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coin_repository.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coin_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/coin_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coin_strategy.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/history.db" beforeDir="false" afterPath="$PROJECT_DIR$/history.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/strategies.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.ipynb" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,6 +36,21 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/anl$strategies.coverage" NAME="strategies Coverage Results" MODIFIED="1532523784686" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/anl$coin_repository.coverage" NAME="coin_repository Coverage Results" MODIFIED="1532694392767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="453396843">
@@ -34,27 +65,27 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1384" />
+          <entry key="Python" value="2139" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="IPNB" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="7" />
+          <entry key="Python" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Pipfile" value="1" />
           <entry key="ipynb" value="1" />
-          <entry key="py" value="7" />
+          <entry key="py" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1384" />
+          <entry key="py" value="2139" />
         </counts>
       </usages-collector>
     </session>
@@ -64,8 +95,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="50" column="32" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+            <state relative-caret-position="186">
+              <caret line="14" column="47" lean-forward="true" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -74,10 +105,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/db.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="29" column="38" lean-forward="true" selection-start-line="29" selection-start-column="38" selection-end-line="29" selection-end-column="38" />
+              <folding>
+                <element signature="e#0#47#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/coin_repository.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="794">
-              <caret line="53" column="29" lean-forward="true" selection-start-line="53" selection-start-column="29" selection-end-line="53" selection-end-column="29" />
+            <state relative-caret-position="1230">
+              <caret line="82" column="54" selection-start-line="82" selection-start-column="54" selection-end-line="82" selection-end-column="54" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -85,11 +128,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/strategies.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="105" column="27" selection-start-line="105" selection-start-column="27" selection-end-line="105" selection-end-column="27" />
+            <state relative-caret-position="390">
+              <caret line="26" column="12" lean-forward="true" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -105,13 +148,19 @@
       <find>k_valu</find>
       <find>repository</find>
       <find>repo</find>
-      <find>date</find>
       <find>datetime</find>
       <find>datetime.</find>
       <find>now</find>
       <find>k_value</find>
       <find>self.won</find>
+      <find>remove</find>
+      <find>update_stock</find>
+      <find>start_date</find>
+      <find>date</find>
+      <find>coin_full_name</find>
+      <find>delta</find>
       <find>benefit</find>
+      <find>query_data</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -123,10 +172,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/coin_repository.py" />
         <option value="$PROJECT_DIR$/db.py" />
         <option value="$PROJECT_DIR$/simulator.py" />
         <option value="$PROJECT_DIR$/strategies.py" />
+        <option value="$PROJECT_DIR$/coin_repository.py" />
       </list>
     </option>
   </component>
@@ -252,7 +301,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.coin_repository">
+    <configuration name="coin_repository" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="anl" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/coin_repository.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="strategies" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="anl" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -275,8 +346,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.strategies" />
+      <item itemvalue="Python.coin_repository" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.coin_repository" />
         <item itemvalue="Python.strategies" />
       </list>
     </recent_temporary>
@@ -303,14 +379,14 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.14160584" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.20583941" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Python Console" order="11" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
@@ -318,7 +394,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32928944" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,8 +437,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/db.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-214">
-          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+        <state relative-caret-position="435">
+          <caret line="29" column="38" lean-forward="true" selection-start-line="29" selection-start-column="38" selection-end-line="29" selection-end-column="38" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
           </folding>
@@ -371,30 +447,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simulator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="50" column="32" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+        <state relative-caret-position="186">
+          <caret line="14" column="47" lean-forward="true" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coin_repository.py">
+    <entry file="file://$PROJECT_DIR$/strategies.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="794">
-          <caret line="53" column="29" lean-forward="true" selection-start-line="53" selection-start-column="29" selection-end-line="53" selection-end-column="29" />
+        <state relative-caret-position="390">
+          <caret line="26" column="12" lean-forward="true" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/strategies.py">
+    <entry file="file://$PROJECT_DIR$/coin_repository.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="105" column="27" selection-start-line="105" selection-start-column="27" selection-end-line="105" selection-end-column="27" />
+        <state relative-caret-position="1230">
+          <caret line="82" column="54" selection-start-line="82" selection-start-column="54" selection-end-line="82" selection-end-column="54" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
