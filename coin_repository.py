@@ -11,7 +11,14 @@ class CoinRepository:
         self.coin_full_name = {
             'ETH': 'ethereum',
             'BTC': 'bitcoin',
-            'XRP': 'ripple'
+            'XRP': 'ripple',
+            'BCH': 'bitcoin_cash',
+            'EOS': 'eos',
+            'XLM': 'stellar',
+            'LTC': 'lite_coin',
+            'ADA': 'cardano',
+            'MIOTA': 'iota',
+            'USDT': 'tether'
         }[coin_type]
 
     @staticmethod
