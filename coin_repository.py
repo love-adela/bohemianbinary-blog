@@ -12,10 +12,10 @@ class CoinRepository:
             'ETH': 'ethereum',
             'BTC': 'bitcoin',
             'XRP': 'ripple',
-            'BCH': 'bitcoin_cash',
+            'BCH': 'bitcoin-cash',
             'EOS': 'eos',
             'XLM': 'stellar',
-            'LTC': 'lite_coin',
+            'LTC': 'litecoin',
             'ADA': 'cardano',
             'MIOTA': 'iota',
             'USDT': 'tether'
@@ -73,6 +73,7 @@ class CoinRepository:
                 self.update_stock(end_date, duration)
                 query = self.query_data(session, start_date, end_date)
         else:
+            self.update_stock(end_date, duration)
             query = self.query_data(session, start_date, end_date)
 
         for row in query:
