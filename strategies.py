@@ -13,7 +13,7 @@ class OrderType(enum.Enum):
 class Strategy:
     def __init__(self, repository, end_date=None, duration=365):
         if end_date is None:
-            self.end_date = datetime.datetime.now()
+            end_date = datetime.datetime.now()
         self.data_frame = copy.deepcopy(repository.get_data_frame(end_date, duration))
 
     def get_previous_price(self, date):
@@ -37,8 +37,8 @@ class Strategy:
 
 class GcdcStrategy(Strategy):
     def __init__(self, repository, end_date=None, duration=365):
-        if self.end_date is None:
-            self.end_date = datetime.datetime.now()
+        if end_date is None:
+            end_date = datetime.datetime.now()
         super(GcdcStrategy, self).__init__(repository, end_date, duration)
         self.data_frame['ma5'] = self.data_frame['close'].rolling(window=5).mean()
         self.data_frame['ma20'] = self.data_frame['close'].rolling(window=20).mean()
@@ -54,7 +54,7 @@ class GcdcStrategy(Strategy):
             ma5_yesterday = self.data_frame['ma5'][yesterday]
             ma20_yesterday = self.data_frame['ma20'][yesterday]
         return ma5_now, ma20_now, ma5_yesterday, ma20_yesterday
-    
+
     def has_order(self, date):
         ma5_now, ma20_now, ma5_yesterday, ma20_yesterday = self.get_mas(date)
 
@@ -70,8 +70,8 @@ class GcdcStrategy(Strategy):
 
 class VolatilityBreakoutStrategy(Strategy):
     def __init__(self, repository, end_date=None, duration=365, k_value=0.5, k_factor=1):
-        if self.end_date is None:
-            self.end_date = datetime.datetime.now()
+        if end_date is None:
+            end_date = datetime.datetime.now()
         super(VolatilityBreakoutStrategy, self).__init__(repository, end_date, duration)
         self.k_value = k_value
         self.ks = []
@@ -85,7 +85,7 @@ class VolatilityBreakoutStrategy(Strategy):
 
         yesterday_open_price = self.data_frame['open'][yesterday]
         yesterday_close_price = self.data_frame['close'][yesterday]
-        yesterday_high_price = self.data_frame['high'][yesterday]               
+        yesterday_high_price = self.data_frame['high'][yesterday]
         yesterday_low_price = self.data_frame['low'][yesterday]
 
         open_price = self.data_frame['open'][date]
@@ -94,7 +94,7 @@ class VolatilityBreakoutStrategy(Strategy):
 
         return yesterday_open_price, yesterday_close_price, \
             yesterday_high_price, yesterday_low_price, open_price, \
-            close_price, high_price                 
+            close_price, high_price
 
     def has_order(self, date):
         yesterday_open_price, yesterday_close_price, \
@@ -103,7 +103,7 @@ class VolatilityBreakoutStrategy(Strategy):
 
         if yesterday_open_price is None:
             return None, None
-        
+
         gap = yesterday_high_price - yesterday_low_price
         if self.k_value == -1:
             body_length = abs(yesterday_close_price - yesterday_open_price)
@@ -118,7 +118,7 @@ class VolatilityBreakoutStrategy(Strategy):
         target_price = open_price + target_gap
         if target_price > high_price:
             return None, None
-        
+
         return OrderType.day_trade, close_price / target_price
 
 

@@ -28,8 +28,10 @@ class CoinRepository:
 
     def print_stock(self):
         session = db.Session()
-        for row in session.query(db.History).filter(db.History.coin_type == self.coin_type). \
-                order_by(asc(db.History.date)).all():
+        for row in session.query(db.History) \
+                .filter(db.History.coin_type == self.coin_type) \
+                .order_by(asc(db.History.date)) \
+                .all():
             print(f"low: {row.low_price} / high: {row.high_price} / open: {row.open_price} / close: {row.close_price} "
                   f"/ date: {row.date}")
 
