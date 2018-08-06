@@ -1,11 +1,11 @@
-from sqlalchemy import create_engine, desc, asc
-from sqlalchemy.orm import sessionmaker, session
+from sqlalchemy import Column, Float, Date, Text
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, DateTime, Date, Text
+from sqlalchemy.orm import sessionmaker, session
 
 engine = create_engine("sqlite:///history.db")
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(engine)
 
 
 def create_db():
@@ -42,3 +42,5 @@ def add(date, open_price, high_price, low_price, close_price):
 
 def commit():
     session.commit()
+
+# h = History(.....) prnt(h)

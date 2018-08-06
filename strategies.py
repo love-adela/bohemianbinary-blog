@@ -11,7 +11,9 @@ class OrderType(enum.Enum):
 
 
 class Strategy:
-    def __init__(self, repository, end_date=datetime.datetime.now(), duration=365):
+    def __init__(self, repository, end_date=None, duration=365):
+        if end_date is None:
+            self.end_date = datetime.datetime.now()
         self.data_frame = copy.deepcopy(repository.get_data_frame(end_date, duration))
 
     def get_previous_price(self, date):
@@ -34,7 +36,9 @@ class Strategy:
 
 
 class GcdcStrategy(Strategy):
-    def __init__(self, repository, end_date, duration):
+    def __init__(self, repository, end_date=None, duration=365):
+        if self.end_date is None:
+            self.end_date = datetime.datetime.now()
         super(GcdcStrategy, self).__init__(repository, end_date, duration)
         self.data_frame['ma5'] = self.data_frame['close'].rolling(window=5).mean()
         self.data_frame['ma20'] = self.data_frame['close'].rolling(window=20).mean()
@@ -65,7 +69,9 @@ class GcdcStrategy(Strategy):
 
 
 class VolatilityBreakoutStrategy(Strategy):
-    def __init__(self, repository, end_date=datetime.datetime.now(), duration=365, k_value=0.5, k_factor=1):
+    def __init__(self, repository, end_date=None, duration=365, k_value=0.5, k_factor=1):
+        if self.end_date is None:
+            self.end_date = datetime.datetime.now()
         super(VolatilityBreakoutStrategy, self).__init__(repository, end_date, duration)
         self.k_value = k_value
         self.ks = []
