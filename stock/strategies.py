@@ -14,7 +14,7 @@ class Strategy:
     def __init__(self, repository, end_date=None, duration=365):
         if end_date is None:
             end_date = datetime.datetime.now()
-        self.data_frame = copy.deepcopy(repository.get_data_frame(end_date, duration))
+        self.data_frame = copy.deepcopy(repository.     get_data_frame(end_date, duration))
 
     def get_previous_price(self, date):
         yesterday = date + datetime.timedelta(days=-1)
