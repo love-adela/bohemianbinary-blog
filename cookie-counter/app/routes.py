@@ -8,17 +8,6 @@ def index():
     return "The delicious way to count movie cookies!"
 
 
-@app.route('/anl-admin/movie')
-def admin_movie():
-    movies = [
-        {'name': 'Searching'},
-        {'name': 'Incredibles2'},
-        {'name': 'Mission : Impossible - Fallout'}
-
-    ]
-    return render_template('anl-admin-movie.html', title='Movie', movies=movies)
-
-
 @app.route("/anl-admin/director")
 def admin_director():
     directors = [
@@ -28,6 +17,17 @@ def admin_director():
 
     ]
     return render_template('admin-anl-director.html', title='Movie Director', directors=directors)
+
+
+@app.route('/anl-admin/movie')
+def admin_movie():
+    movies = [
+        {'name': 'Searching'},
+        {'name': 'Incredibles2'},
+        {'name': 'Mission : Impossible - Fallout'}
+
+    ]
+    return render_template('anl-admin-movie.html', title='Movie', movies=movies)
 
 
 @app.route("/anl-admin/actor")
