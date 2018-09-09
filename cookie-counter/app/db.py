@@ -2,6 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, session
 from sqlalchemy import Column, Integer, String
+from sqlalchemy import Table, ForeignKey
+from sqlalchemy.orm import relationship
 
 engine = create_engine('sqlite:///memory:', echo=True)
 Base = declarative_base
@@ -12,28 +14,63 @@ def create_db():
     Base.metadata.create_all(engine)
 
 
-class Movie(Base):
-    __tablename__ = "movies"
-    id = Column(Integer, primary_key=True)
-    movie_name_en = Column(String(120), primary_key=True)
-    movie_name_kr = Column(String(120))
-    director_name_en = Column(String(64))
-    director_name_kr = Column(String(50))
-    actor_name_en = Column(String(64))
-    actor_name_kr = Column(String(50))
+director_association_table = Table(
+    'director_association',
+    Base.metadata,
+    Column('movie_id', Integer, ForeignKey('movie.id')),
+    Column('director_id', Integer, ForeignKey('director.id'))
+)
 
-    def __init__(self, movie_name_en, movie_name_kr, director_name_en, director_name_kr, actor_name_en, actor_name_kr):
-        self.movie_name_en = movie_name_en
-        self.movie_name_kr = movie_name_kr
-        self.director_name_en = director_name_en
-        self.director_name_kr = director_name_kr
-        self.actor_name_en = actor_name_en
-        self.actor_name_kr = actor_name_kr
+actor_associtation_table = Table(
+    'actor_association',
+    Base.metadata,
+    Column('movie_id', Integer, ForeignKey('movie.id')),
+    Column('actor_id', Integer, ForeignKey('actor.id'))
+)
+
+
+class Movie(Base):
+    id = Column(Integer, primary_key=True)
+    name_en = Column(String(120), primary_key=True)
+    name_kr = Column(String(120))
+    directors = relationship("Director",
+                             secondary=director_association_table,
+                             backref="movies")
+    actors = relationship("Actor",
+                          secondary=actor_associtation_table,
+                          backref="movies")
+    cookies = relationship("Cookie", backref="movie")
+    image_file_name = Column(String(120))
 
     def __repr__(self):
-        return "<Movie('%s', '%s', '%s', '%s', '%s', '%s')> " \
-                        "% (self.movie_name_en, self.movie_name_kr, self.director_name_en, self.director_name_kr,\
-                            self.actor_name_en, self.actor_name_kr)"
+        return "<Movie('%s', '%s')> % (self.name_en, self.name_kr)"
+        # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
+
+
+class Director(Base):
+    id = Column(Integer, primary_key=True)
+    name_en = Column(String(120), primary_key=True)
+    name_kr = Column(String(120))
+
+    def __repr__(self):
+        return "<Movie Director('%s', '%s')> % (self.name_en, self.name_kr)"
+        # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
+
+
+class Actor(Base):
+    id = Column(Integer, primary_key=True)
+    name_en = Column(String(120), primary_key=True)
+    name_kr = Column(String(120))
+
+    def __repr__(self):
+        return "<Movie Actor('%s', '%s')> % (self.name_en, self.name_kr)"
+        # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
+
+
+class Cookie(Base):
+    id = Column(Integer, primary_key=True)
+    description_en = Column(String(120))
+    description_kr = Column(String(120))
 
 
 def commit():
