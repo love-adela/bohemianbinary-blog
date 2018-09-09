@@ -4,9 +4,10 @@ from sqlalchemy.orm import sessionmaker, session
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import Table, ForeignKey
 from sqlalchemy.orm import relationship
+from app import db
 
 engine = create_engine('sqlite:///memory:', echo=True)
-Base = declarative_base
+Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
 
@@ -29,7 +30,7 @@ actor_associtation_table = Table(
 )
 
 
-class Movie(Base):
+class Movie(db.Model):
     id = Column(Integer, primary_key=True)
     name_en = Column(String(120), primary_key=True)
     name_kr = Column(String(120))
@@ -47,7 +48,7 @@ class Movie(Base):
         # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
 
 
-class Director(Base):
+class Director(db.Model):
     id = Column(Integer, primary_key=True)
     name_en = Column(String(120), primary_key=True)
     name_kr = Column(String(120))
@@ -57,7 +58,7 @@ class Director(Base):
         # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
 
 
-class Actor(Base):
+class Actor(db.Model):
     id = Column(Integer, primary_key=True)
     name_en = Column(String(120), primary_key=True)
     name_kr = Column(String(120))
@@ -67,7 +68,7 @@ class Actor(Base):
         # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
 
 
-class Cookie(Base):
+class Cookie(db.Model):
     id = Column(Integer, primary_key=True)
     description_en = Column(String(120))
     description_kr = Column(String(120))

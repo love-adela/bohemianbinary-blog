@@ -3,8 +3,11 @@ from app import app
 
 
 @app.route('/')
-@app.route('/anl-admin')
 def index():
+    return "Hello World"
+
+@app.route('/anl-admin')
+def admin_main():
     return "The delicious way to count movie cookies!"
 
 
