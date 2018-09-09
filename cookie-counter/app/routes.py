@@ -3,24 +3,40 @@ from app import app
 
 
 @app.route('/')
-@app.route('/index')
+@app.route('/anl-admin')
 def index():
-    return "Hello, World!"
+    return "The delicious way to count movie cookies!"
 
 
-@app.route("/admin-anl/director")
-def admin_anl():
-    movie = [
-        {'movie_name':'Searching'},
-        {'movie_name': 'The Predator'},
-        {'movie_name': 'Mission : Impossible - Fallout'}
-
-    ]
-    director = [
-        {'director_name' : 'Aneesh Chaganty'},
-        {'director_name': 'Shane Black'},
-        {'director_name': 'Christopher McQuarrie'},
+@app.route('/anl-admin/movie')
+def admin_movie():
+    movies = [
+        {'name': 'Searching'},
+        {'name': 'Incredibles2'},
+        {'name': 'Mission : Impossible - Fallout'}
 
     ]
-    return render_template('admin-anl.html', title='Movie Director', movie=movie, director=director)
+    return render_template('anl-admin-movie.html', title='Movie', movies=movies)
+
+
+@app.route("/anl-admin/director")
+def admin_director():
+    directors = [
+        {'name': 'Aneesh Chaganty'},
+        {'name': 'Brad Bird'},
+        {'name': 'Christopher McQuarrie'},
+
+    ]
+    return render_template('admin-anl-director.html', title='Movie Director', directors=directors)
+
+
+@app.route("/anl-admin/actor")
+def admin_actor():
+    actors = [
+        {'name': 'John Cho'},
+        {'name': 'Craig T.Nelson'},
+        {'name': 'Tom Cruise'},
+
+    ]
+    return render_template('admin-anl-actor.html', title='Movie Actor', actors=actors)
 
