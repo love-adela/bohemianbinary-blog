@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Director List</h1>
+    {% for director in directors %}
+    <div>
+        <p>Director is {{ director.name }}.</p>
+    </div>
+    {% endfor %}
+{% endblock %}

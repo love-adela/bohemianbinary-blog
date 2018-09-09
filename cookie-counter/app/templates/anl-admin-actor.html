@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Actor List</h1>
+    {% for actor in actors %}
+    <div>
+        <p>Actor is {{ actor.name }}.</p>
+    </div>
+    {% endfor %}
+{% endblock %}

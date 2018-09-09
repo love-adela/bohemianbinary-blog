@@ -1,10 +1,18 @@
-from flask import render_template
+from flask import render_template, request, redirect, flash, redirect, url_for
 from app import app
+from app.forms import DirectorForm
+
 
 
 @app.route('/')
+def base():
+    return render_template('base.html', title='Home')
+
+
+@app.route('/index')
 def index():
-    return "Hello World"
+    return render_template('index.html', title='Main')
+
 
 @app.route('/anl-admin')
 def admin_main():
@@ -19,7 +27,16 @@ def admin_director():
         {'name': 'Christopher McQuarrie'},
 
     ]
-    return render_template('admin-anl-director.html', title='Movie Director', directors=directors)
+    return render_template('anl-admin-director.html', title='Movie Director', directors=directors)
+
+
+@app.route('/anl-admin/director/new', methods=['POST'])
+def add_director():
+    form = DirectorForm()
+    if form.validate_on_submit():
+        flash('Register {}'.format(form.directorname.data))
+        return redirect(url_for('/index'))
+    return render_template('anl-admin-director-new.html', title='Register New Director', form=form)
 
 
 @app.route('/anl-admin/movie')
@@ -41,5 +58,5 @@ def admin_actor():
         {'name': 'Tom Cruise'},
 
     ]
-    return render_template('admin-anl-actor.html', title='Movie Actor', actors=actors)
+    return render_template('anl-admin-actor.html', title='Movie Actor', actors=actors)
 

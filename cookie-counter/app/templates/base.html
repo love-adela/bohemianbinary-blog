@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% if title %}
+    <title>{{ title }} - Cookie Counter</title>
+    {% else%}
+    <title>Welcome to Cookie Counter</title>
+    {% endif %}
+</head>
+<body>
+    <nav>Cookie Counter:
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('add_director') }}">Register New Director!</a>
+    </nav>
+    <hr>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {% block content %}
+        <p>The delicious way to count movie cookies!</p>
+    {% endblock %}
+</body>
+</html>

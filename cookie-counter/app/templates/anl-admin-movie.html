@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Movie List</h1>
+    {% for movie in movies %}
+    <div>
+        <p>Movie is {{ movie.name }}.</p>
+    </div>
+    {% endfor %}
+{% endblock %}
