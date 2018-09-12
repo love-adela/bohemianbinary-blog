@@ -1,14 +1,22 @@
 {% extends "base.html" %}
 
+
 {% block content %}
     <h1>Register New Director! 새로운 감독은 언제나 환영이야.</h1>
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.directorname.label }}<br>
-            {{ form.directorname(size=60) }}<br>
-            {% for error in form.directorname.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            {{ form.director_kr_name.label }}<br>
+            {{ form.director_kr_name(size=60) }}<br>
+            {% for error in form.director_kr_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.director_en_name.label }}<br>
+            {{ form.director_en_name(size=60) }}<br>
+            {% for error in form.director_en_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p> {{ form.submit() }} </p>

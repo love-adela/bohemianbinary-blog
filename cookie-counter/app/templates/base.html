@@ -10,9 +10,8 @@
 <body>
     <nav>Cookie Counter:
         <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('add_director') }}">Register New Director!</a>
+        <a href="{{ url_for('admin_director') }}">Directors</a>
     </nav>
-    <hr>
     <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}

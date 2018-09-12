@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, flash, redirect, url_for
-from app import app
+from app import app, db
+from app.models import Director
 from app.forms import DirectorForm
-
 
 
 @app.route('/')
@@ -21,22 +21,51 @@ def admin_main():
 
 @app.route("/anl-admin/director")
 def admin_director():
-    directors = [
-        {'name': 'Aneesh Chaganty'},
-        {'name': 'Brad Bird'},
-        {'name': 'Christopher McQuarrie'},
-
-    ]
+    directors = Director.query.all()
     return render_template('anl-admin-director.html', title='Movie Director', directors=directors)
 
 
-@app.route('/anl-admin/director/new', methods=['POST'])
+# 새로운 감독 데이터 등록
+@app.route('/anl-admin/director/new', methods=['GET', 'POST'])
 def add_director():
     form = DirectorForm()
     if form.validate_on_submit():
-        flash('Register {}'.format(form.directorname.data))
-        return redirect(url_for('/index'))
+        flash('Register {} ({})'.format(form.director_kr_name.data, form.director_en_name.data))
+
+        director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
+        db.session.add(director)
+        db.session.commit()
+
+        return redirect(url_for('admin_director'))
     return render_template('anl-admin-director-new.html', title='Register New Director', form=form)
+
+
+# 감독 데이터 수정
+@app.route('/anl-admin/director/edit/<id>', methods=['GET', 'POST'])
+def edit_director(id):
+    form = DirectorForm()
+    director = Director.query.get(id)
+
+    if form.validate_on_submit():
+        director.name_en = form.director_en_name.data
+        director.name_kr = form.director_kr_name.data
+        db.session.add(director)
+        db.session.commit()
+        return redirect(url_for('index'))
+    else:
+        form.director_en_name.data = director.name_en
+        form.director_kr_name.data = director.name_kr
+    return render_template('anl-admin-director-new.html', title='Edit New Director', form=form)
+
+
+# 감독 데이터 삭제
+@app.route('/anl-admin/director/delete/<id>', methods=['GET', 'POST'])
+def delete_director(id):
+    director = Director.query.get(id)
+    db.session.delete(director)
+    db.session.commit()
+
+    return redirect(url_for('admin_director'))
 
 
 @app.route('/anl-admin/movie')

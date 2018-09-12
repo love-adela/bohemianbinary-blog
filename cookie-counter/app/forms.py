@@ -4,5 +4,6 @@ from wtforms.validators import DataRequired
 
 
 class DirectorForm(FlaskForm):
-    directorname = StringField('Director_name', validators=[DataRequired()])
+    director_kr_name = StringField('Director Korean Name', validators=[DataRequired()])
+    director_en_name = StringField('Director English Name', validators=[DataRequired()])
     submit = SubmitField('Register')
