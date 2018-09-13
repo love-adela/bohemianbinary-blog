@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Actor List</h1>
+<p><a href="{{ url_for('add_actor') }}">새 배우 등록하기</a></p>
+<ul>
     {% for actor in actors %}
-    <div>
-        <p>Actor is {{ actor.name }}.</p>
-    </div>
+    <li>
+        {{ actor.name_en }} ({{ actor.name_kr }})
+        <a href="{{ url_for('edit_actor', id=actor.id) }}">수정</a>
+        <a href="{{ url_for('delete_actor', id=actor.id) }}">삭제</a>
+    </li>
     {% endfor %}
+</ul>
 {% endblock %}

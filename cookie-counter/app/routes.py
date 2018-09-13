@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, flash, redirect, url_for
 from app import app, db
-from app.models import Director
-from app.forms import DirectorForm
+from app.models import Director, Actor
+from app.forms import DirectorForm, ActorForm
 
 
 @app.route('/')
@@ -61,39 +61,62 @@ def edit_director(id):
 # 감독 데이터 삭제
 @app.route('/anl-admin/director/delete/<id>', methods=['GET', 'POST'])
 def delete_director(id):
-    if request.method == 'POST':
-        director = Director.query.get(id)
-        db.session.delete(director)
-        db.session.commit()
+    director = Director.query.get(id)
+    db.session.delete(director)
+    db.session.commit()
 
     return redirect(url_for('admin_director'))
 
 
 @app.route("/anl-admin/actor")
 def admin_actor():
-    actors = [
-        {'name': 'John Cho'},
-        {'name': 'Craig T.Nelson'},
-        {'name': 'Tom Cruise'},
-
-    ]
+    actors = Actor.query.all()
     return render_template('anl-admin-actor.html', title='Movie Actor', actors=actors)
 
-#
-# # 새로운 배우 데이터 등록
-# @app.route("/anl-admin/actor/new", methods=['GET', 'POST'])
-# def add_actor():
-#     form = ActorForm()
-#     if form.validate_on_submit():
-#         flash('Register {} ({})'.format(form.actor_kr_name.data, form.actor_en_name.data))
-#
-#         actor = Actor(name_kr=form.actor_kr_name.data, name_en=form.actor_en_name.data)
-#         db.session.add(actor)
-#         db.session.commit()
 
-#
-# # 배우 데이터 수정
-# @app.route('/anl-admin/actor/edit', methods=['GET', 'POST'])
+# 새로운 배우 데이터 등록
+@app.route("/anl-admin/actor/new", methods=['GET', 'POST'])
+def add_actor():
+    form = ActorForm()
+    if form.validate_on_submit():
+        flash('Register {} ({})'.format(form.actor_kr_name.data, form.actor_en_name.data))
+
+        actor = Actor(name_kr=form.actor_kr_name.data, name_en=form.actor_en_name.data)
+        db.session.add(actor)
+        db.session.commit()
+
+        return redirect(url_for('admin_actor'))
+
+    return render_template('anl-admin-actor-new.html', title='Register New Actor', form=form)
+
+
+# 배우 데이터 수정
+@app.route('/anl-admin/actor/edit/<id>', methods=['GET', 'POST'])
+def edit_actor(id):
+    form = DirectorForm()
+    actor = Actor.query.get(id)
+
+    if request.method == 'POST' and form.validate_on_submit():
+        actor.name_en = form.actor_en_name.data
+        actor.name_kr = form.actor_kr_name.data
+        db.session.add(actor)
+        db.session.commit()
+        return redirect(url_for('admin_actor'))
+    else:
+        form.actor_en_name.data = actor.name_en
+        form.actor_kr_name.data = actor.name_kr
+    return render_template('anl-admin-actor-new.html', title='Edit New Actor', form=form)
+
+
+# 배우 데이터 삭제
+@app.route('/anl-admin/actor/delete/<id>', methods=['GET', 'POST'])
+def delete_actor(id):
+    actor = Actor.query.get(id)
+    db.session.delete(actor)
+    db.session.commit()
+
+    return redirect(url_for('admin_actor'))
+
 
 @app.route('/anl-admin/movie')
 def admin_movie():
