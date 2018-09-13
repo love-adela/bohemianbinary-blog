@@ -28,8 +28,8 @@ def admin_director():
 # 새로운 감독 데이터 등록
 @app.route('/anl-admin/director/new', methods=['GET', 'POST'])
 def add_director():
-    form = DirectorForm()
-    if form.validate_on_submit():
+    form = DirectorForm(request.form)
+    if request.method == 'POST' and form.validate_on_submit():
         flash('Register {} ({})'.format(form.director_kr_name.data, form.director_en_name.data))
 
         director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
@@ -46,7 +46,7 @@ def edit_director(id):
     form = DirectorForm()
     director = Director.query.get(id)
 
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         director.name_en = form.director_en_name.data
         director.name_kr = form.director_kr_name.data
         db.session.add(director)
@@ -55,28 +55,18 @@ def edit_director(id):
     else:
         form.director_en_name.data = director.name_en
         form.director_kr_name.data = director.name_kr
-    return render_template('anl-admin-d 수irector-new.html', title='Edit New Director', form=form)
+    return render_template('anl-admin-director-new.html', title='Edit New Director', form=form)
 
 
 # 감독 데이터 삭제
 @app.route('/anl-admin/director/delete/<id>', methods=['GET', 'POST'])
 def delete_director(id):
-    director = Director.query.get(id)
-    db.session.delete(director)
-    db.session.commit()
+    if request.method == 'POST':
+        director = Director.query.get(id)
+        db.session.delete(director)
+        db.session.commit()
 
     return redirect(url_for('admin_director'))
-
-
-@app.route('/anl-admin/movie')
-def admin_movie():
-    movies = [
-        {'name': 'Searching'},
-        {'name': 'Incredibles2'},
-        {'name': 'Mission : Impossible - Fallout'}
-
-    ]
-    return render_template('anl-admin-movie.html', title='Movie', movies=movies)
 
 
 @app.route("/anl-admin/actor")
@@ -88,4 +78,31 @@ def admin_actor():
 
     ]
     return render_template('anl-admin-actor.html', title='Movie Actor', actors=actors)
+
+#
+# # 새로운 배우 데이터 등록
+# @app.route("/anl-admin/actor/new", methods=['GET', 'POST'])
+# def add_actor():
+#     form = ActorForm()
+#     if form.validate_on_submit():
+#         flash('Register {} ({})'.format(form.actor_kr_name.data, form.actor_en_name.data))
+#
+#         actor = Actor(name_kr=form.actor_kr_name.data, name_en=form.actor_en_name.data)
+#         db.session.add(actor)
+#         db.session.commit()
+
+#
+# # 배우 데이터 수정
+# @app.route('/anl-admin/actor/edit', methods=['GET', 'POST'])
+
+@app.route('/anl-admin/movie')
+def admin_movie():
+    movies = [
+        {'name': 'Searching'},
+        {'name': 'Incredibles2'},
+        {'name': 'Mission : Impossible - Fallout'}
+
+    ]
+    return render_template('anl-admin-movie.html', title='Movie', movies=movies)
+
 
