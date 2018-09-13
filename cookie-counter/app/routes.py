@@ -51,11 +51,11 @@ def edit_director(id):
         director.name_kr = form.director_kr_name.data
         db.session.add(director)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('admin_director'))
     else:
         form.director_en_name.data = director.name_en
         form.director_kr_name.data = director.name_kr
-    return render_template('anl-admin-director-new.html', title='Edit New Director', form=form)
+    return render_template('anl-admin-d 수irector-new.html', title='Edit New Director', form=form)
 
 
 # 감독 데이터 삭제
