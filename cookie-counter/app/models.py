@@ -52,6 +52,7 @@ class Director(db.Model):
     id = Column(Integer, primary_key=True)
     name_en = Column(String(120))
     name_kr = Column(String(120))
+    photo = Column(String(120))
 
     def __repr__(self):
         return "<Movie Director('%s', '%s')>" % (self.name_en, self.name_kr)

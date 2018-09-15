@@ -1,7 +1,11 @@
-from flask import render_template, request, redirect, flash, redirect, url_for
 from app import app, db
-from app.models import Director, Actor
-from app.forms import DirectorForm, ActorForm
+from app.models import Actor, Director
+from app.forms import ActorForm, DirectorForm
+from flask import flash, render_template, request, redirect, url_for
+
+import os
+import time
+import uuid
 
 
 @app.route('/')
@@ -25,13 +29,15 @@ def admin_director():
     return render_template('anl-admin-director.html', title='Movie Director', directors=directors)
 
 
+def unique_filename(filename):
+    return time.strftime("%d-%m-%Y") + '-' + uuid.uuid4().hex[:8] + '-' + filename
+
+
 # 새로운 감독 데이터 등록
 @app.route('/anl-admin/director/new', methods=['GET', 'POST'])
 def add_director():
     form = DirectorForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
-        flash('Register {} ({})'.format(form.director_kr_name.data, form.director_en_name.data))
-
         director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
         db.session.add(director)
         db.session.commit()
@@ -47,15 +53,22 @@ def edit_director(id):
     director = Director.query.get(id)
 
     if request.method == 'POST' and form.validate_on_submit():
+        photo_data = form.photo.data
+        upload_folder = app.config['UPLOAD_FOLDER']
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+        filename = unique_filename(photo_data.filename)
+        photo_data.save(os.path.join(upload_folder, filename))
         director.name_en = form.director_en_name.data
         director.name_kr = form.director_kr_name.data
+        director.photo = filename
         db.session.add(director)
         db.session.commit()
         return redirect(url_for('admin_director'))
     else:
         form.director_en_name.data = director.name_en
         form.director_kr_name.data = director.name_kr
-    return render_template('anl-admin-director-new.html', title='Edit New Director', form=form)
+    return render_template('anl-admin-director-new.html', title='Edit New Director', form=form, filename=director.photo)
 
 
 # 감독 데이터 삭제
@@ -127,5 +140,4 @@ def admin_movie():
 
     ]
     return render_template('anl-admin-movie.html', title='Movie', movies=movies)
-
 
