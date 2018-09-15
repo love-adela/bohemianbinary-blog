@@ -6,6 +6,8 @@ from flask import flash, render_template, request, redirect, url_for
 import os
 import time
 import uuid
+from app.models import Director, Actor, Movie
+from app.forms import DirectorForm, ActorForm, MovieForm
 
 
 @app.route('/')
@@ -68,7 +70,7 @@ def edit_director(id):
     else:
         form.director_en_name.data = director.name_en
         form.director_kr_name.data = director.name_kr
-    return render_template('anl-admin-director-new.html', title='Edit New Director', form=form, filename=director.photo)
+    return render_template('anl-admin-director-new.html', title='Edit Director Data', form=form, filename=director.photo)
 
 
 # 감독 데이터 삭제
@@ -106,7 +108,7 @@ def add_actor():
 # 배우 데이터 수정
 @app.route('/anl-admin/actor/edit/<id>', methods=['GET', 'POST'])
 def edit_actor(id):
-    form = DirectorForm()
+    form = ActorForm()
     actor = Actor.query.get(id)
 
     if request.method == 'POST' and form.validate_on_submit():
@@ -118,7 +120,7 @@ def edit_actor(id):
     else:
         form.actor_en_name.data = actor.name_en
         form.actor_kr_name.data = actor.name_kr
-    return render_template('anl-admin-actor-new.html', title='Edit New Actor', form=form)
+    return render_template('anl-admin-actor-new.html', title='Edit Actor Data', form=form)
 
 
 # 배우 데이터 삭제
@@ -131,13 +133,50 @@ def delete_actor(id):
     return redirect(url_for('admin_actor'))
 
 
-@app.route('/anl-admin/movie')
+@app.route("/anl-admin/movie")
 def admin_movie():
-    movies = [
-        {'name': 'Searching'},
-        {'name': 'Incredibles2'},
-        {'name': 'Mission : Impossible - Fallout'}
-
-    ]
+    movies = Movie.query.all()
     return render_template('anl-admin-movie.html', title='Movie', movies=movies)
 
+
+# 새로운 영화 데이터 등록
+@app.route('/anl-admin/movie/new', methods=['GET', 'POST'])
+def add_movie():
+    form = MovieForm(request.form)
+    if request.method == 'POST' and form.validate_on_submit():
+        flash('Register {} ({})'.format(form.movie_kr_name.data, form.movie_en_name.data))
+
+        movie = Movie(name_kr=form.movie_kr_name.data, name_en=form.movie_en_name.data)
+        db.session.add(movie)
+        db.session.commit()
+
+        return redirect(url_for('admin_movie'))
+    return render_template('anl-admin-movie-new.html', title='Register New Movie', form=form)
+
+
+# 영화 데이터 수정
+@app.route('/anl-admin/movie/edit/<id>', methods=['GET', 'POST'])
+def edit_movie(id):
+    form = MovieForm()
+    movie = Movie.query.get(id)
+
+    if request.method == 'POST' and form.validate_on_submit():
+        movie.name_en = form.movie_en_name.data
+        movie.name_kr = form.movie_kr_name.data
+        db.session.add(movie)
+        db.session.commit()
+        return redirect(url_for('admin_movie'))
+    else:
+        form.movie_en_name.data = movie.name_en
+        form.movie_kr_name.data = movie.name_kr
+    return render_template('anl-admin-movie-new.html', title='Edit Movie Data', form=form)
+
+
+# 영화 데이터 삭제
+@app.route('/anl-admin/movie/delete/<id>', methods=['GET', 'POST'])
+def delete_movie(id):
+    movie = Movie.query.get(id)
+    db.session.delete(movie)
+    db.session.commit()
+
+    return redirect(url_for('admin_movie'))

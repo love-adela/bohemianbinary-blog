@@ -8,23 +8,24 @@
     {% endif %}
 </head>
 <body>
-    <nav>Cookie Counter:
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('admin_director') }}">Directors</a>
-        <a href="{{ url_for('admin_actor') }}">Actors</a>
-    </nav>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    {% block content %}
-        <p>The delicious way to count movie cookies!</p>
-    {% endblock %}
+<nav>Cookie Counter:
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('admin_movie') }}">Movies</a>
+    <a href="{{ url_for('admin_director') }}">Directors</a>
+    <a href="{{ url_for('admin_actor') }}">Actors</a>
+</nav>
+<hr>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% block content %}
+<p>The delicious way to count movie cookies!</p>
+{% endblock %}
 </body>
 </html>

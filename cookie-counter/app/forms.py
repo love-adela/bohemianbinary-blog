@@ -17,3 +17,9 @@ class ActorForm(FlaskForm):
     actor_kr_name = StringField('Actor Korean Name', validators=[DataRequired()])
     actor_en_name = StringField('Actor English Name', validators=[DataRequired()])
     submit = SubmitField('Register')
+
+
+class MovieForm(FlaskForm):
+    movie_kr_name = StringField('Moive Korean Name', validators=[DataRequired()])
+    movie_en_name = StringField('Movie English Name', validators=[DataRequired()])
+    submit = SubmitField('Register')

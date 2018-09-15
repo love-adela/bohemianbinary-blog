@@ -44,8 +44,7 @@ class Movie(db.Model):
     image_file_name = Column(String(120))
 
     def __repr__(self):
-        return "<Movie('%s', '%s')>" % (self.name_en, self.name_kr)
-        # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
+        return "<Movie('%s', ('%s'))>" % (self.name_en, self.name_kr)
 
 
 class Director(db.Model):
@@ -55,7 +54,7 @@ class Director(db.Model):
     photo = Column(String(120))
 
     def __repr__(self):
-        return "<Movie Director('%s', '%s')>" % (self.name_en, self.name_kr)
+        return "<Movie Director('%s', ('%s'))>" % (self.name_en, self.name_kr)
         # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
 
 
