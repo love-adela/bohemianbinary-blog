@@ -30,13 +30,13 @@ def admin_director():
 def add_director():
     form = DirectorForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
-        flash('Register {} ({})'.format(form.director_kr_name.data, form.director_en_name.data))
+            flash('Register {} ({})'.format(form.director_kr_name.data, form.director_en_name.data))
 
-        director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
-        db.session.add(director)
-        db.session.commit()
+            director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
+            db.session.add(director)
+            db.session.commit()
 
-        return redirect(url_for('admin_director'))
+            return redirect(url_for('admin_director'))
     return render_template('anl-admin-director-new.html', title='Register New Director', form=form)
 
 
@@ -93,7 +93,7 @@ def add_actor():
 # 배우 데이터 수정
 @app.route('/anl-admin/actor/edit/<id>', methods=['GET', 'POST'])
 def edit_actor(id):
-    form = DirectorForm()
+    form = ActorForm()
     actor = Actor.query.get(id)
 
     if request.method == 'POST' and form.validate_on_submit():
