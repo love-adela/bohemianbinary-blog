@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Movie List</h1>
+<p><a href="{{ url_for('add_movie') }}">새 영화 등록하기</a></p>
+<ul>
     {% for movie in movies %}
-    <div>
-        <p>Movie is {{ movie.name }}.</p>
-    </div>
+    <li>
+        {{ movie.name_en }} ({{ movie.name_kr }})
+        <a href="{{ url_for('edit_movie', id=movie.id) }}">수정</a>
+        <a href="{{ url_for('delete_movie', id=movie.id) }}">삭제</a>
+    </li>
     {% endfor %}
+</ul>
 {% endblock %}
