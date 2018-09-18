@@ -10,12 +10,16 @@ class DirectorForm(FlaskForm):
     photo = FileField('Photo', validators=[
         FileAllowed(['jpg', 'png', 'gif'], 'Images only!')
     ])
+    delete = SubmitField('Delete')
     submit = SubmitField('Register')
 
 
 class ActorForm(FlaskForm):
     actor_kr_name = StringField('Actor Korean Name', validators=[DataRequired()])
     actor_en_name = StringField('Actor English Name', validators=[DataRequired()])
+    photo = FileField('Photo', validators=[
+        FileAllowed(['jpg', 'png', 'gif'], 'Images only!')
+    ])
     submit = SubmitField('Register')
 
 

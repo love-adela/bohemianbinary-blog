@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>Register New Actor! 새로운 배우는 언제나 환영이야.</h1>
-    <form action="" method="post" novalidate>
+    <form action="" method="post" enctype="multipart/form-data" novalidate>
         {{ form.hidden_tag() }}
         <p>
             {{ form.actor_kr_name.label }}<br>
@@ -16,6 +16,14 @@
             {{ form.actor_en_name.label }}<br>
             {{ form.actor_en_name(size=60) }}<br>
             {% for error in form.actor_en_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.photo.label }}<br />
+            {{ form.photo(size=60) }}<br />
+            {% if filename %} {{ filename }} {% endif %}
+            {% for error in form.photo.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>

@@ -34,6 +34,7 @@ class Movie(db.Model):
     id = Column(Integer, primary_key=True)
     name_en = Column(String(120))
     name_kr = Column(String(120))
+    photo = Column(String(120))
     directors = relationship("Director",
                              secondary=director_association_table,
                              backref="movies")
@@ -62,6 +63,7 @@ class Actor(db.Model):
     id = Column(Integer, primary_key=True)
     name_en = Column(String(120))
     name_kr = Column(String(120))
+    photo = Column(String(120))
 
     def __repr__(self):
         return "<Movie Actor('%s', '%s')>" % (self.name_en, self.name_kr)
