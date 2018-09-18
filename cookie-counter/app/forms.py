@@ -10,7 +10,6 @@ class DirectorForm(FlaskForm):
     photo = FileField('Photo', validators=[
         FileAllowed(['jpg', 'png', 'gif'], 'Images only!')
     ])
-    delete = SubmitField('Delete')
     submit = SubmitField('Register')
 
 
