@@ -2,7 +2,7 @@ import os
 import time
 import uuid
 from app import app, db
-from flask import flash, render_template, request, redirect, url_for
+from flask import flash, jsonify, render_template, request, redirect, url_for
 from app.models import Director, Actor, Movie
 from app.forms import DirectorForm, ActorForm, MovieForm
 
@@ -24,12 +24,25 @@ def admin_main():
 
 @app.route("/anl-admin/director")
 def admin_director():
-    directors = Director.query.all()
-    return render_template('anl-admin-director.html', title='Movie Director', directors=directors)
+    # directors = Director.query.all()
+    return render_template('anl-admin-director.html', title='Movie Director')
 
 
 def unique_filename(filename):
     return time.strftime("%d-%m-%Y") + '-' + uuid.uuid4().hex[:8] + '-' + filename
+
+
+@app.route('/anl-api/director')
+def api_director():
+    directors = []
+    for d in Director.query.all():
+        director = {
+            'name_en': d.name_en,
+            'name_kr': d.name_kr,
+            'photo': d.photo
+        }
+        directors.append(director)
+    return jsonify(directors=directors)
 
 
 # 새로운 감독 데이터 등록
