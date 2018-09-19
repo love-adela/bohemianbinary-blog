@@ -20,11 +20,15 @@
 <script>
     $.get('/anl-api/director')
         .done(function(response) {
-            // console.log(response.directors)
+            html = ""
             for (var i in response.directors) {
-                console.log(response.directors[i]);
+                li = "<li>";
+                director = response.directors[i];
+                li += director.name_en + " " + director.name_kr;
+                li += "</li>";
+                html += li;
             }
-            // $('.list').text(response.directors);
+            $('.list').html(html);
         }).fail(function(response) {
             console.log(response.text);
     })
