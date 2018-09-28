@@ -2,13 +2,26 @@
 
 {% block content %}
 <p><a href="{{ url_for('add_movie') }}">새 영화 등록하기</a></p>
-<ul>
-    {% for movie in movies %}
-    <li>
-        {{ movie.name_en }} ({{ movie.name_kr }})
-        <a href="{{ url_for('edit_movie', id=movie.id) }}">수정</a>
-        <a href="{{ url_for('delete_movie', id=movie.id) }}">삭제</a>
-    </li>
-    {% endfor %}
+<ul class="list">
+
 </ul>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+    $.getJSON('/anl-api/movie')
+        .done(function(response) {
+            html = "";
+            for (var i in response.movies) {
+                li = "<li>";
+                movie = response.movies[i];
+                li += movie.name_en + " " + movie.name_kr;
+                li += "</li>";
+                html += li;
+            }
+            $('.list').html(html);
+        }).fail(function(response) {
+            console.log(response.text);
+    })
+</script>
 {% endblock %}

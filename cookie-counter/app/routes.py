@@ -24,7 +24,6 @@ def admin_main():
 
 @app.route("/anl-admin/director")
 def admin_director():
-    # directors = Director.query.all()
     return render_template('anl-admin-director.html', title='Movie Director')
 
 
@@ -108,8 +107,20 @@ def delete_director(id):
 
 @app.route("/anl-admin/actor")
 def admin_actor():
-    actors = Actor.query.all()
-    return render_template('anl-admin-actor.html', title='Movie Actor', actors=actors)
+    return render_template('anl-admin-actor.html', title='Movie Actor')
+
+
+@app.route("/anl-api/actor")
+def api_actor():
+    actors = []
+    for a in Actor.query.all():
+        actor = {
+            'name_en': a.name_en,
+            'name_kr': a.name_kr,
+            'photo': a.photo
+        }
+        actors.append(actor)
+    return jsonify(actors=actors)
 
 
 # 새로운 배우 데이터 등록
@@ -174,8 +185,24 @@ def delete_actor(id):
 
 @app.route("/anl-admin/movie")
 def admin_movie():
-    movies = Movie.query.all()
-    return render_template('anl-admin-movie.html', title='Movie', movies=movies)
+    return render_template('anl-admin-movie.html', title='Movie')
+
+
+def unique_filename(filename):
+    return time.strftime("%d-%m-%Y") + '-' + uuid.uuid4().hex[:8] + '-' + filename
+
+
+@app.route('/anl-api/movie')
+def api_movie():
+    movies = []
+    for m in Movie.query.all():
+        movie = {
+            'name_en': m.name_en,
+            'name_kr': m.name_kr,
+            'photo': m.photo
+        }
+        movies.append(movie)
+    return jsonify(movies=movies)
 
 
 # 새로운 영화 데이터 등록
