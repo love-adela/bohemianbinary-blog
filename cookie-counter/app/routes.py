@@ -33,15 +33,37 @@ def unique_filename(filename):
 
 @app.route('/anl-api/director')
 def api_director():
+    directors = get_all_directors()
+    return jsonify(directors=directors)
+
+
+def get_all_directors():
     directors = []
     for d in Director.query.all():
         director = {
+            'id': d.id,
             'name_en': d.name_en,
             'name_kr': d.name_kr,
             'photo': d.photo
         }
         directors.append(director)
-    return jsonify(directors=directors)
+    return directors
+
+
+@app.route('/anl-api/director/photo', methods=['POST'])
+def delete_director_photo():
+    json = request.get_json()
+    id = json.get('id')
+    director = Director.query.get(id)
+    director.photo = None
+    db.session.add(director)
+    db.session.commit()
+
+    return jsonify({
+        'result': 'success',
+        'id': id,
+        'directors': get_all_directors()
+    })
 
 
 # 새로운 감독 데이터 등록

@@ -16,6 +16,9 @@
                 li = "<li>";
                 movie = response.movies[i];
                 li += movie.name_en + " " + movie.name_kr;
+                if(movie.photo != null) {
+                    li += "<img src='/static/" + movie.photo + "'/>"
+                }
                 li += "</li>";
                 html += li;
             }

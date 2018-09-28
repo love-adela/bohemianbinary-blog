@@ -9,19 +9,46 @@
 {% block scripts %}
 {{ super() }}
 <script>
-    $.getJSON('/anl-api/director')
-        .done(function(response) {
-            html = "";
-            for (var i in response.directors) {
-                li = "<li>";
-                director = response.directors[i];
-                li += director.name_en + " " + director.name_kr;
-                li += "</li>";
-                html += li;
+    function delete_photo(id, name_en) {
+        result = confirm(name_en + "을 삭제하시겠습니까?");
+        if (result == true) {
+            $.ajax({
+                type: "POST",
+                url: '/anl-api/director/photo',
+                data: JSON.stringify({
+                    'id': id
+                }),
+                success: function(response) {
+                    alert("사진 삭제에 성공했습니다.");
+                    update_directors(response.directors);
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            })
+        }
+    };
+
+    function update_directors(directors) {
+        html = "";
+        for (var i in directors) {
+            li = "<li>";
+            director = directors[i];
+            li += director.name_en + " " + director.name_kr;
+            if (director.photo != null) {
+                li += "<img src='/static/" + director.photo + "' />"
             }
-            $('.list').html(html);
-        }).fail(function(response) {
-            console.log(response.text);
+            li += "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>"
+            li += "</li>";
+            html += li;
+        }
+        $('.list').html(html);
+    }
+
+    $.getJSON('/anl-api/director')
+        .done(function (response) {
+            update_directors(response.directors);
+        }).fail(function (response) {
+        console.log(response.text);
     })
 </script>
 {% endblock %}
