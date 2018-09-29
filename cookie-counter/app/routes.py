@@ -50,22 +50,6 @@ def get_all_directors():
     return directors
 
 
-@app.route('/anl-api/director/photo', methods=['POST'])
-def delete_director_photo():
-    json = request.get_json()
-    id = json.get('id')
-    director = Director.query.get(id)
-    director.photo = None
-    db.session.add(director)
-    db.session.commit()
-
-    return jsonify({
-        'result': 'success',
-        'id': id,
-        'directors': get_all_directors()
-    })
-
-
 # 새로운 감독 데이터 등록
 @app.route('/anl-admin/director/new', methods=['GET', 'POST'])
 def add_director():
@@ -90,7 +74,6 @@ def add_director():
                            title='Register New Director', form=form, filename=director.photo)
 
 
-# 감독 데이터 수정
 @app.route('/anl-admin/director/edit/<id>', methods=['GET', 'POST'])
 def edit_director(id):
     form = DirectorForm()
@@ -116,15 +99,57 @@ def edit_director(id):
     return render_template('anl-admin-director-new.html', title='Edit Director Data', form=form, filename=director.photo)
 
 
-# 감독 데이터 삭제
-@app.route('/anl-admin/director/delete/<id>', methods=['GET', 'POST'])
+# 감독 데이터 수정 - 사진 제외
+@app.route('/anl-api/director/<id>', methods=['POST'])
+def edit_director_api(id):
+    json = request.get_json()
+    name_en = json.get('name_en')
+    name_kr = json.get('name_kr')
+    director = Director.query.get(id)
+    director.name_en = name_en
+    director.name_kr = name_kr
+    db.session.add(director)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'directors': get_all_directors()
+    })
+
+
+# 감독 사진 변경
+
+
+# 감독 사진 삭제
+@app.route('/anl-api/director/photo', methods=['POST'])
+def delete_director_photo():
+    json = request.get_json()
+    id = json.get('id')
+    director = Director.query.get(id)
+    director.photo = None
+    db.session.add(director)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'directors': get_all_directors()
+    })
+
+
+# 감독 항목 삭제
+@app.route('/anl-api/director/<id>', methods=['DELETE'])
 def delete_director(id):
     director = Director.query.get(id)
-
     db.session.delete(director)
     db.session.commit()
 
-    return redirect(url_for('admin_director'))
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'directors': get_all_directors()
+    })
 
 
 @app.route("/anl-admin/actor")
