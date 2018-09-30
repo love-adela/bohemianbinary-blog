@@ -2,16 +2,29 @@
 
 {% block content %}
 <p><a href="{{ url_for('add_actor') }}">새 배우 등록하기</a></p>
-<ul>
-    {% for actor in actors %}
-    <li>
-        {{ actor.name_en }} ({{ actor.name_kr }})
-        {% if actor.photo %}
-        <img src="{{ url_for('static', filename=actor.photo) }}" alt="배우 사진" />
-        {% endif %}
-        <a href="{{ url_for('edit_actor', id=actor.id) }}">수정</a>
-        <a href="{{ url_for('delete_actor', id=actor.id) }}">삭제</a>
-    </li>
-    {% endfor %}
+<ul class="list">
+
 </ul>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+    $.getJSON('/anl-api/actor')
+        .done(function(response) {
+            html = "";
+            for (var i in response.actors) {
+                li = "<li>";
+                actor = response.actors[i];
+                li += actor.name_en + " " + actor.name_kr;
+                if (actor.photo != null) {
+                    li += "<img src='/static/" + actor.photo +"' />"
+                }
+                li += "</li>";
+                html += li;
+            }
+            $('.list').html(html);
+        }).fail(function(response) {
+            console.log(response.text);
+    })
+</script>
 {% endblock %}
