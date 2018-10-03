@@ -116,6 +116,22 @@ def edit_director_api(id):
         'directors': get_all_directors()
     })
 
+@app.route('/anl-api/director/photo/<id>', methods=['POST'])
+def change_director_photo(id):
+    photo_data = request.files['photo']
+    filename = unique_filename(photo_data.filename)
+    upload_folder = app.config['UPLOAD_FOLDER']
+    photo_data.save(os.path.join(upload_folder, filename))
+    director = Director.query.get(id)
+    director.photo = filename
+    db.session.add(director)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'directors': get_all_directors()
+    })
 
 @app.route('/anl-api/director/photo', methods=['POST'])
 def delete_director_photo():

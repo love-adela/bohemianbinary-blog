@@ -3,12 +3,30 @@
 {% block content %}
 <p><a href="{{ url_for('add_director') }}">새 감독 등록하기</a></p>
 <div class="list">
-
 </div>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
 <script>
+    function change_photo(id) {
+        form_data = new FormData($("#list-" + id + " > form")[0]);
+        is_confirmed = confirm(id + " 감독 항목 사진을 변경하시겠습니까?");
+
+        if (is_confirmed) {
+            $.ajax({
+                type : 'POST',
+                url : '/anl-api/director/photo/' + id,
+                data: form_data,
+                success: function(response) {
+                    alert("수정에 성공했습니다.");
+                    update_directors_html(response.directors);
+                },
+                processData: false,
+                contentType: false
+            })
+        }
+    }
+
     function show_director_edit(id, name_en, name_kr) {
         let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>"
             + "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>"
@@ -100,7 +118,12 @@
                 item += "<img src='/static/" + director.photo + "' /><br />"
             }
 
-            item += "<button onclick=\"show_director_edit("
+            item += "<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">"
+                + "<input type=\"file\" name=\"photo\">"
+                + "</form>"
+                + "<button onclick=\"change_photo(" + director.id + ")\">사진 변경</button>"
+                + "<p/>"
+                + "<button onclick=\"show_director_edit("
                 + director.id + ", '" + director.name_en + "', '" + director.name_kr +  "')\">항목 수정</button>"
                 + "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>"
                 + "<button onclick=\"delete_director(" + director.id + ", '" + director.name_en + "')\">항목 삭제</button>"
