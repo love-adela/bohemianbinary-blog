@@ -1,8 +1,9 @@
 import os
 import time
 import uuid
+import logging
 from app import app, db
-from flask import flash, jsonify, render_template, request, redirect, url_for
+from flask import jsonify, render_template, request, redirect, url_for
 from app.models import Director, Actor, Movie
 from app.forms import DirectorForm, ActorForm, MovieForm
 
@@ -54,7 +55,6 @@ def get_all_directors():
 @app.route('/anl-admin/director/new', methods=['GET', 'POST'])
 def add_director():
     form = DirectorForm()
-    director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
 
     if request.method == 'POST' and form.validate_on_submit():
         photo_data = form.photo.data
@@ -63,15 +63,14 @@ def add_director():
             os.makedirs(upload_folder)
         filename = unique_filename(photo_data.filename)
         photo_data.save(os.path.join(upload_folder, filename))
+
+        director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
         director.photo = filename
         db.session.add(director)
         db.session.commit()
         return redirect(url_for('admin_director'))
-    else:
-        form.director_en_name.data = director.name_en
-        form.director_kr_name.data = director.name_kr
     return render_template('anl-admin-director-new.html',
-                           title='Register New Director', form=form, filename=director.photo)
+                           title='Register New Director', form=form)
 
 
 @app.route('/anl-admin/director/edit/<id>', methods=['GET', 'POST'])
@@ -118,10 +117,6 @@ def edit_director_api(id):
     })
 
 
-# 감독 사진 변경
-
-
-# 감독 사진 삭제
 @app.route('/anl-api/director/photo', methods=['POST'])
 def delete_director_photo():
     json = request.get_json()
@@ -159,22 +154,26 @@ def admin_actor():
 
 @app.route("/anl-api/actor")
 def api_actor():
+    actors = get_all_actors()
+    return jsonify(actors=actors)
+
+
+def get_all_actors():
     actors = []
     for a in Actor.query.all():
         actor = {
+            'id': a.id,
             'name_en': a.name_en,
             'name_kr': a.name_kr,
             'photo': a.photo
         }
         actors.append(actor)
-    return jsonify(actors=actors)
+    return actors
 
 
-# 새로운 배우 데이터 등록
 @app.route("/anl-admin/actor/new", methods=['GET', 'POST'])
 def add_actor():
     form = ActorForm()
-    actor = Actor(name_kr=form.actor_kr_name.data, name_en=form.actor_en_name.data)
 
     if request.method == 'POST' and form.validate_on_submit():
         photo_data = form.photo.data
@@ -183,15 +182,13 @@ def add_actor():
             os.makedirs(upload_folder)
         filename = unique_filename(photo_data.filename)
         photo_data.save(os.path.join(upload_folder, filename))
-
-        actor.name_en = form.actor_en_name.data
-        actor.name_kr = form.actor_kr_name.data
+        actor = Actor(name_kr=form.actor_kr_name.data, name_en=form.actor_en_name.data)
         actor.photo = filename
         db.session.add(actor)
         db.session.commit()
         return redirect(url_for('admin_actor'))
-
-    return render_template('anl-admin-actor-new.html', title='Register New Actor', form=form)
+    return render_template('anl-admin-actor-new.html',
+                           title='Register New Actor', form=form)
 
 
 # 배우 데이터 수정
@@ -220,7 +217,40 @@ def edit_actor(id):
     return render_template('anl-admin-actor-new.html', title='Edit Actor Data', form=form, filename=actor.photo)
 
 
-# 배우 데이터 삭제
+@app.route('/anl-api/actor/<id>', methods=['POST'])
+def edit_actor_api(id):
+    json = request.get_json()
+    name_en = json.get('name_en')
+    name_kr = json.get('name_kr')
+    actor = Actor.query.get(id)
+    actor.name_en = name_en
+    actor.name_kr = name_kr
+    db.session.add(actor)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'actors': get_all_actors()
+    })
+
+
+@app.route('/anl-admin/actor/photo', methods=['POST'])
+def delete_actor_photo():
+    json = request.get_json()
+    id = json.get('id')
+    actor = Actor.query.get(id)
+    actor.photo = None
+    db.session.add(actor)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'actors': get_all_actors()
+    })
+
+
 @app.route('/anl-admin/actor/delete/<id>', methods=['GET', 'POST'])
 def delete_actor(id):
     actor = Actor.query.get(id)
@@ -235,39 +265,49 @@ def admin_movie():
     return render_template('anl-admin-movie.html', title='Movie')
 
 
-def unique_filename(filename):
-    return time.strftime("%d-%m-%Y") + '-' + uuid.uuid4().hex[:8] + '-' + filename
-
-
 @app.route('/anl-api/movie')
 def api_movie():
+    movies = get_all_movies()
+    return jsonify(movies=movies)
+
+
+def get_all_movies():
     movies = []
     for m in Movie.query.all():
         movie = {
+            'id': m.id,
             'name_en': m.name_en,
             'name_kr': m.name_kr,
             'photo': m.photo
         }
         movies.append(movie)
-    return jsonify(movies=movies)
+    return movies
 
 
-# 새로운 영화 데이터 등록
 @app.route('/anl-admin/movie/new', methods=['GET', 'POST'])
 def add_movie():
-    form = MovieForm(request.form)
+    form = MovieForm()
+
     if request.method == 'POST' and form.validate_on_submit():
-        flash('Register {} ({})'.format(form.movie_kr_name.data, form.movie_en_name.data))
+        logging.error(form)
+        logging.error(form.photo)
+        logging.error(form.photo.data)
+        photo_data = form.photo.data
+        upload_folder = app.config['UPLOAD_FOLDER']
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+        filename = unique_filename(photo_data.filename)
+        photo_data.save(os.path.join(upload_folder, filename))
 
         movie = Movie(name_kr=form.movie_kr_name.data, name_en=form.movie_en_name.data)
+        movie.photo = filename
         db.session.add(movie)
         db.session.commit()
-
         return redirect(url_for('admin_movie'))
-    return render_template('anl-admin-movie-new.html', title='Register New Movie', form=form)
+    return render_template('anl-admin-movie-new.html',
+                           title='Register New Movie', form=form)
 
 
-# 영화 데이터 수정
 @app.route('/anl-admin/movie/edit/<id>', methods=['GET', 'POST'])
 def edit_movie(id):
     form = MovieForm()
@@ -285,7 +325,40 @@ def edit_movie(id):
     return render_template('anl-admin-movie-new.html', title='Edit Movie Data', form=form)
 
 
-# 영화 데이터 삭제
+@app.route('/anl-api/movie/<id>', methods=['POST'])
+def edit_movie_api(id):
+    json = request.get_json()
+    name_en = json.get('name_en')
+    name_kr = json.get('name_kr')
+    movie = Movie.query.get(id)
+    movie.name_en = name_en
+    movie.name_kr = name_kr
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'movies': get_all_movies()
+    })
+
+
+@app.route('/anl-api/movie/photo', methods=['POST'])
+def delete_movie_photo():
+    json = request.get_json()
+    id = json.get('id')
+    movie = Movie.query.get(id)
+    movie.photo = None
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'movies': get_all_movies()
+    })
+
+
 @app.route('/anl-admin/movie/delete/<id>', methods=['GET', 'POST'])
 def delete_movie(id):
     movie = Movie.query.get(id)
