@@ -20,10 +20,15 @@ class ActorForm(FlaskForm):
     photo = FileField('Photo', validators=[
         FileAllowed(['jpg', 'png', 'gif'], 'Images only!')
     ])
+    delete = SubmitField('Delete')
     submit = SubmitField('Register')
 
 
 class MovieForm(FlaskForm):
-    movie_kr_name = StringField('Moive Korean Name', validators=[DataRequired()])
+    movie_kr_name = StringField('Movie Korean Name', validators=[DataRequired()])
     movie_en_name = StringField('Movie English Name', validators=[DataRequired()])
+    photo = FileField('Photo', validators=[
+        FileAllowed(['jpg', 'png', 'gif'], 'Images only!')
+    ])
+    delete = SubmitField('Delete')
     submit = SubmitField('Register')

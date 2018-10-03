@@ -10,20 +10,6 @@
 {{ super() }}
 <script>
     function show_director_edit(id, name_en, name_kr) {
-
-        // isConfirmed = confirm(name_en + " 항목을 수정하시겠습니까?");
-        // if (isConfirmed == true) {
-        //     $.ajax({
-        //         type: "PUT",
-        //         url: '/anl-api/director/' + id,
-        //         success: function (response) {
-        //             alert("항목 수정에 성공했습니다.");
-        //             update_directors_html(response.directors);
-        //         },
-        //         contentType: 'application/json',
-        //         dataType: 'json'
-        //     })
-        // }
         let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>";
         body += "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>";
         body += "<button onclick='update_director(" + id +")'>수정 완료</button>"
