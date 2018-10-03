@@ -2,17 +2,17 @@
 
 {% block content %}
 <p><a href="{{ url_for('add_director') }}">새 감독 등록하기</a></p>
-<ul class="list">
+<div class="list">
 
-</ul>
+</div>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
 <script>
     function show_director_edit(id, name_en, name_kr) {
-        let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>";
-        body += "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>";
-        body += "<button onclick='update_director(" + id +")'>수정 완료</button>"
+        let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>"
+            + "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>"
+            + "<button onclick='update_director(" + id +")'>수정 완료</button>";
         $("#list-" + id).html(body);
     }
 
@@ -94,18 +94,18 @@
         html = "";
         for (var i in directors) {
             director = directors[i];
-            li = "<li id=\"list-" + director.id + "\">";
-            li += director.name_en + " " + director.name_kr;
+            item = "<div id=\"list-" + director.id + "\">"
+                + director.name_en + " " + director.name_kr + "<br />";
             if (director.photo != null) {
-                li += "<img src='/static/" + director.photo + "' />"
+                item += "<img src='/static/" + director.photo + "' /><br />"
             }
 
-            li += "<button onclick=\"show_director_edit(" +
-                director.id + ", '" + director.name_en + "', '" + director.name_kr +  "')\">항목 수정</button>";
-            li += "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>"
-            li += "<button onclick=\"delete_director(" + director.id + ", '" + director.name_en + "')\">항목 삭제</button>"
-            li += "</li>";
-            html += li;
+            item += "<button onclick=\"show_director_edit("
+                + director.id + ", '" + director.name_en + "', '" + director.name_kr +  "')\">항목 수정</button>"
+                +  "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>"
+                + "<button onclick=\"delete_director(" + director.id + ", '" + director.name_en + "')\">항목 삭제</button>"
+                + "<hr /></div>";
+            html += item;
         }
         $('.list').html(html);
     }
