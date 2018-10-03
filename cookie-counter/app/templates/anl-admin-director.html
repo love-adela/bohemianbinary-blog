@@ -10,9 +10,9 @@
 {{ super() }}
 <script>
     function show_director_edit(id, name_en, name_kr) {
-        let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>";
-        body += "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>";
-        body += "<button onclick='update_director(" + id +")'>수정 완료</button>"
+        let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>"
+            + "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>"
+            + "<button onclick='update_director(" + id +")'>수정 완료</button>";
         $("#list-" + id).html(body);
     }
 
@@ -94,17 +94,17 @@
         html = "";
         for (var i in directors) {
             director = directors[i];
-            item = "<div id=\"list-" + director.id + "\">";
-            item += director.name_en + " " + director.name_kr + "<br />";
+            item = "<div id=\"list-" + director.id + "\">"
+                + director.name_en + " " + director.name_kr + "<br />";
             if (director.photo != null) {
                 item += "<img src='/static/" + director.photo + "' /><br />"
             }
 
-            item += "<button onclick=\"show_director_edit(" +
-                director.id + ", '" + director.name_en + "', '" + director.name_kr +  "')\">항목 수정</button>";
-            item += "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>"
-            item += "<button onclick=\"delete_director(" + director.id + ", '" + director.name_en + "')\">항목 삭제</button>"
-            item += "<hr /></div>";
+            item += "<button onclick=\"show_director_edit("
+                + director.id + ", '" + director.name_en + "', '" + director.name_kr +  "')\">항목 수정</button>"
+                +  "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>"
+                + "<button onclick=\"delete_director(" + director.id + ", '" + director.name_en + "')\">항목 삭제</button>"
+                + "<hr /></div>";
             html += item;
         }
         $('.list').html(html);
