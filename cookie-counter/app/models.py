@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import Table, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, session, relationship
+from sqlalchemy.orm import sessionmaker, relationship
 from app import db
 
 engine = create_engine('sqlite:///memory:', echo=True)
