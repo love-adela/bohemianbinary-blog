@@ -34,21 +34,34 @@ def unique_filename(filename):
 
 @app.route('/anl-api/director')
 def api_director():
-    directors = get_all_directors()
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        directors = get_all_directors()
+    else:
+        condition = Director.name_en.like(f"%{keyword}%")
+        condition2 = Director.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        query = Director.query.filter(or_clause).all()
+        directors = hydrate_directors(query)
+
     return jsonify(directors=directors)
 
 
-def get_all_directors():
-    directors = []
-    for d in Director.query.all():
+def hydrate_directors(directors):
+    result = []
+    for d in directors:
         director = {
             'id': d.id,
             'name_en': d.name_en,
             'name_kr': d.name_kr,
             'photo': d.photo
         }
-        directors.append(director)
-    return directors
+        result.append(director)
+    return result
+
+
+def get_all_directors():
+    return hydrate_directors(Director.query.all())
 
 
 # 새로운 감독 데이터 등록

@@ -2,12 +2,25 @@
 
 {% block content %}
 <p><a href="{{ url_for('add_director') }}">새 감독 등록하기</a></p>
+<p>
+    <input type="text" name="keyword" /> 
+</p>
 <div class="list">
 </div>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
 <script>
+    $(document).ready(function(){
+        $("input[name=keyword]").bind("change paste keyup", function() {
+            $.getJSON('/anl-api/director?keyword=' + $(this).val())
+                .done(function (response) {
+                    update_directors_html(response.directors);
+                }).fail(function (response) {
+            })
+        });
+    });
+
     function change_photo(id) {
         form_data = new FormData($("#list-" + id + " > form")[0]);
         is_confirmed = confirm(id + " 감독 항목 사진을 변경하시겠습니까?");
