@@ -9,14 +9,15 @@
 {% block scripts %}
 {{ super() }}
 <script>
-    function show_director_edit(id, name_en, name_kr){
+    function show_director_edit(id, name_en, name_kr) {
         let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>";
-        body += "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "' />";
+        body += "<input id='name-kr-" + id + "' type='text' value='" + name_kr + "' />";
         body += "<button onclick='update_director(" + id + ")'> 수정 완료</button>"
         $("#list-" + id).html(body);
     }
 
-    function update_director(id){
+
+    function update_director(id) {
         name_en = $("#name-en-" + id).val();
         name_kr = $("#name-kr-" + id).val();
         isConfirmed = confirm(name_en + " 감독 항목을 수정하시겠습니까?");
@@ -29,7 +30,7 @@
                     'name_en': name_en,
                     'name_kr': name_kr
                 }),
-                success: function(response) {
+                success: function (response) {
                     alert("수정에 성공했습니다.");
                     update_directors_html(response.directors);
                 },
@@ -38,6 +39,7 @@
             })
         }
     }
+
     function update_photo(id, name_en) {
         isConfirmed = confirm(name_en + " 사진을 수정하시겠습니까?");
         if (isConfirmed == true) {
@@ -53,6 +55,7 @@
             })
         }
     }
+
     function delete_photo(id, name_en) {
         isConfirmed = confirm(name_en + " 사진을 삭제하시겠습니까?");
         if (isConfirmed == true) {
@@ -71,6 +74,7 @@
             })
         }
     }
+
     function delete_director(id, name_en) {
         isConfirmed = confirm(name_en + " 항목을 삭제하시겠습니까?");
         if (isConfirmed == true) {
@@ -86,7 +90,8 @@
             })
         }
     }
-    function update_directors_html(directors){
+
+    function update_directors_html(directors) {
         html = "";
         for (var i in directors) {
             director = directors[i];
@@ -107,10 +112,10 @@
     }
 
     $.getJSON('/anl-api/director')
-        .done(function(response) {
+        .done(function (response) {
             update_directors_html(response.directors);
         }).fail(function (response) {
-            console.log(response.text);
+        console.log(response.text);
     })
 </script>
 {% endblock %}
