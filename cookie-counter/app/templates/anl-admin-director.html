@@ -2,59 +2,28 @@
 
 {% block content %}
 <p><a href="{{ url_for('add_director') }}">새 감독 등록하기</a></p>
-<p>
-    <input type="text" name="keyword" /> 
-</p>
-<div class="list">
-</div>
+<ul class="list">
+
+</ul>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
 <script>
-    $(document).ready(function(){
-        $("input[name=keyword]").bind("change paste keyup", function() {
-            $.getJSON('/anl-api/director?keyword=' + $(this).val())
-                .done(function (response) {
-                    update_directors_html(response.directors);
-                }).fail(function (response) {
-            })
-        });
-    });
-
-    function change_photo(id) {
-        form_data = new FormData($("#list-" + id + " > form")[0]);
-        is_confirmed = confirm(id + " 감독 항목 사진을 변경하시겠습니까?");
-
-        if (is_confirmed) {
-            $.ajax({
-                type : 'POST',
-                url : '/anl-api/director/photo/' + id,
-                data: form_data,
-                success: function(response) {
-                    alert("수정에 성공했습니다.");
-                    update_directors_html(response.directors);
-                },
-                processData: false,
-                contentType: false
-            })
-        }
-    }
-
-    function show_director_edit(id, name_en, name_kr) {
-        let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>"
-            + "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>"
-            + "<button onclick='update_director(" + id +")'>수정 완료</button>";
+    function show_director_edit(id, name_en, name_kr){
+        let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>";
+        body += "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "' />";
+        body += "<button onclick='update_director(" + id + ")'> 수정 완료</button>"
         $("#list-" + id).html(body);
     }
 
-    function update_director(id) {
+    function update_director(id){
         name_en = $("#name-en-" + id).val();
         name_kr = $("#name-kr-" + id).val();
         isConfirmed = confirm(name_en + " 감독 항목을 수정하시겠습니까?");
         if (isConfirmed == true) {
             $.ajax({
                 type: 'POST',
-                url: '/anl-api/director/' + id,
+                url: '/anl-api/director' + id,
                 data: JSON.stringify({
                     'id': id,
                     'name_en': name_en,
@@ -69,7 +38,6 @@
             })
         }
     }
-
     function update_photo(id, name_en) {
         isConfirmed = confirm(name_en + " 사진을 수정하시겠습니까?");
         if (isConfirmed == true) {
@@ -85,7 +53,6 @@
             })
         }
     }
-
     function delete_photo(id, name_en) {
         isConfirmed = confirm(name_en + " 사진을 삭제하시겠습니까?");
         if (isConfirmed == true) {
@@ -103,8 +70,7 @@
                 dataType: 'json'
             })
         }
-    };
-
+    }
     function delete_director(id, name_en) {
         isConfirmed = confirm(name_en + " 항목을 삭제하시겠습니까?");
         if (isConfirmed == true) {
@@ -120,37 +86,31 @@
             })
         }
     }
-
-    function update_directors_html(directors) {
+    function update_directors_html(directors){
         html = "";
         for (var i in directors) {
             director = directors[i];
-            item = "<div id=\"list-" + director.id + "\">"
-                + director.name_en + " " + director.name_kr + "<br />";
+            li = "<li id=\"list-" + director.id + "\">";
+            li += director.name_en + " " + director.name_kr;
             if (director.photo != null) {
-                item += "<img src='/static/" + director.photo + "' /><br />"
+                li += "<img src='/static/" + director.photo + "' />"
             }
 
-            item += "<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">"
-                + "<input type=\"file\" name=\"photo\">"
-                + "</form>"
-                + "<button onclick=\"change_photo(" + director.id + ")\">사진 변경</button>"
-                + "<p/>"
-                + "<button onclick=\"show_director_edit("
-                + director.id + ", '" + director.name_en + "', '" + director.name_kr +  "')\">항목 수정</button>"
-                + "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>"
-                + "<button onclick=\"delete_director(" + director.id + ", '" + director.name_en + "')\">항목 삭제</button>"
-                + "<hr /></div>";
-            html += item;
+            li += "<button onclick=\"show_director_edit(" +
+                director.id + ", '" + director.name_en + "', '" + director.name_kr + "')\">항목 수정</button>";
+            li += "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>";
+            li += "<button onclick=\"delete_director(" + director.id + ", '" + director.name_kr + "')\">항목 삭제</button>";
+            li += "</li>";
+            html += li;
         }
         $('.list').html(html);
     }
 
     $.getJSON('/anl-api/director')
-        .done(function (response) {
+        .done(function(response) {
             update_directors_html(response.directors);
         }).fail(function (response) {
-        console.log(response.text);
+            console.log(response.text);
     })
 </script>
 {% endblock %}
