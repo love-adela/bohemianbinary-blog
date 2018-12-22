@@ -12,7 +12,7 @@
     function show_actor_edit(id, name_en, name_kr){
         let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>";
         body += "<input id='name-kr-" + id + "'type='text' value='" + name_kr + "'/>";
-        body += "<button onclick='update_actor(" + id +")'>수정 완료</button>"
+        body += "<button onclick='update_actor(" + id + ")'>수정 완료</button>"
         $("#list-" + id).html(body);
     }
 
@@ -103,8 +103,8 @@
 
             li += "<button onclick=\"show_actor_edit(" +
                 actor.id + ", '" + actor.name_en + "', '" + actor.name_kr +  "')\">항목 수정</button>";
-            li += "<button onclick=\"delete_photo(" + actor.id + ", '" + actor.name_en + "')\">사진 삭제</button>"
-            li += "<button onclick=\"delete_actor(" + actor.id + ", '" + actor.name_en + "')\">항목 삭제</button>"
+            li += "<button onclick=\"delete_photo(" + actor.id + ", '" + actor.name_en + "')\">사진 삭제</button>";
+            li += "<button onclick=\"delete_actor(" + actor.id + ", '" + actor.name_en + "')\">항목 삭제</button>";
             li += "</li>";
             html += li;
         }
