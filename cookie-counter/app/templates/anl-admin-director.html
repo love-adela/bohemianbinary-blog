@@ -24,7 +24,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: 'POST',
-                url: '/anl-api/director' + id,
+                url: '/anl-api/director/' + id,
                 data: JSON.stringify({
                     'id': id,
                     'name_en': name_en,
