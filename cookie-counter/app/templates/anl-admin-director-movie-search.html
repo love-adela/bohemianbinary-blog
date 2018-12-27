@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<form action="">
+    <input type="text" value="영화 검색"></input>
+</form>
+<ul class="relevant-list">
+
+</ul>
+<hr>
+<ul class="director-list">
+
+</ul>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+    function exclude_search_result(directors) {
+        html = "";
+        for (var i in directors) {
+            director = directors[i];
+            li = "<li id=\"list-" + director.id + "\">";
+            li += "<a href='#'>";
+            li += director.name_en + " " + director.name_kr;
+            li += "</a>";
+            if (director.photo != null) {
+                li += "<a href='#'><img src='/static/" + director.photo + "' /></a>"
+            }
+
+            li += "<button onclick=\"update_director(" +
+                director.id + ", '" + director.name_en + "', '" + director.name_kr + "')\">제외</button>";
+            li += "</li>";
+            html += li;
+        }
+        $('.relevant-list').html(html);
+    }
+    function add_search_result(directors) {
+        html = "";
+        for (var i in directors) {
+            director = directors[i];
+            li = "<li id=\"list-" + director.id + "\">";
+            li += "<a href='#'>";
+            li += director.name_en + " " + director.name_kr;
+            li += "</a>";
+            if (director.photo != null) {
+                li += "<a href='#'><img src='/static/" + director.photo + "' /></a>"
+            }
+
+            li += "<button onclick=\"update_director(" +
+                director.id + ", '" + director.name_en + "', '" + director.name_kr + "')\">추가</button>";
+            li += "</li>";
+            html += li;
+        }
+        $('.director-list').html(html);
+    }
+
+    </script>
+{% endblock %}

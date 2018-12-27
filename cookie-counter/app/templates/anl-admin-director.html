@@ -32,7 +32,7 @@
                 }),
                 success: function (response) {
                     alert("수정에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: 'application/json',
                 dataType: 'json'
@@ -48,7 +48,7 @@
                 url: '/anl-api/director/' + id,
                 success: function (response) {
                     alert("항목 수정에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: 'application/json',
                 dataType: 'json'
@@ -67,7 +67,7 @@
                 }),
                 success: function (response) {
                     alert("사진 삭제에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: "application/json",
                 dataType: 'json'
@@ -83,7 +83,7 @@
                 url: '/anl-api/director/' + id,
                 success: function (response) {
                     alert("항목 삭제에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: "application/json",
                 dataType: 'json'
@@ -92,7 +92,7 @@
     }
 
     // function name 고치기
-    function update_directors_html(directors) {
+    function update_directors_page(directors) {
         html = "";
         for (var i in directors) {
             director = directors[i];
@@ -116,7 +116,7 @@
 
     $.getJSON('/anl-api/director')
         .done(function (response) {
-            update_directors_html(response.directors);
+            update_directors_page(response.directors);
         }).fail(function (response) {
         console.log(response.text);
     })
