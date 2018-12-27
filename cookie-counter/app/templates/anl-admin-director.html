@@ -2,6 +2,9 @@
 
 {% block content %}
 <p><a href="{{ url_for('add_director') }}">새 감독 등록하기</a></p>
+<form action="">
+    <input type="text" value="감독 검색"></input>
+</form>
 <ul class="list">
 
 </ul>
@@ -91,20 +94,24 @@
         }
     }
 
+    // function name 고치기
     function update_directors_html(directors) {
         html = "";
         for (var i in directors) {
             director = directors[i];
             li = "<li id=\"list-" + director.id + "\">";
+            li += "<a href='#'>";
             li += director.name_en + " " + director.name_kr;
+            li += "</a>";
             if (director.photo != null) {
-                li += "<img src='/static/" + director.photo + "' />"
+                li += "<a href='#'><img src='/static/" + director.photo + "' /></a>"
             }
 
             li += "<button onclick=\"show_director_edit(" +
                 director.id + ", '" + director.name_en + "', '" + director.name_kr + "')\">항목 수정</button>";
             li += "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>";
             li += "<button onclick=\"delete_director(" + director.id + ", '" + director.name_kr + "')\">항목 삭제</button>";
+            // li += "</a>";
             li += "</li>";
             html += li;
         }
