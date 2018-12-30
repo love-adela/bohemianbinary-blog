@@ -14,11 +14,9 @@ def create_db():
     Base.metadata.create_all(engine)
 
 
-director_association_table = Table(
-    'director_association',
-    db.Model.metadata,
-    Column('movie_id', Integer, ForeignKey('movie.id')),
-    Column('director_id', Integer, ForeignKey('director.id'))
+movie_with_director = db.Table('movie_with_director',
+    db.Column('movie_id', Integer, ForeignKey('movie.id')),
+    db.Column('director_id', Integer, ForeignKey('director.id'))
 )
 
 actor_association_table = Table(
@@ -35,7 +33,7 @@ class Movie(db.Model):
     name_kr = Column(String(120))
     photo = Column(String(120))
     directors = relationship("Director",
-                             secondary=director_association_table,
+                             secondary=movie_with_director,
                              backref="movies")
     actors = relationship("Actor",
                           secondary=actor_association_table,
