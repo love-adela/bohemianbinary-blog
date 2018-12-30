@@ -38,9 +38,11 @@ class MovieForm(FlaskForm):
 
 
 class SearchMovieForm(FlaskForm):
-    search_movie_name = StringField('영화 이름 검색')
+    director_by_movie_kr_name = StringField('Movie Korean Name')
+    director_by_movie_en_name = StringField('Movie English Name')
+    # search_movie_name = StringField('영화 이름 검색')
     submit = SubmitField('검색')
-    emit = SubmitField('항목 제외')
-    add = SubmitField('항목 추가')
+    # emit = SubmitField('제외')
+    # add = SubmitField('추가')
 
 
