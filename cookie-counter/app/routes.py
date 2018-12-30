@@ -3,7 +3,7 @@ import time
 import uuid
 import logging
 from app import app, db
-from flask import jsonify, render_template, request, redirect, url_for
+from flask import jsonify, flash, render_template, request, redirect, url_for
 from app.models import Director, Actor, Movie
 from app.forms import DirectorForm, ActorForm, MovieForm, SearchMovieForm
 
@@ -64,29 +64,82 @@ def get_all_directors():
     return hydrate_directors(Director.query.all())
 
 
+def hydrate_movies_with_director(movies):
+    result = []
+    for m in movies:
+        movie = {
+            'id': m.id,
+            'name_en': m.name_en,
+            'name_kr': m.name_kr,
+            'photo': m.photo
+        }
+        result.append(movie)
+    return result
+
+
+def get_director_of_all_movies():
+    return hydrate_movies_with_director(Movie.query.all())
+
+
 # TODO : render_template title 'ㅇㅇㅇ 감독의 영화 목록'으로 변경
 @app.route('/anl-admin/director/<id>', methods=['GET', 'POST'])
-def director_to_movie(id):
+def director_of_movie(id):
     form = SearchMovieForm()
-    director = Director.query.get(id)
-    movie = Movie.query.get(id)
-
-    if request.method == 'POST' and form.validate_on_submit():
-        movie.name_en = form.search_movie_name.data
-        db.session.add(director)
-        db.session.commit()
-        return redirect(url_for('admin_director'))
-    else:
-        form.director_en_name.data = director.name_en
-        form.director_kr_name.data = director.name_kr
-
+    # movie = Movie(name_kr=form.director_by_movie_kr_name.data, name_en=form.director_by_movie_en_name.data)
     # movie = Movie(name=form.search_movie_name.data)
-    # form.search_movie_name.data = movie.name
-    return render_template('anl-admin-director-movie-search.html',
-                           title='Connect Director To Movie', form=form, director=director)
+    movie = Movie.query.filter_by(id=id).first()
+    # director = Director.query.filter_by(id=id).first()
+    if movie is None:
+        flash('Director {} not found.'.format(id))
+    if request.method == 'POST' and form.validate_on_submit():
+        movie.name_en = form.movie_en_name.data
+        movie.name_kr = form.movie_kr_name.data
+        db.session.add(movie)
+        db.session.commit()
+    # else:
+    #     form.director_by_movie_en_name.data = movie.name_en
+    #     form.director_by_movie_kr_name.data = movie.name_kr
+    # # director_name = # 영화감독 이름
+    return render_template('anl-admin-director-movie-search.html', form=form, movie=movie)
 
 
-# 새로운 감독 데이터 등록
+# title=(f'{director_name} 감독의 영화 목록'),, director=director
+
+
+@app.route('/anl-api/movie-with-director/<id>', methods=['GET'])
+def get_director_of_movie(id):
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        movies = get_all_movies()
+    else:
+        condition = Movie.name_en.like(f"%{keyword}%")
+        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        query = Movie.query.filter(or_clause).all()
+        movies = hydrate_movies_with_director(query)
+
+    return jsonify(movies=movies, id=id)
+
+
+# 감독 데이터 수정 - 사진 제외
+@app.route('/anl-api/movie-with-director/<id>', methods=['POST'])
+def edit_director_of_movie(id):
+    json = request.get_json()
+    name_en = json.get('name_en')
+    name_kr = json.get('name_kr')
+    director = Director.query.get(id)
+    director.name_en = name_en
+    director.name_kr = name_kr
+    db.session.add(director)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'directors': get_director_of_all_movies()
+    })
+
+
 @app.route('/anl-admin/director/new', methods=['GET', 'POST'])
 def add_director():
     form = DirectorForm()

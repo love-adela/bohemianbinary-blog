@@ -6,23 +6,30 @@
 <form action="" method="post" enctype="multipart/form-data" novalidate>
     {{ form.hidden_tag() }}
     <p>
-        {{ form.search_movie_name.label }}<br/>
-        {{ form.search_movie_name(size=60) }}<br/>
-        {% for error in form.search_movie_name.errors %}
+        {{ form.director_by_movie_kr_name.label }}<br/>
+        {{ form.director_by_movie_kr_name(size=60) }}<br/>
+        {% for error in form.director_by_movie_kr_name.errors %}
         <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
     </p>
     <p> {{ form.submit() }} </p>
+    <p>
+        {{ form.director_by_movie_en_name.label }}<br/>
+        {{ form.director_by_movie_en_name(size=60) }}<br/>
+        {% for error in form.director_by_movie_en_name.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
 </form>
 
 <h2>해당 감독 영화 리스트</h2>
-<p>{{ form.emit() }}</p>
+
 <ul class="relevant-list">
 
 </ul>
 <hr>
 <h2>전체 영화 리스트</h2>
-<p>{{ form.add() }}</p>
+
 <ul class="whole-list">
 
 
@@ -30,4 +37,71 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
+
+<script>
+    // function exclude_search_result(movies) {
+    //     html = "";
+    //     for (var i in movies) {
+    //         movies = movies[i];
+    //         li = "<li id=\"list-" + movie.id + "\">";
+    //             li += "<button onclick=\"delete_photo(" + director.id + ", '" + director.name_en + "')\">사진 삭제</button>";
+    //         li += "</li>";
+    //         html += li;
+    //     }
+    //     $('.relevant-list').html(html);
+    // }
+
+    function alert_if_add(id, name_en, name_kr)
+    {
+        let body = "<input id='name-en-" + id + "' type='text' value='" + name_en + "'/>";
+        body += "<input id='name-kr-" + id + "' type='text' value='" + name_kr + "' />";
+        body += "<button onclick='update_director_of_movie_list(" + id + ")'>추가 완료</button>"
+        $("#list-" + id).html(body);
+    }
+
+    function update_director_of_movie_list(id) {
+        name_en = $("#name-en-" + id).val();
+        name_kr = $("#name-kr-" + id).val();
+        isConfirmed = confirm(name_kr + "(" + name_en + ")" + " 감독의 영화 항목을 수정하시겠습니까?");
+        if (isConfirmed == true) {
+            $.ajax({
+                type: 'POST',
+                url: '/anl-api/movie-with-director/' + id,
+                data: JSON.stringify({
+                    'id': id
+                }),
+                success: function (response) {
+                    alert("수정에 성공했습니다.");
+                    add_search_result(response.movies);
+                },
+                contentType: 'application/json',
+                dataType: 'json'
+            })
+        }
+    }
+
+    function add_search_result(movies) {
+        html = "";
+        for (var i in movies) {
+            movie = movies[i];
+            li = "<li id=\"list-" + movie.id + "\">";
+            li += movie.name_kr + movie.name_en;
+            li += "<button onclick=\"alert_if_add(" +
+                movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">항목 추가</button>";
+            li += "</li>";
+            html += li;
+        }
+        $('.whole-list').html(html)
+    }
+
+
+    $.getJSON('/anl-api/movie-with-director/' + {{ movie.id }})
+        .done(function (response) {
+            add_search_result(response.movies);
+        }).fail(function (response) {
+        console.log(response.text);
+    })
+
+
+</script>
 {% endblock %}
