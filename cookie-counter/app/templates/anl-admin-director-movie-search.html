@@ -1,58 +1,33 @@
 {% extends "base.html" %}
 
+
 {% block content %}
-<form action="">
-    <input type="text" value="영화 검색"></input>
+
+<form action="" method="post" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.search_movie_name.label }}<br/>
+        {{ form.search_movie_name(size=60) }}<br/>
+        {% for error in form.search_movie_name.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p> {{ form.submit() }} </p>
 </form>
+
+<h2>해당 감독 영화 리스트</h2>
+<p>{{ form.emit() }}</p>
 <ul class="relevant-list">
 
 </ul>
 <hr>
-<ul class="director-list">
+<h2>전체 영화 리스트</h2>
+<p>{{ form.add() }}</p>
+<ul class="whole-list">
+
 
 </ul>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script>
-    function exclude_search_result(directors) {
-        html = "";
-        for (var i in directors) {
-            director = directors[i];
-            li = "<li id=\"list-" + director.id + "\">";
-            li += "<a href='#'>";
-            li += director.name_en + " " + director.name_kr;
-            li += "</a>";
-            if (director.photo != null) {
-                li += "<a href='#'><img src='/static/" + director.photo + "' /></a>"
-            }
-
-            li += "<button onclick=\"update_director(" +
-                director.id + ", '" + director.name_en + "', '" + director.name_kr + "')\">제외</button>";
-            li += "</li>";
-            html += li;
-        }
-        $('.relevant-list').html(html);
-    }
-    function add_search_result(directors) {
-        html = "";
-        for (var i in directors) {
-            director = directors[i];
-            li = "<li id=\"list-" + director.id + "\">";
-            li += "<a href='#'>";
-            li += director.name_en + " " + director.name_kr;
-            li += "</a>";
-            if (director.photo != null) {
-                li += "<a href='#'><img src='/static/" + director.photo + "' /></a>"
-            }
-
-            li += "<button onclick=\"update_director(" +
-                director.id + ", '" + director.name_en + "', '" + director.name_kr + "')\">추가</button>";
-            li += "</li>";
-            html += li;
-        }
-        $('.director-list').html(html);
-    }
-
-    </script>
 {% endblock %}

@@ -5,7 +5,7 @@ import logging
 from app import app, db
 from flask import jsonify, render_template, request, redirect, url_for
 from app.models import Director, Actor, Movie
-from app.forms import DirectorForm, ActorForm, MovieForm
+from app.forms import DirectorForm, ActorForm, MovieForm, SearchMovieForm
 
 
 @app.route('/')
@@ -64,15 +64,26 @@ def get_all_directors():
     return hydrate_directors(Director.query.all())
 
 
-# issue #3 감독에 영화 연결
+# TODO : render_template title 'ㅇㅇㅇ 감독의 영화 목록'으로 변경
 @app.route('/anl-admin/director/<id>', methods=['GET', 'POST'])
 def director_to_movie(id):
+    form = SearchMovieForm()
     director = Director.query.get(id)
+    movie = Movie.query.get(id)
 
-    if request.method == 'POST':
-        # TODO
+    if request.method == 'POST' and form.validate_on_submit():
+        movie.name_en = form.search_movie_name.data
+        db.session.add(director)
+        db.session.commit()
+        return redirect(url_for('admin_director'))
+    else:
+        form.director_en_name.data = director.name_en
+        form.director_kr_name.data = director.name_kr
 
-    return render_template('anl-admin-director-movie-search.html', title='Connect Director To Movie', director=director)
+    # movie = Movie(name=form.search_movie_name.data)
+    # form.search_movie_name.data = movie.name
+    return render_template('anl-admin-director-movie-search.html',
+                           title='Connect Director To Movie', form=form, director=director)
 
 
 # 새로운 감독 데이터 등록
