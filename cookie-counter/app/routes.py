@@ -85,22 +85,21 @@ def get_director_of_all_movies():
 @app.route('/anl-admin/director/<id>', methods=['GET', 'POST'])
 def director_of_movie(id):
     form = SearchMovieForm()
-    # movie = Movie(name_kr=form.director_by_movie_kr_name.data, name_en=form.director_by_movie_en_name.data)
-    # movie = Movie(name=form.search_movie_name.data)
-    movie = Movie.query.filter_by(id=id).first()
-    # director = Director.query.filter_by(id=id).first()
-    if movie is None:
+    director = Director.query.filter_by(id=id).first()
+    if director is None:
         flash('Director {} not found.'.format(id))
-    if request.method == 'POST' and form.validate_on_submit():
-        movie.name_en = form.movie_en_name.data
-        movie.name_kr = form.movie_kr_name.data
-        db.session.add(movie)
-        db.session.commit()
+    # if request.method == 'POST' and form.validate_on_submit():
+    #     director.name_en = form.movie_en_name.data
+    #     movie.name_kr = form.movie_kr_name.data
+    #     db.session.add(movie)
+    #     db.session.commit()
+
+
     # else:
     #     form.director_by_movie_en_name.data = movie.name_en
     #     form.director_by_movie_kr_name.data = movie.name_kr
     # # director_name = # 영화감독 이름
-    return render_template('anl-admin-director-movie-search.html', form=form, movie=movie)
+    return render_template('anl-admin-director-movie-search.html', form=form, director=director)
 
 
 # title=(f'{director_name} 감독의 영화 목록'),, director=director
@@ -117,8 +116,33 @@ def get_director_of_movie(id):
         or_clause = (condition | condition2)
         query = Movie.query.filter(or_clause).all()
         movies = hydrate_movies_with_director(query)
-
     return jsonify(movies=movies, id=id)
+
+
+@app.route('/anl-api/movie/<mid>/director/<did>', methods=['POST'])
+def associate_movie_with_director(mid, did):
+    movie = Movie.query.filter_by(id=mid).first()
+    director = Director.query.filter_by(id=did).first()
+    movie.directors.append(director)
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'status': 'OK'
+    })
+
+
+@app.route('/anl-api/movie/<mid>/director/<did>/remove', methods=['POST'])
+def remove_director_from_movie(mid, did):
+    movie = Movie.query.filter_by(id=mid).first()
+    director = movie.directors.filter(Director.id==did).one()
+    movie.directors.remove(director)
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'status': 'OK'
+    })
 
 
 # 감독 데이터 수정 - 사진 제외
