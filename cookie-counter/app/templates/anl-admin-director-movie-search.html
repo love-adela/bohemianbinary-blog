@@ -100,7 +100,6 @@
     function refresh() {
         $.getJSON('/anl-api/movie-with-director/' + directorId)
             .done(function (response) {
-                // TODO : add를 display 등으로 바꾸기
                 put_on_others(response.movies);
                 put_on_theirs(response.producers);
             }).fail(function (response) {
