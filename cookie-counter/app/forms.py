@@ -35,3 +35,4 @@ class MovieForm(FlaskForm):
     ])
     delete = SubmitField('Delete')
     submit = SubmitField('Register')
+

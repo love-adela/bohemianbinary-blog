@@ -2,9 +2,6 @@
 
 {% block content %}
 <p><a href="{{ url_for('add_director') }}">새 감독 등록하기</a></p>
-<form action="">
-    <input type="text" value="감독 검색"></input>
-</form>
 <ul class="list">
 
 </ul>
@@ -35,7 +32,7 @@
                 }),
                 success: function (response) {
                     alert("수정에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: 'application/json',
                 dataType: 'json'
@@ -51,7 +48,7 @@
                 url: '/anl-api/director/' + id,
                 success: function (response) {
                     alert("항목 수정에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: 'application/json',
                 dataType: 'json'
@@ -70,7 +67,7 @@
                 }),
                 success: function (response) {
                     alert("사진 삭제에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: "application/json",
                 dataType: 'json'
@@ -86,7 +83,7 @@
                 url: '/anl-api/director/' + id,
                 success: function (response) {
                     alert("항목 삭제에 성공했습니다.");
-                    update_directors_html(response.directors);
+                    update_directors_page(response.directors);
                 },
                 contentType: "application/json",
                 dataType: 'json'
@@ -95,16 +92,16 @@
     }
 
     // function name 고치기
-    function update_directors_html(directors) {
+    function update_directors_page(directors) {
         html = "";
         for (var i in directors) {
             director = directors[i];
             li = "<li id=\"list-" + director.id + "\">";
-            li += "<a href='#'>";
+            li += "<a href='/anl-admin/director/" + director.id + "'>";
             li += director.name_en + " " + director.name_kr;
             li += "</a>";
             if (director.photo != null) {
-                li += "<a href='#'><img src='/static/" + director.photo + "' /></a>"
+                li += "<a href='/anl-admin/director/" + director.id + "'><img src='/static/" + director.photo + "' /></a>"
             }
 
             li += "<button onclick=\"show_director_edit(" +
@@ -119,7 +116,7 @@
 
     $.getJSON('/anl-api/director')
         .done(function (response) {
-            update_directors_html(response.directors);
+            update_directors_page(response.directors);
         }).fail(function (response) {
         console.log(response.text);
     })
