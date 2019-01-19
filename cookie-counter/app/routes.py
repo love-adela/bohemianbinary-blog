@@ -82,23 +82,12 @@ def get_director_of_all_movies():
 
 
 # TODO : render_template title 'ㅇㅇㅇ 감독의 영화 목록'으로 변경
-@app.route('/anl-admin/director/<id>', methods=['GET', 'POST'])
+@app.route('/anl-admin/director/<id>', methods=['GET'])
 def director_of_movie(id):
     form = SearchMovieForm()
     director = Director.query.filter_by(id=id).first()
     if director is None:
         flash('Director {} not found.'.format(id))
-    # if request.method == 'POST' and form.validate_on_submit():
-    #     director.name_en = form.movie_en_name.data
-    #     movie.name_kr = form.movie_kr_name.data
-    #     db.session.add(movie)
-    #     db.session.commit()
-
-
-    # else:
-    #     form.director_by_movie_en_name.data = movie.name_en
-    #     form.director_by_movie_kr_name.data = movie.name_kr
-    # # director_name = # 영화감독 이름
     return render_template('anl-admin-director-movie-search.html', form=form, director=director)
 
 
