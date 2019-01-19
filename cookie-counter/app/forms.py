@@ -36,13 +36,3 @@ class MovieForm(FlaskForm):
     delete = SubmitField('Delete')
     submit = SubmitField('Register')
 
-
-class SearchMovieForm(FlaskForm):
-    director_by_movie_kr_name = StringField('Movie Korean Name')
-    director_by_movie_en_name = StringField('Movie English Name')
-    # search_movie_name = StringField('영화 이름 검색')
-    submit = SubmitField('검색')
-    # emit = SubmitField('제외')
-    # add = SubmitField('추가')
-
-

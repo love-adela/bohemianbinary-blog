@@ -5,7 +5,7 @@ import logging
 from app import app, db
 from flask import jsonify, flash, render_template, request, redirect, url_for
 from app.models import Director, Actor, Movie
-from app.forms import DirectorForm, ActorForm, MovieForm, SearchMovieForm
+from app.forms import DirectorForm, ActorForm, MovieForm
 
 
 @app.route('/')
@@ -84,11 +84,10 @@ def get_director_of_all_movies():
 # TODO : render_template title 'ㅇㅇㅇ 감독의 영화 목록'으로 변경
 @app.route('/anl-admin/director/<id>', methods=['GET'])
 def director_of_movie(id):
-    form = SearchMovieForm()
     director = Director.query.filter_by(id=id).first()
     if director is None:
         flash('Director {} not found.'.format(id))
-    return render_template('anl-admin-director-movie-search.html', form=form, director=director)
+    return render_template('anl-admin-director-movie-search.html', director=director)
 
 
 # title=(f'{director_name} 감독의 영화 목록'),, director=director
