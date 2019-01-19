@@ -41,14 +41,12 @@
 <script>
 
 
-    function alert_if_add(id, name_en, name_kr)
-    {
+    function add(id, name_en, name_kr) {
         relevantUl = $(".relevant-list");
         $.ajax({
           type: 'POST',
           url: "/anl-api/movie/" + id + "/director/" + {{ director.id }},
           success: function (response) {
-            alert("Hello");
             refresh();
           },
           contentType: 'application/json',
@@ -56,49 +54,41 @@
         })
     }
 
-    function update_director_of_movie_list(id) {
-        name_en = $("#name-en-" + id).val();
-        name_kr = $("#name-kr-" + id).val();
-        isConfirmed = confirm(name_kr + "(" + name_en + ")" + " 감독의 영화 항목을 수정하시겠습니까?");
-        if (isConfirmed == true) {
-            $.ajax({
-                type: 'POST',
-                url: '/anl-api/movie-with-director/' + id,
-                data: JSON.stringify({
-                    'id': id
-                }),
-                success: function (response) {
-                    alert("수정에 성공했습니다.");
-                    add_search_result(response.movies);
-                },
-                contentType: 'application/json',
-                dataType: 'json'
-            })
-        }
+    function remove(id, name_en, name_kr) {
+        relevantUl = $(".relevant-list");
+        $.ajax({
+          type: 'DELETE',
+          url: "/anl-api/movie/" + id + "/director/" + {{ director.id }},
+          success: function (response) {
+            refresh();
+          },
+          contentType: 'application/json',
+          dataType: 'json'
+        })
     }
 
-    function add_search_result(movies) {
+    function put_on_others(movies) {
         html = "";
         for (var i in movies) {
             movie = movies[i];
             li = "<li id=\"list-" + movie.id + "\">";
             li += movie.name_kr + " " + movie.name_en;
-            li += "<button onclick=\"alert_if_add(" +
-                movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">항목 추가</button>";
+            li += "<button onclick=\"add(" +
+                movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">감독 영화 리스트에 추가</button>";
             li += "</li>";
             html += li;
         }
         $('.whole-list').html(html)
     }
 
-    function add_producers(movies) {
+    function put_on_theirs(movies) {
         html = "";
         for (var i in movies) {
             movie = movies[i];
             li = "<li id=\"list-" + movie.id + "\">";
             li += movie.name_kr + " " + movie.name_en;
-            li += "<button onclick=\"alert_if_add(" +
-                movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">항목 추가</button>";
+            li += "<button onclick=\"remove(" +
+                movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">감독 영화 리스트에서 제거</button>";
             li += "</li>";
             html += li;
         }
@@ -111,8 +101,8 @@
         $.getJSON('/anl-api/movie-with-director/' + directorId)
             .done(function (response) {
                 // TODO : add를 display 등으로 바꾸기
-                add_search_result(response.movies);
-                add_producers(response.producers);
+                put_on_others(response.movies);
+                put_on_theirs(response.producers);
             }).fail(function (response) {
             console.log(response.text);
         })

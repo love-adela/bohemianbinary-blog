@@ -127,10 +127,10 @@ def associate_movie_with_director(mid, did):
     })
 
 
-@app.route('/anl-api/movie/<mid>/director/<did>/remove', methods=['POST'])
+@app.route('/anl-api/movie/<mid>/director/<did>', methods=['DELETE'])
 def remove_director_from_movie(mid, did):
     movie = Movie.query.filter_by(id=mid).first()
-    director = movie.directors.filter(Director.id==did).one()
+    director = Director.query.with_parent(movie).filter_by(id=did).one()
     movie.directors.remove(director)
     db.session.add(movie)
     db.session.commit()
