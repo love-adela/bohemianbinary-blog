@@ -109,14 +109,20 @@ def director_of_movie(id):
 def get_director_of_movie(id):
     keyword = request.args.get('keyword')
     if keyword is None:
-        movies = get_all_movies()
+        movies = Movie.query.filter(~Movie.directors.any(Director.id==id)).all()
+        movie_dict = hydrate_movies_with_director(movies)
     else:
         condition = Movie.name_en.like(f"%{keyword}%")
         condition2 = Movie.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
-        query = Movie.query.filter(or_clause).all()
-        movies = hydrate_movies_with_director(query)
-    return jsonify(movies=movies, id=id)
+        query = Movie.query.filter(or_clause)
+        movies = query.filter(~Movie.directors.any(Director.id==id)).all()
+        movie_dict = hydrate_movies_with_director(movies)
+        # movie.directors.filter(Director.id == did)
+    producers = Movie.query.filter(Movie.directors.any(Director.id==id)).all()
+    producer_dict = hydrate_movies_with_director(producers)
+    print(producers)
+    return jsonify(movies=movie_dict, id=id, producers=producer_dict)
 
 
 @app.route('/anl-api/movie/<mid>/director/<did>', methods=['POST'])
