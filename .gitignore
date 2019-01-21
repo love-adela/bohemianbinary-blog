@@ -111,3 +111,4 @@ Pipfile.lock
 
 node_mudules
 __pycache__
+.DS_Store

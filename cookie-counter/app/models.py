@@ -33,9 +33,7 @@ class Movie(db.Model):
     name_kr = Column(String(120))
     photo = Column(String(120))
     directors = relationship("Director",
-                             # primaryjoin=movie_with_director,
-                             secondary=movie_with_director,
-                             backref=db.backref("movies", lazy='dynamic'))
+                             secondary=movie_with_director)
     image_file_name = Column(String(120))
 
     def add(self, movie):
@@ -66,7 +64,6 @@ class Director(db.Model):
     name_en = Column(String(120))
     name_kr = Column(String(120))
     photo = Column(String(120))
-    movie_id = Column(Integer, ForeignKey('movie.id'))
 
     def __repr__(self):
         return "<Movie Director('%s', ('%s'))>" % (self.name_en, self.name_kr)
