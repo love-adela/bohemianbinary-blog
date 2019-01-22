@@ -67,7 +67,6 @@ class Director(db.Model):
 
     def __repr__(self):
         return "<Movie Director('%s', ('%s'))>" % (self.name_en, self.name_kr)
-        # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
 
 
 class Actor(db.Model):
@@ -78,7 +77,6 @@ class Actor(db.Model):
 
     def __repr__(self):
         return "<Movie Actor('%s', '%s')>" % (self.name_en, self.name_kr)
-        # TODO: __repr__ 수정 필요 - 무엇을 의미하는지 각각 표시할 것!
 
 
 class Cookie(db.Model):
