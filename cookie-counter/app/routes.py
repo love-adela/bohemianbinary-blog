@@ -23,28 +23,14 @@ def admin_main():
     return "The delicious way to count movie cookies!"
 
 
-@app.route("/anl-admin/director")
-def admin_director():
-    return render_template('anl-admin-director.html', title='Movie Director')
-
-
 def unique_filename(filename):
     return time.strftime("%d-%m-%Y") + '-' + uuid.uuid4().hex[:8] + '-' + filename
 
 
-@app.route('/anl-api/director')
-def api_director():
-    keyword = request.args.get('keyword')
-    if keyword is None:
-        directors = get_all_directors()
-    else:
-        condition = Director.name_en.like(f"%{keyword}%")
-        condition2 = Director.name_kr.like(f"%{keyword}%")
-        or_clause = (condition | condition2)
-        query = Director.query.filter(or_clause).all()
-        directors = hydrate_directors(query)
-
-    return jsonify(directors=directors)
+# ----------------------------- director --------------------------------
+@app.route("/anl-admin/director")
+def admin_director():
+    return render_template('anl-admin-director.html', title='Movie Director')
 
 
 def hydrate_directors(directors):
@@ -88,73 +74,6 @@ def director_of_movie(id):
     if director is None:
         flash('Director {} not found.'.format(id))
     return render_template('anl-admin-director-movie-search.html', director=director)
-
-
-# title=(f'{director_name} 감독의 영화 목록'),, director=director
-
-
-@app.route('/anl-api/movie-with-director/<id>', methods=['GET'])
-def get_director_of_movie(id):
-    keyword = request.args.get('keyword')
-    if keyword is None:
-        movies = Movie.query.filter(~Movie.directors.any(Director.id==id)).all()
-        producers = Movie.query.filter(Movie.directors.any(Director.id==id)).all()
-    else:
-        condition = Movie.name_en.like(f"%{keyword}%")
-        condition2 = Movie.name_kr.like(f"%{keyword}%")
-        or_clause = (condition | condition2)
-        movie_query = Movie.query.filter(or_clause)
-        movies = movie_query.filter(~Movie.directors.any(Director.id==id)).all()
-        producer_query = Movie.query.filter(Movie.directors.any(Director.id==id))
-        producers = producer_query.filter(or_clause).all()
-    movie_dict = hydrate_movies_with_director(movies)
-    producer_dict = hydrate_movies_with_director(producers)
-    return jsonify(movies=movie_dict, id=id, producers=producer_dict)
-
-
-@app.route('/anl-api/movie/<mid>/director/<did>', methods=['POST'])
-def associate_movie_with_director(mid, did):
-    movie = Movie.query.filter_by(id=mid).first()
-    director = Director.query.filter_by(id=did).first()
-    movie.directors.append(director)
-    db.session.add(movie)
-    db.session.commit()
-
-    return jsonify({
-        'status': 'OK'
-    })
-
-
-@app.route('/anl-api/movie/<mid>/director/<did>', methods=['DELETE'])
-def remove_director_from_movie(mid, did):
-    movie = Movie.query.filter_by(id=mid).first()
-    director = Director.query.with_parent(movie).filter_by(id=did).one()
-    movie.directors.remove(director)
-    db.session.add(movie)
-    db.session.commit()
-
-    return jsonify({
-        'status': 'OK'
-    })
-
-
-# 감독 데이터 수정 - 사진 제외
-@app.route('/anl-api/movie-with-director/<id>', methods=['POST'])
-def edit_director_of_movie(id):
-    json = request.get_json()
-    name_en = json.get('name_en')
-    name_kr = json.get('name_kr')
-    director = Director.query.get(id)
-    director.name_en = name_en
-    director.name_kr = name_kr
-    db.session.add(director)
-    db.session.commit()
-
-    return jsonify({
-        'isConfirmed': 'success',
-        'id': id,
-        'directors': get_director_of_all_movies()
-    })
 
 
 @app.route('/anl-admin/director/new', methods=['GET', 'POST'])
@@ -207,7 +126,85 @@ def edit_director(id):
                            filename=director.photo)
 
 
-# 감독 데이터 수정 - 사진 제외
+# -------------------------------- director api ---------------------------------
+@app.route('/anl-api/director')
+def api_director():
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        directors = get_all_directors()
+    else:
+        condition = Director.name_en.like(f"%{keyword}%")
+        condition2 = Director.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        query = Director.query.filter(or_clause).all()
+        directors = hydrate_directors(query)
+
+    return jsonify(directors=directors)
+
+
+@app.route('/anl-api/movie-with-director/<id>', methods=['GET'])
+def get_director_of_movie(id):
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        movies = Movie.query.filter(~Movie.directors.any(Director.id==id)).all()
+        producers = Movie.query.filter(Movie.directors.any(Director.id==id)).all()
+    else:
+        condition = Movie.name_en.like(f"%{keyword}%")
+        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        movie_query = Movie.query.filter(or_clause)
+        movies = movie_query.filter(~Movie.directors.any(Director.id==id)).all()
+        producer_query = Movie.query.filter(Movie.directors.any(Director.id==id))
+        producers = producer_query.filter(or_clause).all()
+    movie_dict = hydrate_movies_with_director(movies)
+    producer_dict = hydrate_movies_with_director(producers)
+    return jsonify(movies=movie_dict, id=id, producers=producer_dict)
+
+
+@app.route('/anl-api/movie/<mid>/director/<did>', methods=['POST'])
+def associate_movie_with_director(mid, did):
+    movie = Movie.query.filter_by(id=mid).first()
+    director = Director.query.filter_by(id=did).first()
+    movie.directors.append(director)
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'status': 'OK'
+    })
+
+
+@app.route('/anl-api/movie/<mid>/director/<did>', methods=['DELETE'])
+def remove_director_from_movie(mid, did):
+    movie = Movie.query.filter_by(id=mid).first()
+    director = Director.query.with_parent(movie).filter_by(id=did).one()
+    movie.directors.remove(director)
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'status': 'OK'
+    })
+
+
+@app.route('/anl-api/movie-with-director/<id>', methods=['POST'])
+def edit_director_of_movie_api(id):
+    json = request.get_json()
+    name_en = json.get('name_en')
+    name_kr = json.get('name_kr')
+    director = Director.query.get(id)
+    director.name_en = name_en
+    director.name_kr = name_kr
+    db.session.add(director)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'directors': get_director_of_all_movies()
+    })
+
+
 @app.route('/anl-api/director/<id>', methods=['POST'])
 def edit_director_api(id):
     json = request.get_json()
@@ -260,7 +257,6 @@ def delete_director_photo():
     })
 
 
-# 감독 항목 삭제
 @app.route('/anl-api/director/<id>', methods=['DELETE'])
 def delete_director(id):
     director = Director.query.get(id)
@@ -274,24 +270,11 @@ def delete_director(id):
     })
 
 
+# ----------------------------- actor --------------------------------
+
 @app.route("/anl-admin/actor")
 def admin_actor():
     return render_template('anl-admin-actor.html', title='Movie Actor')
-
-
-@app.route("/anl-api/actor")
-def api_actor():
-    keyword = request.args.get('keyword')
-    if keyword is None:
-        actors = get_all_actors()
-    else:
-        condition = Actor.name_en.like(f"%{keyword}%")
-        condition2 = Actor.name_kr.like(f"%{keyword}%")
-        or_clause = (condition | condition2)
-        query = Actor.query.filter(or_clause).all()
-        actors = hydrate_actors(query)
-
-    return jsonify(actors=actors)
 
 
 def hydrate_actors(actors):
@@ -311,7 +294,33 @@ def get_all_actors():
     return hydrate_actors(Actor.query.all())
 
 
-@app.route("/anl-admin/actor/new", methods=['GET', 'POST'])
+def hydrate_movies_with_actor(movies):
+    result = []
+    for m in movies:
+        movie = {
+            'id': m.id,
+            'name_en': m.name_en,
+            'name_kr': m.name_kr,
+            'photo': m.photo
+        }
+        result.append(movie)
+    return result
+
+
+def get_actor_of_all_movies():
+    return hydrate_movies_with_actor(Movie.query.all())
+
+
+# TODO : render_template title 'ooo 배우의 영화 목록'으로 변경
+@app.route('/anl-admin/actor/<id>', methods=['GET'])
+def actor_of_movie(id):
+    actor = Actor.query.filter_by(id=id).first()
+    if actor is None:
+        flash('Actor {} not found.'.format(id))
+    return render_template('anl-admin-actor-movie-search.html', actor=actor)
+
+
+@app.route('/anl-admin/actor/new', methods=['GET', 'POST'])
 def add_actor():
     form = ActorForm()
     actor = Actor(name_kr=form.actor_kr_name.data, name_en=form.actor_en_name.data)
@@ -334,7 +343,6 @@ def add_actor():
                            title='Register New Actor', form=form, filename=actor.photo)
 
 
-# 배우 데이터 수정
 @app.route('/anl-admin/actor/edit/<id>', methods=['GET', 'POST'])
 def edit_actor(id):
     form = ActorForm()
@@ -360,6 +368,85 @@ def edit_actor(id):
     return render_template('anl-admin-actor-new.html', title='Edit Actor Data', form=form, filename=actor.photo)
 
 
+# ----------------------------- actor api --------------------------------
+@app.route("/anl-api/actor")
+def api_actor():
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        actors = get_all_actors()
+    else:
+        condition = Actor.name_en.like(f"%{keyword}%")
+        condition2 = Actor.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        query = Actor.query.filter(or_clause).all()
+        actors = hydrate_actors(query)
+
+    return jsonify(actors=actors)
+
+
+@app.route('/anl-api/movie-with-actor/<id>', methods=['GET'])
+def get_actor_of_movie(id):
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        movies = Movie.query.filter(~Movie.directors.any(Director.id==id)).all()
+        actors = Movie.query.filter(Movie.directors.any(Director.id==id)).all()
+    else:
+        condition = Movie.name_en.like(f"%{keyword}%")
+        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        movie_query = Movie.query.filter(or_clause)
+        movies = movie_query.filter(~Movie.actors.any(Actor.id==id)).all()
+        actor_query = Movie.query.filter(Movie.actors.any(Actor.id==id))
+        actors = actor_query.filter(or_clause).all()
+    movie_dict = hydrate_movies_with_actor(movies)
+    actor_dict = hydrate_movies_with_actor(actors)
+    return jsonify(movies=movie_dict, id=id, actors=actor_dict)
+
+
+@app.route('/anl-api/movie/<mid>/actor/<aid>', methods=['POST'])
+def associate_movie_with_actor(mid, aid):
+    movie = Movie.query.filter_by(id=mid).first()
+    actor = Actor.query.filter_by(id=aid).first()
+    movie.actors.append(actor)
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'status': 'OK'
+    })
+
+
+@app.route('/anl-api/movie/<mid>/actor/<aid>', methods=['DELETE'])
+def remove_actor_from_movie(mid, aid):
+    movie = Movie.query.filter_by(id=mid).first()
+    actor = Actor.query.with_parent(movie).filter_by(id=aid).one()
+    movie.actors.remove(actor)
+    db.session.add(movie)
+    db.session.commit()
+
+    return jsonify({
+        'status': 'OK'
+    })
+
+
+@app.route('/anl-api/movie-with-actor/<id>', methods=['POST'])
+def edit_actor_of_movie_api(id):
+    json = request.get_json()
+    name_en = json.get('name_en')
+    name_kr = json.get('name_kr')
+    actor = Actor.query.get(id)
+    actor.name_en = name_en
+    actor.name_kr = name_kr
+    db.session.add(actor)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'actors': get_actor_of_all_movies()
+    })
+
+
 @app.route('/anl-api/actor/<id>', methods=['POST'])
 def edit_actor_api(id):
     json = request.get_json()
@@ -374,7 +461,25 @@ def edit_actor_api(id):
     return jsonify({
         'isConfirmed': 'success',
         'id': id,
-        'actors': get_all_actors()
+        'directors': get_all_actors()
+    })
+
+
+@app.route('/anl-api/actor/photo/<id>', methods=['POST'])
+def change_actor_photo(id):
+    photo_data = request.files['photo']
+    filename = unique_filename(photo_data.filename)
+    upload_folder = app.config['UPLOAD_FOLDER']
+    photo_data.save(os.path.join(upload_folder, filename))
+    actor = Actor.query.get(id)
+    actor.photo = filename
+    db.session.add(actor)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'directors': get_all_actors()
     })
 
 
@@ -394,14 +499,20 @@ def delete_actor_photo():
     })
 
 
-@app.route('/anl-admin/actor/delete/<id>', methods=['GET', 'POST'])
+@app.route('/anl-admin/actor/<id>', methods=['DELETE'])
 def delete_actor(id):
     actor = Actor.query.get(id)
     db.session.delete(actor)
     db.session.commit()
 
-    return redirect(url_for('admin_actor'))
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'actors': get_all_actors()
+    })
 
+
+# ----------------------------- movie --------------------------------
 
 @app.route("/anl-admin/movie")
 def admin_movie():
@@ -467,6 +578,8 @@ def edit_movie(id):
         form.movie_kr_name.data = movie.name_kr
     return render_template('anl-admin-movie-new.html', title='Edit Movie Data', form=form)
 
+
+# ----------------------------- movie api --------------------------------
 
 @app.route('/anl-api/movie/<id>', methods=['POST'])
 def edit_movie_api(id):
