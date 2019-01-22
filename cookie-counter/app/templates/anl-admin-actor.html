@@ -96,9 +96,10 @@
         for (var i in actors) {
             actor = actors[i];
             li = "<li id=\"list-" + actor.id + "\">";
+            li += "<a href='/anl-admin/actor/" + actor.id + "'>";
             li += actor.name_en + " " + actor.name_kr;
             if (actor.photo != null) {
-                li += "<img src='/static/" + actor.photo + "' />"
+                li += "<a href='/anl-admin/actor/\" + actor.id + \"'><img src='/static/" + actor.photo + "' /></a>"
             }
 
             li += "<button onclick=\"show_actor_edit(" +
