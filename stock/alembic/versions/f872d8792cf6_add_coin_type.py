@@ -1,4 +1,4 @@
-"""add coin type
+"""add_movie_to_director coin type
 
 Revision ID: f872d8792cf6
 Revises: 18dbc1ecc598

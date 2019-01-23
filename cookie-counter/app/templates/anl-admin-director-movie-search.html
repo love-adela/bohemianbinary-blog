@@ -26,7 +26,7 @@
         refresh();
     }
 
-    function add(id, name_en, name_kr) {
+    function add_movie_to_director(id, name_en, name_kr) {
         relevantUl = $(".relevant-list");
         $.ajax({
           type: 'POST',
@@ -60,7 +60,7 @@
             movie = movies[i];
             li = "<li id=\"list-" + movie.id + "\">";
             li += movie.name_kr + " " + movie.name_en;
-            li += "<button onclick=\"add(" +
+            li += "<button onclick=\"add_movie_to_director(" +
                 movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">감독 영화 리스트에 추가</button>";
             li += "</li>";
             html += li;

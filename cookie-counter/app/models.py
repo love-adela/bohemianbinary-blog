@@ -20,44 +20,17 @@ movie_with_director = Table('movie_with_director',
                             Column('director_id', Integer, ForeignKey('director.id'))
                             )
 
+movie_with_actor = Table('movie_with_actor',
+                         db.Model.metadata,
+                         Column('movie_id', Integer, ForeignKey('movie/id')),
+                         Column('actor_id', Integer, ForeignKey('actor.id'))
+                         )
+
 actor_association_table = Table('actor_association',
                                 db.Model.metadata,
                                 Column('movie_id', Integer, ForeignKey('movie.id')),
                                 Column('actor_id', Integer, ForeignKey('actor.id'))
                                 )
-
-
-class Movie(db.Model):
-    id = Column(Integer, primary_key=True)
-    name_en = Column(String(120))
-    name_kr = Column(String(120))
-    photo = Column(String(120))
-    directors = relationship("Director",
-                             secondary=movie_with_director)
-    image_file_name = Column(String(120))
-
-    def add(self, movie):
-        if not self.is_movie(movie):
-            self.directors.append(movie)
-
-    def emit(self, movie):
-        if self.is_movie(movie):
-            self.directors.remove(movie)
-
-    def is_movie(self, movie):
-        return self.directors.filter(
-            movie.c.director_id == movie.id).count() > 0
-
-    def directors_lists(self):
-        director = Director.query.join(
-            movie_with_director, (movie_with_director.c.directors_id == Director.movie_id)).filter(
-            movie_with_director.c.movie_id == self.id)
-        own = Director.query.filter_by(user_id=self.id)
-        return director.union(own)
-
-    def __repr__(self):
-        return "<Movie('%s', ('%s'))>" % (self.name_en, self.name_kr)
-
 
 class Director(db.Model):
     id = Column(Integer, primary_key=True)
@@ -77,6 +50,50 @@ class Actor(db.Model):
 
     def __repr__(self):
         return "<Movie Actor('%s', '%s')>" % (self.name_en, self.name_kr)
+
+
+class Movie(db.Model):
+    id = Column(Integer, primary_key=True)
+    name_en = Column(String(120))
+    name_kr = Column(String(120))
+    photo = Column(String(120))
+    directors = relationship("Director", secondary=movie_with_director)
+    actors = relationship("Actor", secondary=movie_with_actor)
+    image_file_name = Column(String(120))
+
+    def add_movie_to_director(self, movie):
+        if not self.is_movie(movie):
+            self.directors.append(movie)
+
+    def add_movie_to_actor(self, movie):
+        if not self.is_movie(movie):
+            self.actors.append(movie)
+
+    def emit(self, movie):
+        if self.is_movie(movie):
+            self.directors.remove(movie)
+            self.actors.remove(movie)
+
+    def is_movie(self, movie):
+        return self.directors.filter(
+            movie.c.director_id == movie.id).count() > 0
+
+    def directors_lists(self):
+        director = Director.query.join(
+            movie_with_director, (movie_with_director.c.directors_id == Director.movie_id)).filter(
+            movie_with_director.c.movie_id == self.id)
+        own = Director.query.filter_by(user_id=self.id)
+        return director.union(own)
+
+    def actors_lists(self):
+        actor = Actor.query.join(
+            movie_with_actor, (movie_with_actor.c.actors_id == Actor.movie_id)).filter(
+            movie_with_actor.c.movie_id == self.id)
+        own = Actor.query.filter_by(user_id=self.id)
+        return actor.union(own)
+
+    def __repr__(self):
+        return "<Movie('%s', ('%s'))>" % (self.name_en, self.name_kr)
 
 
 class Cookie(db.Model):
