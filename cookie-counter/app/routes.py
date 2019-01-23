@@ -90,7 +90,7 @@ def add_director():
         photo_data.save(os.path.join(upload_folder, filename))
 
         director.photo = filename
-        db.session.add_movie_to_director(director)
+        db.session.add(director)
         db.session.commit()
         return redirect(url_for('admin_director'))
     else:
@@ -116,7 +116,7 @@ def edit_director(id):
         director.name_en = form.director_en_name.data
         director.name_kr = form.director_kr_name.data
         director.photo = filename
-        db.session.add_movie_to_director(director)
+        db.session.add(director)
         db.session.commit()
         return redirect(url_for('admin_director'))
     else:
@@ -166,7 +166,7 @@ def associate_movie_with_director(mid, did):
     movie = Movie.query.filter_by(id=mid).first()
     director = Director.query.filter_by(id=did).first()
     movie.directors.append(director)
-    db.session.add_movie_to_director(movie)
+    db.session.add(movie)
     db.session.commit()
 
     return jsonify({
@@ -179,7 +179,7 @@ def remove_director_from_movie(mid, did):
     movie = Movie.query.filter_by(id=mid).first()
     director = Director.query.with_parent(movie).filter_by(id=did).one()
     movie.directors.remove(director)
-    db.session.add_movie_to_director(movie)
+    db.session.add(movie)
     db.session.commit()
 
     return jsonify({
@@ -195,7 +195,7 @@ def edit_director_of_movie_api(id):
     director = Director.query.get(id)
     director.name_en = name_en
     director.name_kr = name_kr
-    db.session.add_movie_to_director(director)
+    db.session.add(director)
     db.session.commit()
 
     return jsonify({
@@ -213,7 +213,7 @@ def edit_director_api(id):
     director = Director.query.get(id)
     director.name_en = name_en
     director.name_kr = name_kr
-    db.session.add_movie_to_director(director)
+    db.session.add(director)
     db.session.commit()
 
     return jsonify({
@@ -231,7 +231,7 @@ def change_director_photo(id):
     photo_data.save(os.path.join(upload_folder, filename))
     director = Director.query.get(id)
     director.photo = filename
-    db.session.add_movie_to_director(director)
+    db.session.add(director)
     db.session.commit()
 
     return jsonify({
@@ -247,7 +247,7 @@ def delete_director_photo():
     id = json.get('id')
     director = Director.query.get(id)
     director.photo = None
-    db.session.add_movie_to_director(director)
+    db.session.add(director)
     db.session.commit()
 
     return jsonify({
@@ -333,7 +333,7 @@ def add_actor():
         filename = unique_filename(photo_data.filename)
         photo_data.save(os.path.join(upload_folder, filename))
         actor.photo = filename
-        db.session.add_movie_to_director(actor)
+        db.session.add(actor)
         db.session.commit()
         return redirect(url_for('admin_actor'))
     else:
@@ -359,7 +359,7 @@ def edit_actor(id):
         actor.name_en = form.actor_en_name.data
         actor.name_kr = form.actor_kr_name.data
         actor.photo = filename
-        db.session.add_movie_to_director(actor)
+        db.session.add(actor)
         db.session.commit()
         return redirect(url_for('admin_actor'))
     else:
@@ -388,8 +388,8 @@ def api_actor():
 def get_actor_of_movie(id):
     keyword = request.args.get('keyword')
     if keyword is None:
-        movies = Movie.query.filter(~Movie.directors.any(Director.id==id)).all()
-        actors = Movie.query.filter(Movie.directors.any(Director.id==id)).all()
+        movies = Movie.query.filter(~Movie.actors.any(Actor.id==id)).all()
+        actors = Movie.query.filter(Movie.actors.any(Actor.id==id)).all()
     else:
         condition = Movie.name_en.like(f"%{keyword}%")
         condition2 = Movie.name_kr.like(f"%{keyword}%")
@@ -408,7 +408,7 @@ def associate_movie_with_actor(mid, aid):
     movie = Movie.query.filter_by(id=mid).first()
     actor = Actor.query.filter_by(id=aid).first()
     movie.actors.append(actor)
-    db.session.add_movie_to_director(movie)
+    db.session.add(movie)
     db.session.commit()
 
     return jsonify({
@@ -419,9 +419,19 @@ def associate_movie_with_actor(mid, aid):
 @app.route('/anl-api/movie/<mid>/actor/<aid>', methods=['DELETE'])
 def remove_actor_from_movie(mid, aid):
     movie = Movie.query.filter_by(id=mid).first()
-    actor = Actor.query.with_parent(movie).filter_by(id=aid).one()
+    actor = Actor.query.with_parent(movie).filter_by(id=aid).first()
+    if movie is None:
+        return jsonify({
+            'status': "ERROR",
+            'message': "No movie was found."
+        })
+    if actor is None:
+        return jsonify({
+            'status': "ERROR",
+            'message': "No actor was found."
+        })
     movie.actors.remove(actor)
-    db.session.add_movie_to_director(movie)
+    db.session.add(movie)
     db.session.commit()
 
     return jsonify({
@@ -437,7 +447,7 @@ def edit_actor_of_movie_api(id):
     actor = Actor.query.get(id)
     actor.name_en = name_en
     actor.name_kr = name_kr
-    db.session.add_movie_to_director(actor)
+    db.session.add(actor)
     db.session.commit()
 
     return jsonify({
@@ -455,13 +465,13 @@ def edit_actor_api(id):
     actor = Actor.query.get(id)
     actor.name_en = name_en
     actor.name_kr = name_kr
-    db.session.add_movie_to_director(actor)
+    db.session.add(actor)
     db.session.commit()
 
     return jsonify({
         'isConfirmed': 'success',
         'id': id,
-        'directors': get_all_actors()
+        'actors': get_all_actors()
     })
 
 
@@ -473,13 +483,13 @@ def change_actor_photo(id):
     photo_data.save(os.path.join(upload_folder, filename))
     actor = Actor.query.get(id)
     actor.photo = filename
-    db.session.add_movie_to_director(actor)
+    db.session.add(actor)
     db.session.commit()
 
     return jsonify({
         'isConfirmed': 'success',
         'id': id,
-        'directors': get_all_actors()
+        'actors': get_all_actors()
     })
 
 
@@ -489,7 +499,7 @@ def delete_actor_photo():
     id = json.get('id')
     actor = Actor.query.get(id)
     actor.photo = None
-    db.session.add_movie_to_director(actor)
+    db.session.add(actor)
     db.session.commit()
 
     return jsonify({
@@ -555,7 +565,7 @@ def add_movie():
         photo_data.save(os.path.join(upload_folder, filename))
 
         movie.photo = filename
-        db.session.add_movie_to_director(movie)
+        db.session.add(movie)
         db.session.commit()
         return redirect(url_for('admin_movie'))
     return render_template('anl-admin-movie-new.html',
@@ -570,7 +580,7 @@ def edit_movie(id):
     if request.method == 'POST' and form.validate_on_submit():
         movie.name_en = form.movie_en_name.data
         movie.name_kr = form.movie_kr_name.data
-        db.session.add_movie_to_director(movie)
+        db.session.add(movie)
         db.session.commit()
         return redirect(url_for('admin_movie'))
     else:
@@ -589,7 +599,7 @@ def edit_movie_api(id):
     movie = Movie.query.get(id)
     movie.name_en = name_en
     movie.name_kr = name_kr
-    db.session.add_movie_to_director(movie)
+    db.session.add(movie)
     db.session.commit()
 
     return jsonify({
@@ -605,7 +615,7 @@ def delete_movie_photo():
     id = json.get('id')
     movie = Movie.query.get(id)
     movie.photo = None
-    db.session.add_movie_to_director(movie)
+    db.session.add(movie)
     db.session.commit()
 
     return jsonify({

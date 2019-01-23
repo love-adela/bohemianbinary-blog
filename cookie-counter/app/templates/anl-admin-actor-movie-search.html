@@ -29,7 +29,7 @@
         relevantUl = $(".relevant-list");
         $.ajax({
             type: 'POST',
-            url: "/anl-api/movie" + id + "/actor/" + {{ actor.id }},
+            url: "/anl-api/movie/" + id + "/actor/" + {{ actor.id }},
         success: function (response) {
             refresh();
         },
