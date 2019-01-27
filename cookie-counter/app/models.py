@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, BigInteger
 from sqlalchemy import Table, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -52,22 +52,10 @@ class Movie(db.Model):
     name_en = Column(String(120))
     name_kr = Column(String(120))
     photo = Column(String(120))
+    number_of_cookies = Column(BigInteger)
     directors = relationship("Director", secondary=movie_with_director)
     actors = relationship("Actor", secondary=movie_with_actor)
-    image_file_name = Column(String(120))
-
-    def add_movie_to_director(self, movie):
-        self.directors.append(movie)
-
-    def add_movie_to_actor(self, movie):
-        self.actors.append(movie)
 
     def __repr__(self):
         return "<Movie('%s', ('%s'))>" % (self.name_en, self.name_kr)
 
-
-class Cookie(db.Model):
-    id = Column(Integer, primary_key=True)
-    description_en = Column(String(120))
-    description_kr = Column(String(120))
-    movie_id = Column(Integer, ForeignKey('movie.id'))

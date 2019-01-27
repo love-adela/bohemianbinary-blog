@@ -31,7 +31,7 @@
                 }),
                 success: function(response) {
                     alert("수정에 성공했습니다.");
-                    update_movies_html(response.movies);
+                    update_movies_page(response.movies);
                 },
                 contentType: 'application/json',
                 dataType: 'json'
@@ -47,7 +47,7 @@
                 url: '/anl-api/movie/' + id,
                 success: function (response) {
                     alert("항목 수정에 성공했습니다.");
-                    update_movies_html(response.movies);
+                    update_movies_page(response.movies);
                 },
                 contentType: 'application/json',
                 dataType: 'json'
@@ -66,7 +66,7 @@
                 }),
                 success: function (response) {
                     alert("사진 삭제에 성공했습니다.");
-                    update_movies_html(response.movies);
+                    update_movies_page(response.movies);
                 },
                 contentType: "application/json",
                 dataType: 'json'
@@ -82,7 +82,7 @@
                 url: '/anl-api/movie/' + id,
                 success: function (response) {
                     alert("항목 삭제에 성공했습니다.");
-                    update_movies_html(response.movies);
+                    update_movies_page(response.movies);
                 },
                 contentType: "application/json",
                 dataType: 'json'
@@ -90,14 +90,17 @@
         }
     }
 
-    function update_movies_html(movies){
+    function update_movies_page(movies){
         html = "";
         for (var i in movies) {
             movie = movies[i];
             li = "<li id=\"list-" + movie.id + "\">";
+            li += "<a href='/anl-admin/movie/" + movie.id + "'>";
             li += movie.name_en + " " + movie.name_kr;
+            li += "</a>";
+            li += "</br>";
             if (movie.photo != null) {
-                li += "<img src='/static/" + movie.photo + "' />"
+                li += "<a href='/anl-admin/movie/" + movie.id + "'><img src='/static/" + movie.photo + "' /></a>"
             }
 
             li += "<button onclick=\"show_movie_edit(" +
@@ -113,7 +116,7 @@
 
     $.getJSON('/anl-api/movie')
         .done(function (response) {
-            update_movies_html(response.movies);
+            update_movies_page(response.movies);
         }).fail(function (response) {
         console.log(response.text);
     })

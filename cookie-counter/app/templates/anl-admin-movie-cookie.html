@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="movie-info">
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+    function edit_button(id, number_of_cookies) {
+        let body = "<input id='number-of-cookies" + number_of_cookies + "' type='text' value='" + name_en + "'/>";
+        body += "<button onclick='update_number_of_cookies(" + movie.id + ")'> 수정 완료</button>";
+        $("#movie-list-" + movie.id).html(body);
+    }
+
+    function update_number_of_cookies(mid) {
+        number_of_cookies = $("#movie-list-" + movie.id).val();
+        isConfirmed = confirm(name_en + " 쿠키 개수를 수정하시겠습니까?");
+        if (isConfirmed == true) {
+            $.ajax({
+                type: 'POST',
+                url: '/anl-api/movie/' + mid,
+                data: JSON.stringify({
+                    'id': movie.id,
+                    'name_en': movie.name_en,
+                    'name_kr': movie.name_kr,
+                    'number_of_cookies': movie.number_of_cookies,
+                }),
+                success: function (response) {
+                    alert("수정에 성공했습니다.");
+                    show_movie_information(response);
+                },
+                contentType: 'application/json',
+                dataType: 'json'
+            })
+        }
+    }
+
+    function show_movie_information(movie) {
+        html = "<h2>" + movie.name_kr + '(' + movie.name_en +  ')';
+        html += "</h2>";
+        div1 = "<div id=\"movie-list-" + movie.id + "\">";
+        if (movie.photo != null) {
+            div1 += "<a href='/anl-admin/movie/" + movie.id + "'><img src='/static/" + movie.photo + "' /></a>"
+        }
+        div1 += "</div>";
+        html += div1;
+
+        div2 = "<div id=\"movie-list-" + movie.id + "\">";
+        div2 += "<p>영화 쿠키 개수 : ";
+        div2 += movie.number_of_cookies;
+        div2 += "</p>"
+        div2 += "<button onclick=\"edit_button(" + movie.number_of_cookies + "')\">항목 수정</button>";
+        div2 += "</div>";
+        html += div2;
+
+        div3 = "<div id=\"movie-list-" + movie.id + "\">";
+        for (var d in movie.directors) {
+            director = movie.directors[d];
+            div3 += "<p>영화 감독 이름 : ";
+            div3 += director.name_kr + " (" + director.name_en +  ")";
+            div3 += "</p>"
+            if (director.photo != null) {
+                div3 += "<a href='/anl-admin/director/" + director.id + "'><img src='/static/" + director.photo + "' /></a>"
+        }
+        }
+        html += div3;
+        $('.movie-info').html(html);
+    }
+
+    var mid = {{ mid }};
+
+    $.getJSON("/anl-api/movie/" + mid)
+        .done(function (response) {
+            show_movie_information(response);
+        }).fail(function (response) {
+        console.log(response.text);
+    })
+</script>
+{% endblock %}

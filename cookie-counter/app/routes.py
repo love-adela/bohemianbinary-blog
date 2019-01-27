@@ -175,7 +175,7 @@ def associate_movie_with_director(mid, did):
 @app.route('/anl-api/movie/<mid>/director/<did>', methods=['DELETE'])
 def remove_director_from_movie(mid, did):
     movie = Movie.query.filter_by(id=mid).first()
-    director = Director.query.with_parent(movie).filter_by(id=did).one()
+    director = Director.query.with_parent(movie).filter_by(id=did).first()
     movie.directors.remove(director)
     db.session.commit()
 
@@ -515,23 +515,29 @@ def admin_movie():
     return render_template('anl-admin-movie.html', title='Movie')
 
 
-@app.route('/anl-api/movie')
-def api_movie():
-    movies = get_all_movies()
-    return jsonify(movies=movies)
-
-
-def get_all_movies():
-    movies = []
-    for m in Movie.query.all():
+def hydrate_movies(movies):
+    result = []
+    for m in movies:
         movie = {
             'id': m.id,
             'name_en': m.name_en,
             'name_kr': m.name_kr,
             'photo': m.photo
         }
-        movies.append(movie)
-    return movies
+        result.append(movie)
+    return result
+
+
+def get_all_movies():
+    return hydrate_movies(Movie.query.all())
+
+
+@app.route('/anl-admin/movie/<mid>', methods=['GET'])
+def get_movie_information(mid):
+    movie = Movie.query.filter_by(id=mid).first()
+    if movie is None:
+        flash('Movie {} not found.'.format(mid))
+    return render_template('anl-admin-movie-cookie.html', movie=movie, mid=mid)
 
 
 @app.route('/anl-admin/movie/new', methods=['GET', 'POST'])
@@ -573,21 +579,56 @@ def edit_movie(id):
     return render_template('anl-admin-movie-new.html', title='Edit Movie Data', form=form)
 
 
-# ----------------------------- movie api --------------------------------
+@app.route('/anl-admin/movie/delete/<id>', methods=['GET', 'POST'])
+def delete_movie(id):
+    movie = Movie.query.get(id)
+    db.session.delete(movie)
+    db.session.commit()
 
-@app.route('/anl-api/movie/<id>', methods=['POST'])
-def edit_movie_api(id):
+    return redirect(url_for('admin_movie'))
+
+
+# ----------------------------- movie api --------------------------------
+@app.route('/anl-api/movie')
+def get_api_movie():
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        movies = get_all_movies()
+    else:
+        condition = Movie.name_en.like(f"%{keyword}%")
+        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        query = Movie.query.filter(or_clause).all()
+        movies = hydrate_movies(query)
+    return jsonify(movies=movies)
+
+
+@app.route('/anl-api/movie/<mid>', methods=['GET'])
+def get_this_movie_api(mid):
+    movie = Movie.query.filter_by(id=mid).first()
+    return jsonify({
+        'id': movie.id,
+        'name_en': movie.name_en,
+        'name_kr': movie.name_kr,
+        'photo': movie.photo,
+        'number_of_cookies': movie.number_of_cookies,
+        'directors': hydrate_directors(movie.directors)
+    })
+
+
+@app.route('/anl-api/movie/<mid>', methods=['POST'])
+def edit_movie_api(mid):
     json = request.get_json()
     name_en = json.get('name_en')
     name_kr = json.get('name_kr')
-    movie = Movie.query.get(id)
+    movie = Movie.query.get(mid)
     movie.name_en = name_en
     movie.name_kr = name_kr
     db.session.commit()
 
     return jsonify({
         'isConfirmed': 'success',
-        'id': id,
+        'id': mid,
         'movies': get_all_movies()
     })
 
@@ -607,10 +648,51 @@ def delete_movie_photo():
     })
 
 
-@app.route('/anl-admin/movie/delete/<id>', methods=['GET', 'POST'])
-def delete_movie(id):
-    movie = Movie.query.get(id)
-    db.session.delete(movie)
-    db.session.commit()
+def hydrate_movies_with_cookie(movies):
+    result = []
+    for m in movies:
+        movie = {
+            'id': m.id,
+            'name_en': m.name_en,
+            'name_kr': m.name_kr,
+            'photo': m.photo
+        }
+        result.append(movie)
+    return result
 
-    return redirect(url_for('admin_movie'))
+
+def get_cookie_of_all_movies():
+    return hydrate_movies_with_cookie(Movie.query.all())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
