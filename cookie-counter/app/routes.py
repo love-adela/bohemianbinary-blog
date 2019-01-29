@@ -145,15 +145,15 @@ def api_director():
 def get_director_of_movie(id):
     keyword = request.args.get('keyword')
     if keyword is None:
-        movies = Movie.query.filter(~Movie.directors.any(Director.id==id)).all()
-        producers = Movie.query.filter(Movie.directors.any(Director.id==id)).all()
+        movies = Movie.query.filter(~Movie.directors.any(Director.id == id)).all()
+        producers = Movie.query.filter(Movie.directors.any(Director.id == id)).all()
     else:
         condition = Movie.name_en.like(f"%{keyword}%")
         condition2 = Movie.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         movie_query = Movie.query.filter(or_clause)
-        movies = movie_query.filter(~Movie.directors.any(Director.id==id)).all()
-        producer_query = Movie.query.filter(Movie.directors.any(Director.id==id))
+        movies = movie_query.filter(~Movie.directors.any(Director.id == id)).all()
+        producer_query = Movie.query.filter(Movie.directors.any(Director.id == id))
         producers = producer_query.filter(or_clause).all()
     movie_dict = hydrate_movies_with_director(movies)
     producer_dict = hydrate_movies_with_director(producers)
@@ -380,15 +380,15 @@ def api_actor():
 def get_actor_of_movie(id):
     keyword = request.args.get('keyword')
     if keyword is None:
-        movies = Movie.query.filter(~Movie.actors.any(Actor.id==id)).all()
-        actors = Movie.query.filter(Movie.actors.any(Actor.id==id)).all()
+        movies = Movie.query.filter(~Movie.actors.any(Actor.id == id)).all()
+        actors = Movie.query.filter(Movie.actors.any(Actor.id == id)).all()
     else:
         condition = Movie.name_en.like(f"%{keyword}%")
         condition2 = Movie.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         movie_query = Movie.query.filter(or_clause)
-        movies = movie_query.filter(~Movie.actors.any(Actor.id==id)).all()
-        actor_query = Movie.query.filter(Movie.actors.any(Actor.id==id))
+        movies = movie_query.filter(~Movie.actors.any(Actor.id == id)).all()
+        actor_query = Movie.query.filter(Movie.actors.any(Actor.id == id))
         actors = actor_query.filter(or_clause).all()
     movie_dict = hydrate_movies_with_actor(movies)
     actor_dict = hydrate_movies_with_actor(actors)
@@ -522,7 +522,9 @@ def hydrate_movies(movies):
             'id': m.id,
             'name_en': m.name_en,
             'name_kr': m.name_kr,
-            'photo': m.photo
+            'photo': m.photo,
+            'number_of_cookies': m.number_of_cookies
+
         }
         result.append(movie)
     return result
@@ -621,15 +623,32 @@ def edit_movie_api(mid):
     json = request.get_json()
     name_en = json.get('name_en')
     name_kr = json.get('name_kr')
+    # number_of_cookies = json.get('number_of_cookies')
+
     movie = Movie.query.get(mid)
     movie.name_en = name_en
     movie.name_kr = name_kr
+    # movie.number_of_cookies = number_of_cookies
     db.session.commit()
 
     return jsonify({
         'isConfirmed': 'success',
         'id': mid,
         'movies': get_all_movies()
+    })
+
+
+@app.route('/anl-api/movie/<mid>/cookie', methods=["POST"])
+def modify_number_of_cookies(mid):
+    json = request.get_json()
+    number_of_cookies = json.get('number_of_cookies')
+    movie = Movie.query.get(mid)
+    movie.number_of_cookies = number_of_cookies
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': mid
     })
 
 
@@ -646,53 +665,21 @@ def delete_movie_photo():
         'id': id,
         'movies': get_all_movies()
     })
-
-
-def hydrate_movies_with_cookie(movies):
-    result = []
-    for m in movies:
-        movie = {
-            'id': m.id,
-            'name_en': m.name_en,
-            'name_kr': m.name_kr,
-            'photo': m.photo
-        }
-        result.append(movie)
-    return result
-
-
-def get_cookie_of_all_movies():
-    return hydrate_movies_with_cookie(Movie.query.all())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+# def hydrate_movies_with_cookie(movies):
+#     result = []
+#     for m in movies:
+#         movie = {
+#             'id': m.id,
+#             'name_en': m.name_en,
+#             'name_kr': m.name_kr,
+#             'photo': m.photo,
+#             'number_of_cookies': m.number_of_cookies
+#         }
+#         result.append(movie)
+#     return result
+#
+#
+# def get_cookie_of_all_movies():
+#     return hydrate_movies_with_cookie(Movie.query.all())

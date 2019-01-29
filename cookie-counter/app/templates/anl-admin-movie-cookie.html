@@ -9,24 +9,25 @@
 {% block scripts %}
 {{ super() }}
 <script>
-    function edit_button(id, number_of_cookies) {
-        let body = "<input id='number-of-cookies" + number_of_cookies + "' type='text' value='" + name_en + "'/>";
-        body += "<button onclick='update_number_of_cookies(" + movie.id + ")'> 수정 완료</button>";
-        $("#movie-list-" + movie.id).html(body);
+    function edit_button(number_of_cookies) {
+        let number = number_of_cookies != null ? number_of_cookies : 0;
+        let body = "<input id='update-cookie' type='text' value='" + number + "'/>";
+        body += "<button onclick='update_number_of_cookies(" + mid + ")'> 수정 완료</button>";
+        $("#movie-list-" + mid).html(body);
     }
 
+
     function update_number_of_cookies(mid) {
-        number_of_cookies = $("#movie-list-" + movie.id).val();
-        isConfirmed = confirm(name_en + " 쿠키 개수를 수정하시겠습니까?");
+        name_en = $("#name-en-" + mid).val();
+        number_of_cookies = $("#update-cookie").val();
+        isConfirmed = confirm("쿠키 개수를 수정하시겠습니까?");
         if (isConfirmed == true) {
             $.ajax({
                 type: 'POST',
-                url: '/anl-api/movie/' + mid,
+                url: '/anl-api/movie/' + mid + "/cookie",
                 data: JSON.stringify({
-                    'id': movie.id,
-                    'name_en': movie.name_en,
-                    'name_kr': movie.name_kr,
-                    'number_of_cookies': movie.number_of_cookies,
+                    'id': mid,
+                    'number_of_cookies': number_of_cookies,
                 }),
                 success: function (response) {
                     alert("수정에 성공했습니다.");
@@ -49,10 +50,9 @@
         html += div1;
 
         div2 = "<div id=\"movie-list-" + movie.id + "\">";
-        div2 += "<p>영화 쿠키 개수 : ";
-        div2 += movie.number_of_cookies;
-        div2 += "</p>"
-        div2 += "<button onclick=\"edit_button(" + movie.number_of_cookies + "')\">항목 수정</button>";
+        div2 += (movie.number_of_cookies != null ? movie.number_of_cookies : 0);
+        div2 += "<button onclick=\"edit_button(" +
+            movie.number_of_cookies + ")\">항목 수정</button>";
         div2 += "</div>";
         html += div2;
 
@@ -64,7 +64,7 @@
             div3 += "</p>"
             if (director.photo != null) {
                 div3 += "<a href='/anl-admin/director/" + director.id + "'><img src='/static/" + director.photo + "' /></a>"
-        }
+            }
         }
         html += div3;
         $('.movie-info').html(html);
