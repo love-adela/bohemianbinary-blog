@@ -612,9 +612,10 @@ def get_this_movie_api(mid):
         'id': movie.id,
         'name_en': movie.name_en,
         'name_kr': movie.name_kr,
-        'photo': movie.photo,
         'number_of_cookies': movie.number_of_cookies,
-        'directors': hydrate_directors(movie.directors)
+        'photo': movie.photo,
+        'directors': hydrate_directors(movie.directors),
+        'actors': hydrate_actors(movie.actors)
     })
 
 
@@ -623,18 +624,28 @@ def edit_movie_api(mid):
     json = request.get_json()
     name_en = json.get('name_en')
     name_kr = json.get('name_kr')
-    # number_of_cookies = json.get('number_of_cookies')
+    number_of_cookies = json.get('number_of_cookies')
 
     movie = Movie.query.get(mid)
     movie.name_en = name_en
     movie.name_kr = name_kr
-    # movie.number_of_cookies = number_of_cookies
+    movie.number_of_cookies = number_of_cookies
     db.session.commit()
 
     return jsonify({
         'isConfirmed': 'success',
         'id': mid,
-        'movies': get_all_movies()
+        'movies': get_all_movies(),
+        'number_of_cookies': number_of_cookies
+    })
+
+
+@app.route('/anl-api/movie/<mid>/cookie', methods=["GET"])
+def show_modified_number_of_cookies(mid):
+    movie = Movie.query.get(mid)
+    return jsonify({
+        'id': mid,
+        'number_of_cookies': movie.number_of_cookies
     })
 
 
@@ -648,7 +659,16 @@ def modify_number_of_cookies(mid):
 
     return jsonify({
         'isConfirmed': 'success',
-        'id': mid
+        'id': mid,
+        'movie': {
+            'id': movie.id,
+            'name_en': movie.name_en,
+            'name_kr': movie.name_kr,
+            'photo': movie.photo,
+            'number_of_cookies': movie.number_of_cookies,
+            'directors': hydrate_directors(movie.directors),
+            'actors': hydrate_actors(movie.actors)
+        }
     })
 
 
@@ -665,21 +685,3 @@ def delete_movie_photo():
         'id': id,
         'movies': get_all_movies()
     })
-#
-#
-# def hydrate_movies_with_cookie(movies):
-#     result = []
-#     for m in movies:
-#         movie = {
-#             'id': m.id,
-#             'name_en': m.name_en,
-#             'name_kr': m.name_kr,
-#             'photo': m.photo,
-#             'number_of_cookies': m.number_of_cookies
-#         }
-#         result.append(movie)
-#     return result
-#
-#
-# def get_cookie_of_all_movies():
-#     return hydrate_movies_with_cookie(Movie.query.all())
