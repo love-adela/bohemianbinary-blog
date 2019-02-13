@@ -33,38 +33,16 @@ def admin_director():
     return render_template('anl-admin-director.html', title='Movie Director')
 
 
-def hydrate_directors(directors):
-    result = []
-    for d in directors:
-        director = {
-            'id': d.id,
-            'name_en': d.name_en,
-            'name_kr': d.name_kr,
-            'photo': d.photo
-        }
-        result.append(director)
-    return result
+def hydrate_objects(objects):
+    return [{x.name: getattr(o, x.name) for x in o.__table__.columns} for o in objects]
 
 
 def get_all_directors():
-    return hydrate_directors(Director.query.all())
-
-
-def hydrate_movies_with_director(movies):
-    result = []
-    for m in movies:
-        movie = {
-            'id': m.id,
-            'name_en': m.name_en,
-            'name_kr': m.name_kr,
-            'photo': m.photo
-        }
-        result.append(movie)
-    return result
+    return hydrate_objects(Director.query.all())
 
 
 def get_director_of_all_movies():
-    return hydrate_movies_with_director(Movie.query.all())
+    return hydrate_objects(Movie.query.all())
 
 
 # TODO : render_template title 'ㅇㅇㅇ 감독의 영화 목록'으로 변경
@@ -136,7 +114,7 @@ def api_director():
         condition2 = Director.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         query = Director.query.filter(or_clause).all()
-        directors = hydrate_directors(query)
+        directors = hydrate_objects(query)
 
     return jsonify(directors=directors)
 
@@ -155,8 +133,8 @@ def get_director_of_movie(id):
         movies = movie_query.filter(~Movie.directors.any(Director.id == id)).all()
         producer_query = Movie.query.filter(Movie.directors.any(Director.id == id))
         producers = producer_query.filter(or_clause).all()
-    movie_dict = hydrate_movies_with_director(movies)
-    producer_dict = hydrate_movies_with_director(producers)
+    movie_dict = hydrate_objects(movies)
+    producer_dict = hydrate_objects(producers)
     return jsonify(movies=movie_dict, id=id, producers=producer_dict)
 
 
@@ -270,38 +248,12 @@ def admin_actor():
     return render_template('anl-admin-actor.html', title='Movie Actor')
 
 
-def hydrate_actors(actors):
-    result = []
-    for a in actors:
-        actor = {
-            'id': a.id,
-            'name_en': a.name_en,
-            'name_kr': a.name_kr,
-            'photo': a.photo
-        }
-        result.append(actor)
-    return result
-
-
 def get_all_actors():
-    return hydrate_actors(Actor.query.all())
-
-
-def hydrate_movies_with_actor(movies):
-    result = []
-    for m in movies:
-        movie = {
-            'id': m.id,
-            'name_en': m.name_en,
-            'name_kr': m.name_kr,
-            'photo': m.photo
-        }
-        result.append(movie)
-    return result
+    return hydrate_objects(Actor.query.all())
 
 
 def get_actor_of_all_movies():
-    return hydrate_movies_with_actor(Movie.query.all())
+    return hydrate_objects(Movie.query.all())
 
 
 # TODO : render_template title 'ooo 배우의 영화 목록'으로 변경
@@ -371,7 +323,7 @@ def api_actor():
         condition2 = Actor.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         query = Actor.query.filter(or_clause).all()
-        actors = hydrate_actors(query)
+        actors = hydrate_objects(query)
 
     return jsonify(actors=actors)
 
@@ -390,8 +342,8 @@ def get_actor_of_movie(id):
         movies = movie_query.filter(~Movie.actors.any(Actor.id == id)).all()
         actor_query = Movie.query.filter(Movie.actors.any(Actor.id == id))
         actors = actor_query.filter(or_clause).all()
-    movie_dict = hydrate_movies_with_actor(movies)
-    actor_dict = hydrate_movies_with_actor(actors)
+    movie_dict = hydrate_objects(movies)
+    actor_dict = hydrate_objects(actors)
     return jsonify(movies=movie_dict, id=id, actors=actor_dict)
 
 
@@ -515,23 +467,8 @@ def admin_movie():
     return render_template('anl-admin-movie.html', title='Movie')
 
 
-def hydrate_movies(movies):
-    result = []
-    for m in movies:
-        movie = {
-            'id': m.id,
-            'name_en': m.name_en,
-            'name_kr': m.name_kr,
-            'photo': m.photo,
-            'number_of_cookies': m.number_of_cookies
-
-        }
-        result.append(movie)
-    return result
-
-
 def get_all_movies():
-    return hydrate_movies(Movie.query.all())
+    return hydrate_objects(Movie.query.all())
 
 
 @app.route('/anl-admin/movie/<mid>', methods=['GET'])
@@ -601,7 +538,7 @@ def get_api_movie():
         condition2 = Movie.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         query = Movie.query.filter(or_clause).all()
-        movies = hydrate_movies(query)
+        movies = hydrate_objects(query)
     return jsonify(movies=movies)
 
 
@@ -614,8 +551,8 @@ def get_this_movie_api(mid):
         'name_kr': movie.name_kr,
         'number_of_cookies': movie.number_of_cookies,
         'photo': movie.photo,
-        'directors': hydrate_directors(movie.directors),
-        'actors': hydrate_actors(movie.actors)
+        'directors': hydrate_objects(movie.directors),
+        'actors': hydrate_objects(movie.actors)
     })
 
 
@@ -666,8 +603,8 @@ def modify_number_of_cookies(mid):
             'name_kr': movie.name_kr,
             'photo': movie.photo,
             'number_of_cookies': movie.number_of_cookies,
-            'directors': hydrate_directors(movie.directors),
-            'actors': hydrate_actors(movie.actors)
+            'directors': hydrate_objects(movie.directors),
+            'actors': hydrate_objects(movie.actors)
         }
     })
 

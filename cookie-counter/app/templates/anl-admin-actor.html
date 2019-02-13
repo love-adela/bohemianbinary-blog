@@ -98,6 +98,8 @@
             li = "<li id=\"list-" + actor.id + "\">";
             li += "<a href='/anl-admin/actor/" + actor.id + "'>";
             li += actor.name_en + " " + actor.name_kr;
+            li += "</a>";
+            li += "</br>";
             if (actor.photo != null) {
                 li += "<a href='/anl-admin/actor/\" + actor.id + \"'><img src='/static/" + actor.photo + "' /></a>"
             }
