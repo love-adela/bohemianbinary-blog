@@ -30,7 +30,7 @@
         relevantUl = $(".relevant-list");
         $.ajax({
           type: 'POST',
-          url: "/anl-api/movie/" + id + "/director/" + {{ director.id }},
+          url: "/bb-admin/api/movie/" + id + "/director/" + {{ director.id }},
           success: function (response) {
             refresh();
           },
@@ -44,7 +44,7 @@
         relevantUl = $(".relevant-list");
         $.ajax({
           type: 'DELETE',
-          url: "/anl-api/movie/" + id + "/director/" + {{ director.id }},
+          url: "/bb-admin/api/movie/" + id + "/director/" + {{ director.id }},
           success: function (response) {
             refresh();
           },
@@ -89,7 +89,7 @@
         } else {
             query = "?keyword=" + keyword;
         }
-        $.getJSON('/anl-api/movie-with-director/' + directorId + query)
+        $.getJSON('/bb-admin/api/movie-with-director/' + directorId + query)
             .done(function (response) {
                 put_on_others(response.movies);
                 put_on_theirs(response.producers);

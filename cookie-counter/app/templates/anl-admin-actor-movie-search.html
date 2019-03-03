@@ -29,7 +29,7 @@
         relevantUl = $(".relevant-list");
         $.ajax({
             type: 'POST',
-            url: "/anl-api/movie/" + id + "/actor/" + {{ actor.id }},
+            url: "/bb-admin/api/movie/" + id + "/actor/" + {{ actor.id }},
         success: function (response) {
             refresh();
         },
@@ -42,7 +42,7 @@
         relevantUl = $(".relevant-list");
         $.ajax({
             type: 'DELETE',
-            url: "/anl-api/movie/" + id + "/actor/" + {{ actor.id }},
+            url: "/bb-admin/api/movie/" + id + "/actor/" + {{ actor.id }},
             success: function (response) {
                 refresh();
             },
@@ -85,7 +85,7 @@
         } else {
             query = "?keyword=" + keyword;
         }
-        $.getJSON('/anl-api/movie-with-actor/' + actorId + query)
+        $.getJSON('/bb-admin/api/movie-with-actor/' + actorId + query)
             .done(function (response) {
                 put_on_others(response.movies);
                 put_on_theirs(response.actors);

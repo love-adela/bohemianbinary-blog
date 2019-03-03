@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p><a href="{{ url_for('add_actor') }}">새 배우 등록하기</a></p>
+<p><a href="{{ url_for('admin.add_actor') }}">새 배우 등록하기</a></p>
 <ul class="list">
 
 </ul>
@@ -23,7 +23,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: 'POST',
-                url: '/anl-api/actor/' + id,
+                url: '/bb-admin/api/actor/' + id,
                 data: JSON.stringify({
                     'id': id,
                     'name_en': name_en,
@@ -44,7 +44,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "PUT",
-                url: '/anl-api/actor/' + id,
+                url: '/bb-admin/api/actor/' + id,
                 success: function (response) {
                     alert("항목 수정에 성공했습니다.");
                     update_actors_html(response.actors);
@@ -60,7 +60,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "POST",
-                url: '/anl-api/actor/photo',
+                url: '/bb-admin/api/actor/photo',
                 data: JSON.stringify({
                     'id': id
                 }),
@@ -80,7 +80,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "DELETE",
-                url: '/anl-api/actor/' + id,
+                url: '/bb-admin/api/actor/' + id,
                 success: function (response) {
                     alert("항목 삭제에 성공했습니다.");
                     update_actors_html(response.actors);
@@ -96,12 +96,12 @@
         for (var i in actors) {
             actor = actors[i];
             li = "<li id=\"list-" + actor.id + "\">";
-            li += "<a href='/anl-admin/actor/" + actor.id + "'>";
+            li += "<a href='/bb-admin/actor/" + actor.id + "'>";
             li += actor.name_en + " " + actor.name_kr;
             li += "</a>";
             li += "</br>";
             if (actor.photo != null) {
-                li += "<a href='/anl-admin/actor/\" + actor.id + \"'><img src='/static/" + actor.photo + "' /></a>"
+                li += "<a href='/bb-admin/actor/\" + actor.id + \"'><img src='/static/" + actor.photo + "' /></a>"
             }
 
             li += "<button onclick=\"show_actor_edit(" +
@@ -114,7 +114,7 @@
         $('.list').html(html);
     }
 
-    $.getJSON('/anl-api/actor')
+    $.getJSON('/bb-admin/api/actor')
         .done(function(response) {
             update_actors_html(response.actors);
         }).fail(function(response) {

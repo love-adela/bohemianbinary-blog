@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p><a href="{{ url_for('add_director') }}">새 감독 등록하기</a></p>
+<p><a href="{{ url_for('admin.add_director') }}">새 감독 등록하기</a></p>
 <ul class="list">
 
 </ul>
@@ -24,7 +24,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: 'POST',
-                url: '/anl-api/director/' + id,
+                url: '/bb-admin/api/director/' + id,
                 data: JSON.stringify({
                     'id': id,
                     'name_en': name_en,
@@ -45,7 +45,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "PUT",
-                url: '/anl-api/director/' + id,
+                url: '/bb-admin/api/director/' + id,
                 success: function (response) {
                     alert("항목 수정에 성공했습니다.");
                     update_directors_page(response.directors);
@@ -61,7 +61,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "POST",
-                url: '/anl-api/director/photo',
+                url: '/bb-admin/api/director/photo',
                 data: JSON.stringify({
                     'id': id
                 }),
@@ -80,7 +80,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "DELETE",
-                url: '/anl-api/director/' + id,
+                url: '/bb-admin/api/director/' + id,
                 success: function (response) {
                     alert("항목 삭제에 성공했습니다.");
                     update_directors_page(response.directors);
@@ -97,12 +97,12 @@
         for (var i in directors) {
             director = directors[i];
             li = "<li id=\"list-" + director.id + "\">";
-            li += "<a href='/anl-admin/director/" + director.id + "'>";
+            li += "<a href='/bb-admin/director/" + director.id + "'>";
             li += director.name_en + " " + director.name_kr;
             li += "</a>";
             li += "</br>";
             if (director.photo != null) {
-                li += "<a href='/anl-admin/director/" + director.id + "'><img src='/static/" + director.photo + "' /></a>"
+                li += "<a href='/bb-admin/director/" + director.id + "'><img src='/static/" + director.photo + "' /></a>"
             }
 
             li += "<button onclick=\"show_director_edit(" +
@@ -115,7 +115,7 @@
         $('.list').html(html);
     }
 
-    $.getJSON('/anl-api/director')
+    $.getJSON('/bb-admin/api/director')
         .done(function (response) {
             update_directors_page(response.directors);
         }).fail(function (response) {

@@ -23,7 +23,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: 'POST',
-                url: '/anl-api/movie/' + mid + "/cookie",
+                url: '/bb-admin/api/movie/' + mid + "/cookie",
                 data: JSON.stringify({
                     'id': mid,
                     'number_of_cookies': number_of_cookies,
@@ -53,7 +53,7 @@
 
         div2 = "<div id=\"movie-list-" + movie.id + "\">";
         if (movie.photo != null) {
-            div2 += "<a href='/anl-admin/movie/" + movie.id + "'><img src='/static/" + movie.photo + "' /></a>"
+            div2 += "<a href='/bb-admin/api/movie/" + movie.id + "'><img src='/static/" + movie.photo + "' /></a>"
         }
         div2 += "</div>";
         html += div2;
@@ -65,7 +65,7 @@
             div3 += director.name_kr + " (" + director.name_en +  ")";
             div3 += "</p>";
             if (director.photo != null) {
-                div3 += "<a href='/anl-admin/director/" + director.id + "'>" +
+                div3 += "<a href='/bb-admin/api/director/" + director.id + "'>" +
                     "<img src='/static/" + director.photo + "' /></a>"
             }
         }
@@ -78,7 +78,7 @@
             div4 += actor.name_kr + " (" + actor.name_en + ")";
             div4 += "</p>";
             if (actor.photo != null) {
-                div4 += "<a href='/anl-admin/actor/" + actor.id + "'>" +
+                div4 += "<a href='/bb-admin/api/actor/" + actor.id + "'>" +
                     "<img src='/static/" + actor.photo + "' /></a>"
             }
         }
@@ -89,7 +89,7 @@
 
     var mid = {{ mid }};
 
-    $.getJSON("/anl-api/movie/" + mid)
+    $.getJSON("/bb-admin/api/movie/" + mid)
         .done(function(response) {
             show_movie_information(response);
         }).fail(function (response) {

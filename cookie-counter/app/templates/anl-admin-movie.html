@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p><a href="{{ url_for('add_movie') }}">새 영화 등록하기</a></p>
+<p><a href="{{ url_for('admin.add_movie') }}">새 영화 등록하기</a></p>
 <ul class="list">
 
 </ul>
@@ -23,7 +23,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: 'POST',
-                url: '/anl-api/movie/' + id,
+                url: '/bb-admin/api/movie/' + id,
                 data: JSON.stringify({
                     'id': id,
                     'name_en': name_en,
@@ -44,7 +44,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "PUT",
-                url: '/anl-api/movie/' + id,
+                url: '/bb-admin/api/movie/' + id,
                 success: function (response) {
                     alert("항목 수정에 성공했습니다.");
                     update_movies_page(response.movies);
@@ -60,7 +60,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "POST",
-                url: '/anl-api/movie/photo',
+                url: '/bb-admin/api/movie/photo',
                 data: JSON.stringify({
                     'id': id
                 }),
@@ -79,7 +79,7 @@
         if (isConfirmed == true) {
             $.ajax({
                 type: "DELETE",
-                url: '/anl-api/movie/' + id,
+                url: '/bb-admin/api/movie/' + id,
                 success: function (response) {
                     alert("항목 삭제에 성공했습니다.");
                     update_movies_page(response.movies);
@@ -95,12 +95,12 @@
         for (var i in movies) {
             movie = movies[i];
             li = "<li id=\"list-" + movie.id + "\">";
-            li += "<a href='/anl-admin/movie/" + movie.id + "'>";
+            li += "<a href='/bb-admin/movie/" + movie.id + "'>";
             li += movie.name_en + " " + movie.name_kr;
             li += "</a>";
             li += "</br>";
             if (movie.photo != null) {
-                li += "<a href='/anl-admin/movie/" + movie.id + "'><img src='/static/" + movie.photo + "' /></a>"
+                li += "<a href='/bb-admin/movie/" + movie.id + "'><img src='/static/" + movie.photo + "' /></a>"
             }
 
             li += "<button onclick=\"show_movie_edit(" +
@@ -114,7 +114,7 @@
     }
 
 
-    $.getJSON('/anl-api/movie')
+    $.getJSON('/bb-admin/api/movie')
         .done(function (response) {
             update_movies_page(response.movies);
         }).fail(function (response) {
