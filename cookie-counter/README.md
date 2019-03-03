@@ -1,5 +1,10 @@
 # Cookie Counter
 
+## 가상환경 설정
+
+```
+$ python3 -m venv myvenv
+```
 ## 가상환경 실행
 
 ```
