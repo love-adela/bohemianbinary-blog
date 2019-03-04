@@ -1,18 +1,7 @@
-from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, BigInteger
 from sqlalchemy import Table, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import relationship
 from app import db
-
-engine = create_engine('sqlite:///memory:', echo=True)
-Base = declarative_base()
-Session = sessionmaker(bind=engine)
-
-
-def create_db():
-    Base.metadata.create_all(engine)
-
 
 movie_with_director = Table('movie_with_director',
                             db.Model.metadata,
@@ -58,4 +47,3 @@ class Movie(db.Model):
 
     def __repr__(self):
         return "<Movie('%s', ('%s'))>" % (self.name_en, self.name_kr)
-
