@@ -2,5 +2,4 @@ from flask import Blueprint
 
 bp = Blueprint('admin', __name__)
 
-from app.admin import handlers
-
+from app.admin import routes

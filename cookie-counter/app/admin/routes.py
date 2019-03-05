@@ -2,29 +2,70 @@ import os
 import time
 import uuid
 import logging
+from flask import current_app, jsonify, flash, render_template, request, redirect, url_for
+from flask_login import current_user, login_user, logout_user, login_required
+
 from app import db
 from app.admin import bp
-from flask import current_app, jsonify, flash, render_template, request, redirect, url_for
-from app.models import Director, Actor, Movie
-from app.forms import DirectorForm, ActorForm, MovieForm
-
-
-@bp.route('/')
-def admin_main():
-    return "The delicious way to count movie cookies!"
+from app.admin.forms import ActorForm, DirectorForm, MovieForm, LoginForm, RegistrationForm
+from app.models import Director, Actor, Movie, Admin
 
 
 def unique_filename(filename):
     return time.strftime("%d-%m-%Y") + '-' + uuid.uuid4().hex[:8] + '-' + filename
 
 
+@bp.route('/index', methods=['GET', 'POST'])
+@login_required
+def index():
+    return render_template('index.html', title='Main')
+
+
+@bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('admin.index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        admin = Admin.query.filter_by(name=form.username.data).first()
+        if admin is None or not admin.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('admin.login'))
+        login_user(admin, remember=form.remember_me.data)
+        return redirect(url_for('admin.index'))
+    return render_template('admin/login.html', title='Sign In', form=form)
+
+
+@bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('admin.index'))
+
+
+@bp.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        admin = Admin(name=form.username.data, email=form.email.data)
+        admin.set_password(form.password.data)
+        db.session.add(admin)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('admin.login'))
+    return render_template('admin/register.html', title='Register', form=form)
+
+
 # ----------------------------- director --------------------------------
 @bp.route("/director")
+@login_required
 def admin_director():
     return render_template('anl-admin-director.html', title='Movie Director')
 
 
 @bp.route('/director/<id>', methods=['GET'])
+@login_required
 def director_of_movie(id):
     director = Director.query.filter_by(id=id).first()
     if director is None:
@@ -33,6 +74,7 @@ def director_of_movie(id):
 
 
 @bp.route('/director/new', methods=['GET', 'POST'])
+@login_required
 def add_director():
     form = DirectorForm()
     director = Director(name_kr=form.director_kr_name.data, name_en=form.director_en_name.data)
@@ -57,6 +99,7 @@ def add_director():
 
 
 @bp.route('/director/edit/<id>', methods=['GET', 'POST'])
+@login_required
 def edit_director(id):
     form = DirectorForm()
     director = Director.query.get(id)
@@ -83,6 +126,7 @@ def edit_director(id):
 
 # -------------------------------- director api ---------------------------------
 @bp.route('/api/director')
+@login_required
 def api_director():
     keyword = request.args.get('keyword')
     if keyword is None:
@@ -97,6 +141,7 @@ def api_director():
 
 
 @bp.route('/api/movie-with-director/<id>', methods=['GET'])
+@login_required
 def get_director_of_movie(id):
     keyword = request.args.get('keyword')
     if keyword is None:
@@ -114,6 +159,7 @@ def get_director_of_movie(id):
 
 
 @bp.route('/api/movie/<mid>/director/<did>', methods=['POST'])
+@login_required
 def associate_movie_with_director(mid, did):
     movie = Movie.query.filter_by(id=mid).first()
     director = Director.query.filter_by(id=did).first()
@@ -126,6 +172,7 @@ def associate_movie_with_director(mid, did):
 
 
 @bp.route('/api/movie/<mid>/director/<did>', methods=['DELETE'])
+@login_required
 def remove_director_from_movie(mid, did):
     movie = Movie.query.filter_by(id=mid).first()
     director = Director.query.with_parent(movie).filter_by(id=did).first()
@@ -138,6 +185,7 @@ def remove_director_from_movie(mid, did):
 
 
 @bp.route('/api/movie-with-director/<id>', methods=['POST'])
+@login_required
 def edit_director_of_movie_api(id):
     json = request.get_json()
     name_en = json.get('name_en')
@@ -155,6 +203,7 @@ def edit_director_of_movie_api(id):
 
 
 @bp.route('/api/director/<id>', methods=['POST'])
+@login_required
 def edit_director_api(id):
     json = request.get_json()
     name_en = json.get('name_en')
@@ -172,6 +221,7 @@ def edit_director_api(id):
 
 
 @bp.route('/api/director/photo/<id>', methods=['POST'])
+@login_required
 def change_director_photo(id):
     photo_data = request.files['photo']
     filename = unique_filename(photo_data.filename)
@@ -189,6 +239,7 @@ def change_director_photo(id):
 
 
 @bp.route('/api/director/photo', methods=['POST'])
+@login_required
 def delete_director_photo():
     json = request.get_json()
     id = json.get('id')
@@ -204,6 +255,7 @@ def delete_director_photo():
 
 
 @bp.route('/api/director/<id>', methods=['DELETE'])
+@login_required
 def delete_director(id):
     director = Director.query.get(id)
     db.session.delete(director)
@@ -219,11 +271,13 @@ def delete_director(id):
 # ----------------------------- actor --------------------------------
 
 @bp.route("/actor")
+@login_required
 def admin_actor():
     return render_template('anl-admin-actor.html', title='Movie Actor')
 
 
 @bp.route('/actor/<id>', methods=['GET'])
+@login_required
 def actor_of_movie(id):
     actor = Actor.query.filter_by(id=id).first()
     if actor is None:
@@ -232,6 +286,7 @@ def actor_of_movie(id):
 
 
 @bp.route('/actor/new', methods=['GET', 'POST'])
+@login_required
 def add_actor():
     form = ActorForm()
     actor = Actor(name_kr=form.actor_kr_name.data, name_en=form.actor_en_name.data)
@@ -255,6 +310,7 @@ def add_actor():
 
 
 @bp.route('/actor/edit/<id>', methods=['GET', 'POST'])
+@login_required
 def edit_actor(id):
     form = ActorForm()
     actor = Actor.query.get(id)
@@ -280,6 +336,7 @@ def edit_actor(id):
 
 # ----------------------------- actor api --------------------------------
 @bp.route("/api/actor")
+@login_required
 def api_actor():
     keyword = request.args.get('keyword')
     if keyword is None:
@@ -293,6 +350,7 @@ def api_actor():
 
 
 @bp.route('/api/movie-with-actor/<id>', methods=['GET'])
+@login_required
 def get_actor_of_movie(id):
     keyword = request.args.get('keyword')
     if keyword is None:
@@ -310,6 +368,7 @@ def get_actor_of_movie(id):
 
 
 @bp.route('/api/movie/<mid>/actor/<aid>', methods=['POST'])
+@login_required
 def associate_movie_with_actor(mid, aid):
     movie = Movie.query.filter_by(id=mid).first()
     actor = Actor.query.filter_by(id=aid).first()
@@ -322,6 +381,7 @@ def associate_movie_with_actor(mid, aid):
 
 
 @bp.route('/api/movie/<mid>/actor/<aid>', methods=['DELETE'])
+@login_required
 def remove_actor_from_movie(mid, aid):
     movie = Movie.query.filter_by(id=mid).first()
     actor = Actor.query.with_parent(movie).filter_by(id=aid).first()
@@ -344,6 +404,7 @@ def remove_actor_from_movie(mid, aid):
 
 
 @bp.route('/api/movie-with-actor/<id>', methods=['POST'])
+@login_required
 def edit_actor_of_movie_api(id):
     json = request.get_json()
     name_en = json.get('name_en')
@@ -361,6 +422,7 @@ def edit_actor_of_movie_api(id):
 
 
 @bp.route('/api/actor/<id>', methods=['POST'])
+@login_required
 def edit_actor_api(id):
     json = request.get_json()
     name_en = json.get('name_en')
@@ -378,6 +440,7 @@ def edit_actor_api(id):
 
 
 @bp.route('/api/actor/photo/<id>', methods=['POST'])
+@login_required
 def change_actor_photo(id):
     photo_data = request.files['photo']
     filename = unique_filename(photo_data.filename)
@@ -395,6 +458,7 @@ def change_actor_photo(id):
 
 
 @bp.route('/actor/photo', methods=['POST'])
+@login_required
 def delete_actor_photo():
     json = request.get_json()
     id = json.get('id')
@@ -410,6 +474,7 @@ def delete_actor_photo():
 
 
 @bp.route('/actor/<id>', methods=['DELETE'])
+@login_required
 def delete_actor(id):
     actor = Actor.query.get(id)
     db.session.delete(actor)
@@ -425,11 +490,13 @@ def delete_actor(id):
 # ----------------------------- movie --------------------------------
 
 @bp.route("/movie")
+@login_required
 def admin_movie():
     return render_template('anl-admin-movie.html', title='Movie')
 
 
 @bp.route('/movie/<mid>', methods=['GET'])
+@login_required
 def get_movie_information(mid):
     movie = Movie.query.filter_by(id=mid).first()
     if movie is None:
@@ -438,6 +505,7 @@ def get_movie_information(mid):
 
 
 @bp.route('/movie/new', methods=['GET', 'POST'])
+@login_required
 def add_movie():
     form = MovieForm()
     movie = Movie(name_kr=form.movie_kr_name.data, name_en=form.movie_en_name.data)
@@ -461,6 +529,7 @@ def add_movie():
 
 
 @bp.route('/movie/edit/<id>', methods=['GET', 'POST'])
+@login_required
 def edit_movie(id):
     form = MovieForm()
     movie = Movie.query.get(id)
@@ -477,6 +546,7 @@ def edit_movie(id):
 
 
 @bp.route('/movie/delete/<id>', methods=['GET', 'POST'])
+@login_required
 def delete_movie(id):
     movie = Movie.query.get(id)
     db.session.delete(movie)
@@ -487,6 +557,7 @@ def delete_movie(id):
 
 # ----------------------------- movie api --------------------------------
 @bp.route('/api/movie')
+@login_required
 def get_api_movie():
     keyword = request.args.get('keyword')
     if keyword is None:
@@ -500,6 +571,7 @@ def get_api_movie():
 
 
 @bp.route('/api/movie/<mid>', methods=['GET'])
+@login_required
 def get_this_movie_api(mid):
     movie = Movie.query.filter_by(id=mid).first()
     return jsonify({
@@ -514,6 +586,7 @@ def get_this_movie_api(mid):
 
 
 @bp.route('/api/movie/<mid>', methods=['POST'])
+@login_required
 def edit_movie_api(mid):
     json = request.get_json()
     name_en = json.get('name_en')
@@ -535,6 +608,7 @@ def edit_movie_api(mid):
 
 
 @bp.route('/api/movie/<mid>/cookie', methods=["GET"])
+@login_required
 def show_modified_number_of_cookies(mid):
     movie = Movie.query.get(mid)
     return jsonify({
@@ -544,6 +618,7 @@ def show_modified_number_of_cookies(mid):
 
 
 @bp.route('/api/movie/<mid>/cookie', methods=["POST"])
+@login_required
 def modify_number_of_cookies(mid):
     json = request.get_json()
     number_of_cookies = json.get('number_of_cookies')
@@ -567,6 +642,7 @@ def modify_number_of_cookies(mid):
 
 
 @bp.route('/api/movie/photo', methods=['POST'])
+@login_required
 def delete_movie_photo():
     json = request.get_json()
     id = json.get('id')
