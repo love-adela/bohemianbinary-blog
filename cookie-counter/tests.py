@@ -28,4 +28,27 @@ class TestCase(unittest.TestCase):
     def test_index(self):
         res = self.client.get('/')
         self.assertEqual(res.status_code, 200)
-        assert 'The delicious way to count movie cookies!' in str(res.data)
+        self.assertIn('The delicious way to count movie cookies!', str(res.data))
+
+    # Register
+
+    def populate_dummy_admin(self):
+        data = dict(username="admin", password="1234", password2="1234", email="test@test.com")
+        return self.client.post("/bb-admin/register", data=data, follow_redirects=True)
+
+    def log_in_dummy_admin(self):
+        self.populate_dummy_admin()
+        data = dict(username="admin", password="1234")
+        return self.client.post("/bb-admin/login", data=data, follow_redirects=True)
+
+    def test_register(self):
+        res = self.populate_dummy_admin()
+        self.assertIn('Congratulations, you are now a registered user!', str(res.data))
+
+    def test_log_in(self):
+        res = self.log_in_dummy_admin()
+        self.assertIn('Hi!', str(res.data))
+
+    # Login
+
+    # New Director
