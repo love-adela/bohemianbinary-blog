@@ -5,6 +5,7 @@ import unittest
 
 from app import create_app, db
 from config import basedir
+from io import BytesIO
 
 
 class TestCase(unittest.TestCase):
@@ -30,8 +31,6 @@ class TestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertIn('The delicious way to count movie cookies!', str(res.data))
 
-    # Register
-
     def populate_dummy_admin(self):
         data = dict(username="admin", password="1234", password2="1234", email="test@test.com")
         return self.client.post("/bb-admin/register", data=data, follow_redirects=True)
@@ -49,6 +48,14 @@ class TestCase(unittest.TestCase):
         res = self.log_in_dummy_admin()
         self.assertIn('Hi!', str(res.data))
 
-    # Login
-
-    # New Director
+    def test_director_new_post(self):
+        self.log_in_dummy_admin()
+        photo = (BytesIO(b'my file contents'), "for-test.jpg")
+        # TODO: for-test.jpg 파일을 삭제하라.
+        data = dict(director_kr_name="장진", director_en_name="Jang Jin", photo=photo)
+        res = self.client.post("/bb-admin/director/new", data=data, follow_redirects=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('/director/new', str(res.data))
+        res = self.client.get("/bb-admin/api/director")
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('Jang Jin', str(res.data))
