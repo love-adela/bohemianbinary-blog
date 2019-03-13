@@ -2,20 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9e21d2ed-bfdd-4a27-a909-31bcf8600295" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/cookie-counter/app/main/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cookie-counter/app/main/routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cookie-counter/app/templates/admin/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cookie-counter/app/templates/admin/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/anl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/anl.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cookie-counter/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/cookie-counter/app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cookie-counter/app/api/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/cookie-counter/app/api/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cookie-counter/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cookie-counter/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cookie-counter/app/routes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cookie-counter/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/cookie-counter/app/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cookie-counter/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/cookie-counter/app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cookie-counter/migrations/versions/70ad06f5d426_init_db.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cookie-counter/app/admin/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/cookie-counter/app/admin/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cookie-counter/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/cookie-counter/tests.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,11 +14,16 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/bohemian_binary$Unittests_for_tests_TestCase_test_add_movie.coverage" NAME="Unittests for tests.TestCase.test_add_movie Coverage Results" MODIFIED="1552494066551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter" />
+    <SUITE FILE_PATH="coverage/bohemian_binary$Unittests_for_tests_TestCase_test_log_out.coverage" NAME="Unittests for tests.TestCase.test_log_out Coverage Results" MODIFIED="1552492393200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter" />
+    <SUITE FILE_PATH="coverage/bohemian_binary$Unittests_for_tests_TestCase_test_director_new_post.coverage" NAME="Unittests for tests.TestCase.test_director_new_post Coverage Results" MODIFIED="1552480579073" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter" />
     <SUITE FILE_PATH="coverage/anl$db.coverage" NAME="db Coverage Results" MODIFIED="1536324526491" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter/app" />
+    <SUITE FILE_PATH="coverage/bohemian_binary$Unittests_for_tests_TestCase_test_log_in.coverage" NAME="Unittests for tests.TestCase.test_log_in Coverage Results" MODIFIED="1552492293470" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter" />
     <SUITE FILE_PATH="coverage/anl$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1536324008522" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter/app" />
     <SUITE FILE_PATH="coverage/anl$coin_repository.coverage" NAME="coin_repository Coverage Results" MODIFIED="1532943208178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/anl$strategies.coverage" NAME="strategies Coverage Results" MODIFIED="1532523784686" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/bohemian_binary$db.coverage" NAME="db Coverage Results" MODIFIED="1550063222537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter/app" />
+    <SUITE FILE_PATH="coverage/bohemian_binary$Unittests_for_tests_TestCase_test_add_director.coverage" NAME="Unittests for tests.TestCase.test_add_director Coverage Results" MODIFIED="1552493714928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cookie-counter" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -49,23 +44,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="644" column="15" selection-start-line="644" selection-start-column="15" selection-end-line="644" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1176">
-              <caret line="82" column="11" selection-start-line="82" selection-start-column="7" selection-end-line="82" selection-end-column="11" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="46">
+              <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -73,8 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
+            <state relative-caret-position="389">
+              <caret line="41" column="27" selection-start-line="41" selection-start-column="27" selection-end-line="41" selection-end-column="27" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -83,73 +63,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/admin/login.html">
+        <entry file="file://$PROJECT_DIR$/cookie-counter/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="529">
-              <caret line="23" column="44" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
+            <state relative-caret-position="87">
+              <caret line="68" column="33" selection-start-line="68" selection-start-column="33" selection-end-line="68" selection-end-column="51" />
               <folding>
-                <element signature="n#style#0;n#span#0;n#p#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#p#1;n#form#0;n#!!top" expanded="true" />
+                <element signature="e#23#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/base.html">
+        <entry file="file://$PROJECT_DIR$/myvenv/lib/python3.7/site-packages/werkzeug/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+            <state relative-caret-position="184">
+              <caret line="838" selection-start-line="838" selection-end-line="838" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/admin/register.html">
+        <entry file="file://$PROJECT_DIR$/myvenv/lib/python3.7/site-packages/sqlalchemy/orm/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="4" column="10" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="10" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#p#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#p#3;n#form#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/main/routes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cookie-counter/app/main/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+            <state relative-caret-position="246">
+              <caret line="41" selection-start-line="41" selection-end-line="41" />
             </state>
           </provider>
         </entry>
@@ -166,21 +104,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>curre</find>
-      <find>add_movi</find>
-      <find>bp</find>
-      <find>api</find>
-      <find>anl-</find>
-      <find>/bb-admin/api</find>
-      <find>anl-admin</find>
-      <find>anl</find>
-      <find>handler</find>
-      <find>bb-admin</find>
       <find>delicious</find>
       <find>cookie-coun</find>
-      <find>cookie-counter</find>
       <find>__name__</find>
-      <find>create_app</find>
       <find>from flask import</find>
       <find>user</find>
       <find>current</find>
@@ -196,6 +122,18 @@
       <find>username</find>
       <find>Director(</find>
       <find>index</find>
+      <find>flask_login</find>
+      <find>log</find>
+      <find>ㅣㅐ</find>
+      <find>cookie-counter</find>
+      <find>cookie</find>
+      <find>create_app</find>
+      <find>movie</find>
+      <find>movie/new</find>
+      <find>url_For(</find>
+      <find>/movie/new</find>
+      <find>for-test</find>
+      <find>logging</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -207,7 +145,6 @@
         <option value="$PROJECT_DIR$/cookie-counter/server/app/__init__.py" />
         <option value="$PROJECT_DIR$/cookie-counter/server/app/routes.py" />
         <option value="$PROJECT_DIR$/cookie-counter/server/cookie-counter.py" />
-        <option value="$PROJECT_DIR$/cookie-counter/config.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/db.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/template/admin-anl.html" />
         <option value="$PROJECT_DIR$/cookie-counter/app/template/admin-actor.html" />
@@ -235,22 +172,25 @@
         <option value="$PROJECT_DIR$/cookie-counter/cookie-counter.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/admin/__init__.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/templates/login.html" />
-        <option value="$PROJECT_DIR$/cookie-counter/app/__init__.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/templates/index.html" />
         <option value="$PROJECT_DIR$/cookie-counter/app/templates/admin/register.html" />
         <option value="$PROJECT_DIR$/cookie-counter/app/templates/base.html" />
-        <option value="$PROJECT_DIR$/cookie-counter/app/main/routes.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/templates/admin/login.html" />
         <option value="$PROJECT_DIR$/cookie-counter/app/models.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/admin/forms.py" />
+        <option value="$PROJECT_DIR$/cookie-counter/app/__init__.py" />
+        <option value="$PROJECT_DIR$/cookie-counter/app/main/routes.py" />
+        <option value="$PROJECT_DIR$/cookie-counter/test_login.py" />
+        <option value="$PROJECT_DIR$/cookie-counter/app/admin/test_unique_filename.py" />
+        <option value="$PROJECT_DIR$/cookie-counter/config.py" />
+        <option value="$PROJECT_DIR$/cookie-counter/tests.py" />
         <option value="$PROJECT_DIR$/cookie-counter/app/admin/routes.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="697" />
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="980" />
+    <option name="width" value="1680" />
     <option name="height" value="962" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -325,7 +265,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -348,8 +288,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.db">
-    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python tests.Unittests for tests.TestCase.test_add_movie">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="anl" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -357,12 +297,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cookie-counter/app" />
+      <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cookie-counter/app/__init__.py" />
+      <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -371,36 +311,95 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="db" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="Unittests for tests.TestCase.test_add_director" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="anl" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cookie-counter/app" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cookie-counter" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cookie-counter/app/db.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;tests.TestCase.test_add_director&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for tests.TestCase.test_add_movie" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="anl" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cookie-counter" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;tests.TestCase.test_add_movie&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for tests.TestCase.test_director_new_post" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="anl" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cookie-counter" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;tests.TestCase.test_director_new_post&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for tests.TestCase.test_log_in" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="anl" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cookie-counter" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;tests.TestCase.test_log_in&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for tests.TestCase.test_log_out" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="anl" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cookie-counter" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;tests.TestCase.test_log_out&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.db" />
-      <item itemvalue="Python.__init__" />
+      <item itemvalue="Python tests.Unittests for tests.TestCase.test_log_out" />
+      <item itemvalue="Python tests.Unittests for tests.TestCase.test_log_in" />
+      <item itemvalue="Python tests.Unittests for tests.TestCase.test_director_new_post" />
+      <item itemvalue="Python tests.Unittests for tests.TestCase.test_add_movie" />
+      <item itemvalue="Python tests.Unittests for tests.TestCase.test_add_director" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.db" />
-        <item itemvalue="Python.__init__" />
+        <item itemvalue="Python tests.Unittests for tests.TestCase.test_add_movie" />
+        <item itemvalue="Python tests.Unittests for tests.TestCase.test_add_director" />
+        <item itemvalue="Python tests.Unittests for tests.TestCase.test_log_out" />
+        <item itemvalue="Python tests.Unittests for tests.TestCase.test_log_in" />
+        <item itemvalue="Python tests.Unittests for tests.TestCase.test_director_new_post" />
       </list>
     </recent_temporary>
   </component>
@@ -419,7 +418,11 @@
       <workItem from="1550650834775" duration="194000" />
       <workItem from="1550839008027" duration="366000" />
       <workItem from="1551007900255" duration="1097000" />
-      <workItem from="1551603238664" duration="22819000" />
+      <workItem from="1551603238664" duration="23621000" />
+      <workItem from="1552128586646" duration="3702000" />
+      <workItem from="1552191767367" duration="1661000" />
+      <workItem from="1552462015932" duration="2250000" />
+      <workItem from="1552479864562" duration="9672000" />
     </task>
     <task id="LOCAL-00001" summary="Implement Login Blueprint - Issue #24">
       <created>1551794175893</created>
@@ -431,34 +434,75 @@
     <option name="localTasksCounter" value="2" />
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 05m 44s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_director - 2019.03.14 at 01h 06m 22s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_director" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 06m 26s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 11m 18s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_director - 2019.03.14 at 01h 15m 15s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_director" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 15m 27s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 16m 30s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 16m 59s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 17m 44s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_TestCase_test_add_movie - 2019.03.14 at 01h 19m 04s.xml">
+      <configuration name="Unittests for tests.TestCase.test_add_movie" configurationId="tests" />
+    </history-entry>
+  </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34068000" />
+    <option name="totallyTimeSpent" value="52155000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <frame x="0" y="23" width="1680" height="962" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16239317" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11294261" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.6102041" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49957374" weight="0.20583941" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.122627735" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.6091954" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49957374" weight="0.41379312" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.33448276" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.498779" weight="0.32988507" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49957374" weight="0.329927" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.498779" weight="0.32988507" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.329927" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50042623" side_tool="true" weight="0.32959184" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.501221" side_tool="true" weight="0.32988507" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" visible="true" weight="0.01831502" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.32967034" />
+      <window_info anchor="right" id="Database" order="4" weight="0.01831502" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -472,32 +516,19 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/myvenv/lib/python3.7/site-packages/sqlalchemy/orm/__init__.py</url>
-          <line>41</line>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/cookie-counter/tests.py</url>
+          <line>68</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/cookie-counter/app/admin/routes.py</url>
-          <option name="timeStamp" value="3" />
+          <line>508</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cookie-counter/server/app/routes.py" />
-    <entry file="file://$PROJECT_DIR$/cookie-counter/server/cookie-counter.py" />
-    <entry file="file://$PROJECT_DIR$/cookie-counter/server/app/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/stock/db.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5">
-          <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/db.py" />
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/template/admin-actor.html" />
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/template/admin-movie.html" />
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/template/admin-director.html" />
@@ -526,9 +557,7 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/api/handlers.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/api/handlers.py" />
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/anl-admin-director-new.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -564,12 +593,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitconfig">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test.txt" />
+    <entry file="file://$PROJECT_DIR$/.gitconfig" />
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/anl-admin-movie-new.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
@@ -584,46 +609,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/routes.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/forms.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/auth/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="1" column="34" lean-forward="true" selection-start-line="1" selection-start-column="34" selection-end-line="1" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/auth/routes.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/auth/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/.flaskenv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="10" selection-start-column="10" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="7" column="42" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/routes.py" />
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/forms.py" />
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/auth/forms.py" />
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/auth/routes.py" />
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/auth/__init__.py" />
     <entry file="file://$PROJECT_DIR$/stock/strategies.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="679">
@@ -652,30 +642,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/cookie-counter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/anl-admin-director.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="69">
           <caret line="3" column="42" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="30" column="19" lean-forward="true" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -693,38 +663,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/main/__init__.py">
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/main/routes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="38" />
+        <state relative-caret-position="1288">
+          <caret line="67" selection-start-line="67" selection-end-line="67" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -739,45 +684,135 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/test_login.py" />
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/test_unique_filename.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/admin/register.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="92">
           <caret line="4" column="10" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="10" />
           <folding>
             <element signature="n#style#0;n#span#0;n#p#0;n#form#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#p#3;n#form#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/main/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/main/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/.flaskenv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="10" selection-start-column="10" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/cookie-counter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/app/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="37" lean-forward="true" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
+        <state relative-caret-position="389">
+          <caret line="41" column="27" selection-start-line="41" selection-start-column="27" selection-end-line="41" selection-end-column="27" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cookie-counter/app/models.py">
+    <entry file="file://$PROJECT_DIR$/myvenv/lib/python3.7/site-packages/sqlalchemy/orm/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1176">
-          <caret line="82" column="11" selection-start-line="82" selection-start-column="7" selection-end-line="82" selection-end-column="11" />
+        <state relative-caret-position="246">
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myvenv/lib/python3.7/site-packages/werkzeug/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="838" selection-start-line="838" selection-end-line="838" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cookie-counter/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="68" column="33" selection-start-line="68" selection-start-column="33" selection-end-line="68" selection-end-column="51" />
           <folding>
-            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#23#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cookie-counter/app/admin/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="644" column="15" selection-start-line="644" selection-start-column="15" selection-end-line="644" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="46">
+          <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
         </state>
       </provider>
     </entry>

@@ -1,7 +1,6 @@
 import os
 import time
 import uuid
-import logging
 from flask import current_app, jsonify, flash, render_template, request, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 
@@ -45,7 +44,7 @@ def logout():
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('admin.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
         admin = Admin(name=form.username.data, email=form.email.data)
@@ -511,9 +510,6 @@ def add_movie():
     movie = Movie(name_kr=form.movie_kr_name.data, name_en=form.movie_en_name.data)
 
     if request.method == 'POST' and form.validate_on_submit():
-        logging.error(form)
-        logging.error(form.photo)
-        logging.error(form.photo.data)
         photo_data = form.photo.data
         upload_folder = current_app.config['UPLOAD_FOLDER']
         if not os.path.exists(upload_folder):
