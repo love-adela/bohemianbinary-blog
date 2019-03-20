@@ -131,8 +131,8 @@ def api_director():
     if keyword is None:
         directors = Director.query.all()
     else:
-        condition = Director.name_en.like(f"%{keyword}%")
-        condition2 = Director.name_kr.like(f"%{keyword}%")
+        condition = Director.name_en.like(f"{keyword}")
+        condition2 = Director.name_kr.like(f"{keyword}")
         or_clause = (condition | condition2)
         directors = Director.query.filter(or_clause).all()
 
@@ -147,8 +147,8 @@ def get_director_of_movie(id):
         movies = Movie.query.filter(~Movie.directors.any(Director.id == id)).all()
         producers = Movie.query.filter(Movie.directors.any(Director.id == id)).all()
     else:
-        condition = Movie.name_en.like(f"%{keyword}%")
-        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        condition = Movie.name_en.like(f"{keyword}")
+        condition2 = Movie.name_kr.like(f"{keyword}")
         or_clause = (condition | condition2)
         movie_query = Movie.query.filter(or_clause)
         movies = movie_query.filter(~Movie.directors.any(Director.id == id)).all()
@@ -341,8 +341,8 @@ def api_actor():
     if keyword is None:
         actors = Actor.query.all()
     else:
-        condition = Actor.name_en.like(f"%{keyword}%")
-        condition2 = Actor.name_kr.like(f"%{keyword}%")
+        condition = Actor.name_en.like(f"{keyword}")
+        condition2 = Actor.name_kr.like(f"{keyword}")
         or_clause = (condition | condition2)
         actors = Actor.query.filter(or_clause).all()
     return jsonify(actors=actors)
@@ -356,8 +356,8 @@ def get_actor_of_movie(id):
         movies = Movie.query.filter(~Movie.actors.any(Actor.id == id)).all()
         actors = Movie.query.filter(Movie.actors.any(Actor.id == id)).all()
     else:
-        condition = Movie.name_en.like(f"%{keyword}%")
-        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        condition = Movie.name_en.like(f"{keyword}")
+        condition2 = Movie.name_kr.like(f"{keyword}")
         or_clause = (condition | condition2)
         movie_query = Movie.query.filter(or_clause)
         movies = movie_query.filter(~Movie.actors.any(Actor.id == id)).all()
@@ -559,8 +559,8 @@ def get_api_movie():
     if keyword is None:
         movies = Movie.query.all()
     else:
-        condition = Movie.name_en.like(f"%{keyword}%")
-        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        condition = Movie.name_en.like(f"{keyword}")
+        condition2 = Movie.name_kr.like(f"{keyword}")
         or_clause = (condition | condition2)
         movies = Movie.query.filter(or_clause).all()
     return jsonify(movies=movies)

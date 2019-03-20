@@ -1,6 +1,7 @@
 import os
 
 import pytest
+import json
 
 from app import create_app, db
 from config import basedir
@@ -106,7 +107,29 @@ def test_add_movie(client):
 
 
 def test_edit_movie(client):
-    pass
+    test_log_in_dummy_admin(client)
+    test_add_movie(client)
+    response = client.get("/bb-admin/api/movie/1", follow_redirects=True)
+    parsed_data = json.loads(response.data)
+    assert "캡틴마블" == parsed_data["name_kr"]
+
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    data = dict(movie_kr_name="캡틴마블링", movie_en_name="Captain Marveling", photo=photo)
+    response = client.post("/bb-admin/movie/edit/1", data=data, follow_redirects=True)
+    assert "새 영화 등록하기" in response.data.decode("utf-8", "strict")
+
+    response = client.get("/bb-admin/api/movie/1", follow_redirects=True)
+    parsed_data = json.loads(response.data)
+    assert "캡틴마블링" == parsed_data["name_kr"]
+
+
+def test_movie_data_validation_on_submit_fail(client):
+    test_log_in_dummy_admin(client)
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    test_add_movie(client)
+    data = dict(movie_kr_name="", movie_en_name="", photo=photo)
+    response = client.post("bb-admin/movie/new", data=data)
+    assert "This field is required." in response.data.decode("utf-8", "strict")
 
 
 def test_delete_movie(client):
@@ -124,6 +147,15 @@ def test_add_director(client):
     response = client.get("/bb-admin/api/director")
     assert response.status_code == 200
     assert 'Jang Jin' in str(response.data)
+
+
+def test_director_data_validation_on_submit_fail(client):
+    test_log_in_dummy_admin(client)
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    test_add_director(client)
+    data = dict(director_kr_name="", director_en_name="", photo=photo)
+    response = client.post("bb-admin/director/new", data=data)
+    assert "This field is required." in response.data.decode("utf-8", "strict")
 
 
 def test_search_director_success(client):
@@ -154,6 +186,15 @@ def test_add_actor(client):
     data = dict(actor_kr_name='브리라슨', movie_en_name='Brie Larson', photo=photo)
     response = client.post("/bb-admin/actor/new", data=data, follow_redirects=True)
     assert response.status_code == 200
+
+
+def test_actor_data_validation_on_submit_fail(client):
+    test_log_in_dummy_admin(client)
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    test_add_actor(client)
+    data = dict(actor_kr_name="", actor_en_name="", photo=photo)
+    response = client.post("bb-admin/actor/new", data=data)
+    assert "This field is required." in response.data.decode("utf-8", "strict")
 
 
 def test_edit_actor(client):
