@@ -45,6 +45,7 @@ def test_log_in_dummy_admin(client, username="admin", password="1234"):
     data = dict(username=username, password=password)
     return client.post("/bb-admin/login", data=data, follow_redirects=True)
 
+
 # post : html이나 json 문자열로 반환
 # client.post / get / delete /put 모두  http 헤더를 주고 resopnse를 얻는 형태.
 
@@ -76,6 +77,20 @@ def test_log_out(client):
     assert 'Please log in to access this page.' in str(response.data)
     response = client.get("/bb-admin/movie", follow_redirects=True)
     assert "movie/new" not in str(response.data)
+
+
+def test_login_with_auth(client):
+    test_log_in_dummy_admin(client)
+    response = client.get("/bb-admin/login", follow_redirects=True)
+    assert response.status_code == 200
+    assert "Hi!" in str(response.data)
+
+
+def test_register_with_auth(client):
+    test_log_in_dummy_admin(client)
+    response = client.get("bb-admin/register", follow_redirects=True)
+    assert response.status_code == 200
+    assert "Hi!" in str(response.data)
 
 
 def test_add_movie(client):
@@ -115,7 +130,14 @@ def test_search_director_success(client):
     test_log_in_dummy_admin(client)
     test_add_director(client)
     response = client.get("/bb-admin/director/1", follow_redirects=True)
-    assert '감독 영화 리스트에서 제거' in str(response.data)
+    assert '감독 영화 리스트에서 제거' in response.data.decode("utf-8", "strict")
+
+
+def test_search_director_fail(client):
+    test_log_in_dummy_admin(client)
+    test_add_director(client)
+    response = client.get("bb-admin/director/2", follow_redirects=True)
+    assert "Director 2 not found" in response.data.decode("utf-8", "strict")
 
 
 def test_edit_director(client):
@@ -124,9 +146,6 @@ def test_edit_director(client):
 
 def test_delete_director(client):
     pass
-
-
-
 
 
 def test_add_actor(client):
@@ -143,3 +162,17 @@ def test_edit_actor(client):
 
 def test_delete_actor(client):
     pass
+
+
+def test_search_actor_success(client):
+    test_log_in_dummy_admin(client)
+    test_add_actor(client)
+    response = client.get("/bb-admin/actor/1", follow_redirects=True)
+    assert '배우 영화 리스트에서 제거' in response.data.decode("utf-8", "strict")
+
+
+def test_search_actor_fail(client):
+    test_log_in_dummy_admin(client)
+    test_add_actor(client)
+    response = client.get("bb-admin/actor/2", follow_redirects=True)
+    assert "Actor 2 not found." in response.data.decode("utf-8", "strict")
