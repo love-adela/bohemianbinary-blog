@@ -94,57 +94,15 @@ def test_register_with_auth(client):
     assert "Hi!" in str(response.data)
 
 
-def test_add_movie(client):
-    test_log_in_dummy_admin(client)
-    photo = (BytesIO(b'my file contents'), "for-test.jpg")
-    data = dict(movie_kr_name='캡틴마블', movie_en_name='Captain Marvel', photo=photo)
-    response = client.post("/bb-admin/movie/new", data=data, follow_redirects=True)
-    assert response.status_code == 200
-    assert '/movie/new' in str(response.data)
-    response = client.get('/bb-admin/api/movie')
-    assert response.status_code == 200
-    assert 'Captain Marvel' in str(response.data)
-
-
-def test_edit_movie(client):
-    test_log_in_dummy_admin(client)
-    test_add_movie(client)
-    response = client.get("/bb-admin/api/movie/1", follow_redirects=True)
-    parsed_data = json.loads(response.data)
-    assert "캡틴마블" == parsed_data["name_kr"]
-
-    photo = (BytesIO(b'my file contents'), "for-test.jpg")
-    data = dict(movie_kr_name="캡틴마블링", movie_en_name="Captain Marveling", photo=photo)
-    response = client.post("/bb-admin/movie/edit/1", data=data, follow_redirects=True)
-    assert "새 영화 등록하기" in response.data.decode("utf-8", "strict")
-
-    response = client.get("/bb-admin/api/movie/1", follow_redirects=True)
-    parsed_data = json.loads(response.data)
-    assert "캡틴마블링" == parsed_data["name_kr"]
-
-
-def test_movie_data_validation_on_submit_fail(client):
-    test_log_in_dummy_admin(client)
-    photo = (BytesIO(b'my file contents'), "for-test.jpg")
-    test_add_movie(client)
-    data = dict(movie_kr_name="", movie_en_name="", photo=photo)
-    response = client.post("bb-admin/movie/new", data=data)
-    assert "This field is required." in response.data.decode("utf-8", "strict")
-
-
-def test_delete_movie(client):
-    pass
-
-
 def test_add_director(client):
     test_log_in_dummy_admin(client)
     photo = (BytesIO(b'my file contents'), "for-test.jpg")
     # TODO: for-test.jpg 파일을 삭제하라.
     data = dict(director_kr_name="장진", director_en_name="Jang Jin", photo=photo)
-    response = client.post("/bb-admin/director/new", data=data, follow_redirects=True)
+    response = client.post("bb-admin/director/new", data=data, follow_redirects=True)
     assert response.status_code == 200
     assert '/director/new' in str(response.data)
-    response = client.get("/bb-admin/api/director")
+    response = client.get("bb-admin/api/director")
     assert response.status_code == 200
     assert 'Jang Jin' in str(response.data)
 
@@ -173,7 +131,23 @@ def test_search_director_fail(client):
 
 
 def test_edit_director(client):
-    pass
+    test_log_in_dummy_admin(client)
+    test_add_director(client)
+
+    response = client.get("bb-admin/api/director", follow_redirects=True)
+    parsed_data = json.loads(response.data)
+    assert "Jang Jin" in [x["name_en"] for x in parsed_data["directors"]]
+
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    data = dict(director_kr_name="장면", director_en_name="Jang Myeon", photo=photo)
+    response = client.post("/bb-admin/director/edit/1", data=data, follow_redirects=True)
+    print(response.data.decode("utf-8", "strict"))
+    assert "감독 항목을 수정하시겠습니까?" in response.data.decode("utf-8", "strict")
+
+    response = client.get("/bb-admin/api/director", follow_redirects=True)
+    parsed_data = json.loads(response.data)
+    print(parsed_data)
+    assert not ("Jang Jin" in [x["name_en"] for x in parsed_data["directors"]])
 
 
 def test_delete_director(client):
@@ -217,3 +191,47 @@ def test_search_actor_fail(client):
     test_add_actor(client)
     response = client.get("bb-admin/actor/2", follow_redirects=True)
     assert "Actor 2 not found." in response.data.decode("utf-8", "strict")
+
+
+def test_add_movie(client):
+    test_log_in_dummy_admin(client)
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    data = dict(movie_kr_name='캡틴마블', movie_en_name='Captain Marvel', photo=photo)
+    response = client.post("/bb-admin/movie/new", data=data, follow_redirects=True)
+    assert response.status_code == 200
+    assert '/movie/new' in str(response.data)
+    response = client.get('/bb-admin/api/movie')
+    assert response.status_code == 200
+    assert 'Captain Marvel' in str(response.data)
+
+
+def test_edit_movie(client):
+    test_log_in_dummy_admin(client)
+    test_add_movie(client)
+    response = client.get("/bb-admin/api/movie/1", follow_redirects=True)
+    parsed_data = json.loads(response.data)
+    assert "캡틴마블" == parsed_data["name_kr"]
+
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    data = dict(movie_kr_name="캡틴마블링", movie_en_name="Captain Marveling", photo=photo)
+    response = client.post("/bb-admin/movie/edit/1", data=data, follow_redirects=True)
+    assert "새 영화 등록하기" in response.data.decode("utf-8", "strict")
+
+    response = client.get("/bb-admin/api/movie/1", follow_redirects=True)
+    parsed_data = json.loads(response.data)
+    assert "캡틴마블링" == parsed_data["name_kr"]
+
+
+def test_movie_data_validation_on_submit_fail(client):
+    test_log_in_dummy_admin(client)
+    photo = (BytesIO(b'my file contents'), "for-test.jpg")
+    test_add_movie(client)
+    data = dict(movie_kr_name="", movie_en_name="", photo=photo)
+    response = client.post("bb-admin/movie/new", data=data)
+    assert "This field is required." in response.data.decode("utf-8", "strict")
+
+
+def test_delete_movie(client):
+    pass
+
+

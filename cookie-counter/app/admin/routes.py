@@ -145,16 +145,16 @@ def get_director_of_movie(id):
     keyword = request.args.get('keyword')
     if keyword is None:
         movies = Movie.query.filter(~Movie.directors.any(Director.id == id)).all()
-        producers = Movie.query.filter(Movie.directors.any(Director.id == id)).all()
+        directors = Movie.query.filter(Movie.directors.any(Director.id == id)).all()
     else:
         condition = Movie.name_en.like(f"{keyword}")
         condition2 = Movie.name_kr.like(f"{keyword}")
         or_clause = (condition | condition2)
         movie_query = Movie.query.filter(or_clause)
         movies = movie_query.filter(~Movie.directors.any(Director.id == id)).all()
-        producer_query = Movie.query.filter(Movie.directors.any(Director.id == id))
-        producers = producer_query.filter(or_clause).all()
-    return jsonify(movies=movies, producers=producers)
+        director_query = Movie.query.filter(Movie.directors.any(Director.id == id))
+        directors = director_query.filter(or_clause).all()
+    return jsonify(movies=movies, directors=directors)
 
 
 @bp.route('/api/movie/<mid>/director/<did>', methods=['POST'])
