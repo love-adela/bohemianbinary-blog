@@ -97,32 +97,6 @@ def add_director():
                            title='Register New Director', form=form, filename=director.photo)
 
 
-@bp.route('/director/edit/<id>', methods=['GET', 'POST'])
-@login_required
-def edit_director(id):
-    form = DirectorForm()
-    director = Director.query.get(id)
-
-    if request.method == 'POST' and form.validate_on_submit():
-        photo_data = form.photo.data
-        upload_folder = current_app.config['UPLOAD_FOLDER']
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
-        filename = unique_filename(photo_data.filename)
-        photo_data.save(os.path.join(upload_folder, filename))
-
-        director.name_en = form.director_en_name.data
-        director.name_kr = form.director_kr_name.data
-        director.photo = filename
-        db.session.commit()
-        return redirect(url_for('admin.admin_director'))
-    else:
-        form.director_en_name.data = director.name_en
-        form.director_kr_name.data = director.name_kr
-    return render_template('anl-admin-director-new.html', title='Edit Director Data', form=form,
-                           filename=director.photo)
-
-
 # -------------------------------- director api ---------------------------------
 @bp.route('/api/director')
 @login_required
@@ -135,26 +109,7 @@ def api_director():
         condition2 = Director.name_kr.like(f"{keyword}")
         or_clause = (condition | condition2)
         directors = Director.query.filter(or_clause).all()
-
     return jsonify(directors=directors)
-
-
-@bp.route('/api/movie-with-director/<id>', methods=['GET'])
-@login_required
-def get_director_of_movie(id):
-    keyword = request.args.get('keyword')
-    if keyword is None:
-        movies = Movie.query.filter(~Movie.directors.any(Director.id == id)).all()
-        directors = Movie.query.filter(Movie.directors.any(Director.id == id)).all()
-    else:
-        condition = Movie.name_en.like(f"{keyword}")
-        condition2 = Movie.name_kr.like(f"{keyword}")
-        or_clause = (condition | condition2)
-        movie_query = Movie.query.filter(or_clause)
-        movies = movie_query.filter(~Movie.directors.any(Director.id == id)).all()
-        director_query = Movie.query.filter(Movie.directors.any(Director.id == id))
-        directors = director_query.filter(or_clause).all()
-    return jsonify(movies=movies, directors=directors)
 
 
 @bp.route('/api/movie/<mid>/director/<did>', methods=['POST'])
@@ -181,6 +136,24 @@ def remove_director_from_movie(mid, did):
     return jsonify({
         'status': 'OK'
     })
+
+
+@bp.route('/api/movie-with-director/<id>', methods=['GET'])
+@login_required
+def get_director_of_movie(id):
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        movies = Movie.query.filter(~Movie.directors.any(Director.id == id)).all()
+        directors = Movie.query.filter(Movie.directors.any(Director.id == id)).all()
+    else:
+        condition = Movie.name_en.like(f"%{keyword}%")
+        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        movie_query = Movie.query.filter(or_clause)
+        movies = movie_query.filter(~Movie.directors.any(Director.id == id)).all()
+        director_query = Movie.query.filter(Movie.directors.any(Director.id == id))
+        directors = director_query.filter(or_clause).all()
+    return jsonify(movies=movies, directors=directors)
 
 
 @bp.route('/api/movie-with-director/<id>', methods=['POST'])
@@ -308,31 +281,6 @@ def add_actor():
                            title='Register New Actor', form=form, filename=actor.photo)
 
 
-@bp.route('/actor/edit/<id>', methods=['GET', 'POST'])
-@login_required
-def edit_actor(id):
-    form = ActorForm()
-    actor = Actor.query.get(id)
-
-    if request.method == 'POST' and form.validate_on_submit():
-        photo_data = form.photo.data
-        upload_folder = current_app.config['UPLOAD_FOLDER']
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
-        filename = unique_filename(photo_data.filename)
-        photo_data.save(os.path.join(upload_folder, filename))
-
-        actor.name_en = form.actor_en_name.data
-        actor.name_kr = form.actor_kr_name.data
-        actor.photo = filename
-        db.session.commit()
-        return redirect(url_for('admin.admin_actor'))
-    else:
-        form.actor_en_name.data = actor.name_en
-        form.actor_kr_name.data = actor.name_kr
-    return render_template('anl-admin-actor-new.html', title='Edit Actor Data', form=form, filename=actor.photo)
-
-
 # ----------------------------- actor api --------------------------------
 @bp.route("/api/actor")
 @login_required
@@ -346,24 +294,6 @@ def api_actor():
         or_clause = (condition | condition2)
         actors = Actor.query.filter(or_clause).all()
     return jsonify(actors=actors)
-
-
-@bp.route('/api/movie-with-actor/<id>', methods=['GET'])
-@login_required
-def get_actor_of_movie(id):
-    keyword = request.args.get('keyword')
-    if keyword is None:
-        movies = Movie.query.filter(~Movie.actors.any(Actor.id == id)).all()
-        actors = Movie.query.filter(Movie.actors.any(Actor.id == id)).all()
-    else:
-        condition = Movie.name_en.like(f"{keyword}")
-        condition2 = Movie.name_kr.like(f"{keyword}")
-        or_clause = (condition | condition2)
-        movie_query = Movie.query.filter(or_clause)
-        movies = movie_query.filter(~Movie.actors.any(Actor.id == id)).all()
-        actor_query = Movie.query.filter(Movie.actors.any(Actor.id == id))
-        actors = actor_query.filter(or_clause).all()
-    return jsonify(movies=movies, id=id, actors=actors)
 
 
 @bp.route('/api/movie/<mid>/actor/<aid>', methods=['POST'])
@@ -400,6 +330,24 @@ def remove_actor_from_movie(mid, aid):
     return jsonify({
         'status': 'OK'
     })
+
+
+@bp.route('/api/movie-with-actor/<id>', methods=['GET'])
+@login_required
+def get_actor_of_movie(id):
+    keyword = request.args.get('keyword')
+    if keyword is None:
+        movies = Movie.query.filter(~Movie.actors.any(Actor.id == id)).all()
+        actors = Movie.query.filter(Movie.actors.any(Actor.id == id)).all()
+    else:
+        condition = Movie.name_en.like(f"%{keyword}%")
+        condition2 = Movie.name_kr.like(f"%{keyword}%")
+        or_clause = (condition | condition2)
+        movie_query = Movie.query.filter(or_clause)
+        movies = movie_query.filter(~Movie.actors.any(Actor.id == id)).all()
+        actor_query = Movie.query.filter(Movie.actors.any(Actor.id == id))
+        actors = actor_query.filter(or_clause).all()
+    return jsonify(movies=movies, id=id, actors=actors)
 
 
 @bp.route('/api/movie-with-actor/<id>', methods=['POST'])
@@ -456,7 +404,7 @@ def change_actor_photo(id):
     })
 
 
-@bp.route('/actor/photo', methods=['POST'])
+@bp.route('/api/actor/photo', methods=['POST'])
 @login_required
 def delete_actor_photo():
     json = request.get_json()
@@ -472,7 +420,7 @@ def delete_actor_photo():
     })
 
 
-@bp.route('/actor/<id>', methods=['DELETE'])
+@bp.route('/api/actor/<id>', methods=['DELETE'])
 @login_required
 def delete_actor(id):
     actor = Actor.query.get(id)
@@ -524,23 +472,6 @@ def add_movie():
                            title='Register New Movie', form=form, filename=movie.photo)
 
 
-@bp.route('/movie/edit/<id>', methods=['GET', 'POST'])
-@login_required
-def edit_movie(id):
-    form = MovieForm()
-    movie = Movie.query.get(id)
-
-    if request.method == 'POST' and form.validate_on_submit():
-        movie.name_en = form.movie_en_name.data
-        movie.name_kr = form.movie_kr_name.data
-        db.session.commit()
-        return redirect(url_for('admin.admin_movie'))
-    else:
-        form.movie_en_name.data = movie.name_en
-        form.movie_kr_name.data = movie.name_kr
-    return render_template('anl-admin-movie-new.html', title='Edit Movie Data', form=form)
-
-
 @bp.route('/movie/delete/<id>', methods=['GET', 'POST'])
 @login_required
 def delete_movie(id):
@@ -559,8 +490,8 @@ def get_api_movie():
     if keyword is None:
         movies = Movie.query.all()
     else:
-        condition = Movie.name_en.like(f"{keyword}")
-        condition2 = Movie.name_kr.like(f"{keyword}")
+        condition = Movie.name_en.like(f"%{keyword}%")
+        condition2 = Movie.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         movies = Movie.query.filter(or_clause).all()
     return jsonify(movies=movies)
@@ -616,7 +547,7 @@ def show_modified_number_of_cookies(mid):
 @bp.route('/api/movie/<mid>/cookie', methods=["POST"])
 @login_required
 def modify_number_of_cookies(mid):
-    json = request.get_json()
+    json = request.get_json(force=True)
     number_of_cookies = json.get('number_of_cookies')
     movie = Movie.query.get(mid)
     movie.number_of_cookies = number_of_cookies
