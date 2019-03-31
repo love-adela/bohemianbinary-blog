@@ -43,13 +43,13 @@
     function remove(id, name_en, name_kr) {
         relevantUl = $(".relevant-list");
         $.ajax({
-          type: 'DELETE',
-          url: "/bb-admin/api/movie/" + id + "/director/" + {{ director.id }},
-          success: function (response) {
-            refresh();
-          },
-          contentType: 'application/json',
-          dataType: 'json'
+            type: 'DELETE',
+            url: "/bb-admin/api/movie/" + id + "/director/" + {{ director.id }},
+            success: function (response) {
+                refresh();
+            },
+            contentType: 'application/json',
+            dataType: 'json'
         })
     }
 
@@ -76,7 +76,7 @@
             li = "<li id=\"list-" + movie.id + "\">";
             li += movie.name_kr + " " + movie.name_en;
             li += "<button onclick=\"remove(" +
-                movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">감독 영화 리스트에서 제거</button>";
+                    movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">감독 영화 리스트에서 제거</button>";
             li += "</li>";
             html += li;
         }
@@ -92,9 +92,9 @@
         $.getJSON('/bb-admin/api/movie-with-director/' + directorId + query)
             .done(function (response) {
                 put_on_others(response.movies);
-                put_on_theirs(response.producers);
+                put_on_theirs(response.directors);
             }).fail(function (response) {
-            console.log(response.text);
+                console.log(response.text);
         })
     }
 

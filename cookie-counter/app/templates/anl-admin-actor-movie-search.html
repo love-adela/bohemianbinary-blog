@@ -17,15 +17,14 @@
 
 <script>
     var keyword = "";
-    var actorId = {{ actor.id }}
-    ;
+    var actorId = {{ actor.id }};
 
     function search() {
         keyword = $("#search-form").val();
         refresh();
     }
 
-    function add_movie_to_director(id, name_en, name_kr) {
+    function add_movie_to_actor(id, name_en, name_kr) {
         relevantUl = $(".relevant-list");
         $.ajax({
             type: 'POST',
@@ -47,7 +46,7 @@
                 refresh();
             },
             contentType: 'application/json',
-                dataType: 'json'
+            dataType: 'json'
         })
     }
 
@@ -57,7 +56,7 @@
             movie = movies[i];
             li = "<li id=\"list-" + movie.id + "\">";
             li += movie.name_kr + " " + movie.name_en;
-            li += "<button onclick=\"add_movie_to_director(" +
+            li += "<button onclick=\"add_movie_to_actor(" +
                     movie.id + ", '" + movie.name_en + "', '" + movie.name_kr + "')\">배우 영화 리스트에 추가</button>";
             li += "</li>";
             html += li;
@@ -89,7 +88,7 @@
             .done(function (response) {
                 put_on_others(response.movies);
                 put_on_theirs(response.actors);
-            }).fail(function (response){
+            }).fail(function (response) {
                 console.log(response.text);
         })
     }
