@@ -65,7 +65,7 @@ def admin_director():
 
 @bp.route('/director/<id>', methods=['GET'])
 @login_required
-def director_of_movie(id):
+def director_of_director(id):
     director = Director.query.filter_by(id=id).first()
     if director is None:
         flash('Director {} not found.'.format(id))
@@ -105,8 +105,8 @@ def api_director():
     if keyword is None:
         directors = Director.query.all()
     else:
-        condition = Director.name_en.like(f"{keyword}")
-        condition2 = Director.name_kr.like(f"{keyword}")
+        condition = Director.name_en.like(f"%{keyword}%")
+        condition2 = Director.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         directors = Director.query.filter(or_clause).all()
     return jsonify(directors=directors)
@@ -119,7 +119,6 @@ def associate_movie_with_director(mid, did):
     director = Director.query.filter_by(id=did).first()
     movie.directors.append(director)
     db.session.commit()
-
     return jsonify({
         'status': 'OK'
     })
@@ -129,7 +128,19 @@ def associate_movie_with_director(mid, did):
 @login_required
 def remove_director_from_movie(mid, did):
     movie = Movie.query.filter_by(id=mid).first()
-    director = Director.query.with_parent(movie).filter_by(id=did).first()
+    if movie is not None:
+        director = Director.query.with_parent(movie).filter_by(id=did).first()
+    else:
+        return jsonify({
+            'status': 'Error',
+            'message': 'No movie was found.'
+        })
+    if director is None:
+        return jsonify({
+            'status': 'Error',
+            'message': 'No director was found.'
+        })
+
     movie.directors.remove(director)
     db.session.commit()
 
@@ -140,7 +151,7 @@ def remove_director_from_movie(mid, did):
 
 @bp.route('/api/movie-with-director/<id>', methods=['GET'])
 @login_required
-def get_director_of_movie(id):
+def get_movie_of_director(id):
     keyword = request.args.get('keyword')
     if keyword is None:
         movies = Movie.query.filter(~Movie.directors.any(Director.id == id)).all()
@@ -153,7 +164,7 @@ def get_director_of_movie(id):
         movies = movie_query.filter(~Movie.directors.any(Director.id == id)).all()
         director_query = Movie.query.filter(Movie.directors.any(Director.id == id))
         directors = director_query.filter(or_clause).all()
-    return jsonify(movies=movies, directors=directors)
+    return jsonify(movies=movies, id=id, directors=directors)
 
 
 @bp.route('/api/movie-with-director/<id>', methods=['POST'])
@@ -213,7 +224,7 @@ def change_director_photo(id):
 @bp.route('/api/director/photo', methods=['POST'])
 @login_required
 def delete_director_photo():
-    json = request.get_json()
+    json = request.get_json(force=True)
     id = json.get('id')
     director = Director.query.get(id)
     director.photo = None
@@ -250,7 +261,7 @@ def admin_actor():
 
 @bp.route('/actor/<id>', methods=['GET'])
 @login_required
-def actor_of_movie(id):
+def movie_of_actor(id):
     actor = Actor.query.filter_by(id=id).first()
     if actor is None:
         flash('Actor {} not found.'.format(id))
@@ -289,8 +300,8 @@ def api_actor():
     if keyword is None:
         actors = Actor.query.all()
     else:
-        condition = Actor.name_en.like(f"{keyword}")
-        condition2 = Actor.name_kr.like(f"{keyword}")
+        condition = Actor.name_en.like(f"%{keyword}%")
+        condition2 = Actor.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         actors = Actor.query.filter(or_clause).all()
     return jsonify(actors=actors)
@@ -313,8 +324,9 @@ def associate_movie_with_actor(mid, aid):
 @login_required
 def remove_actor_from_movie(mid, aid):
     movie = Movie.query.filter_by(id=mid).first()
-    actor = Actor.query.with_parent(movie).filter_by(id=aid).first()
-    if movie is None:
+    if movie is not None:
+        actor = Actor.query.with_parent(movie).filter_by(id=aid).first()
+    else:
         return jsonify({
             'status': "ERROR",
             'message': "No movie was found."
@@ -334,20 +346,21 @@ def remove_actor_from_movie(mid, aid):
 
 @bp.route('/api/movie-with-actor/<id>', methods=['GET'])
 @login_required
-def get_actor_of_movie(id):
+def get_movie_of_actor(id):
     keyword = request.args.get('keyword')
     if keyword is None:
         movies = Movie.query.filter(~Movie.actors.any(Actor.id == id)).all()
-        actors = Movie.query.filter(Movie.actors.any(Actor.id == id)).all()
     else:
         condition = Movie.name_en.like(f"%{keyword}%")
         condition2 = Movie.name_kr.like(f"%{keyword}%")
         or_clause = (condition | condition2)
         movie_query = Movie.query.filter(or_clause)
         movies = movie_query.filter(~Movie.actors.any(Actor.id == id)).all()
-        actor_query = Movie.query.filter(Movie.actors.any(Actor.id == id))
-        actors = actor_query.filter(or_clause).all()
-    return jsonify(movies=movies, id=id, actors=actors)
+
+        # TODO: 액터에 대해 키워드 질의처리하느 부분이 있어야 함.
+        # TODO: 무비에 대한 키워드 검색과 액터에 대한 키워드 검색에 대해 별도의 테스팅을 할 것.
+
+    return jsonify(movies=movies, id=id, actor=Actor.query.get(id))
 
 
 @bp.route('/api/movie-with-actor/<id>', methods=['POST'])
@@ -407,7 +420,7 @@ def change_actor_photo(id):
 @bp.route('/api/actor/photo', methods=['POST'])
 @login_required
 def delete_actor_photo():
-    json = request.get_json()
+    json = request.get_json(force=True)
     id = json.get('id')
     actor = Actor.query.get(id)
     actor.photo = None
@@ -472,18 +485,8 @@ def add_movie():
                            title='Register New Movie', form=form, filename=movie.photo)
 
 
-@bp.route('/movie/delete/<id>', methods=['GET', 'POST'])
-@login_required
-def delete_movie(id):
-    movie = Movie.query.get(id)
-    db.session.delete(movie)
-    db.session.commit()
-
-    return redirect(url_for('admin.admin_movie'))
-
-
 # ----------------------------- movie api --------------------------------
-@bp.route('/api/movie')
+@bp.route('/api/movie', methods=['GET'])
 @login_required
 def get_api_movie():
     keyword = request.args.get('keyword')
@@ -534,6 +537,36 @@ def edit_movie_api(mid):
     })
 
 
+@bp.route('/api/movie/<mid>', methods=['DELETE'])
+@login_required
+def delete_movie_api(mid):
+    movie = Movie.query.get(mid)
+    db.session.delete(movie)
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': mid,
+        'movies': Movie.query.all()
+    })
+
+
+@bp.route('/api/movie/photo', methods=['POST'])
+@login_required
+def delete_movie_photo():
+    json = request.get_json(force=True)
+    id = json.get('id')
+    movie = Movie.query.get(id)
+    movie.photo = None
+    db.session.commit()
+
+    return jsonify({
+        'isConfirmed': 'success',
+        'id': id,
+        'movies': Movie.query.all()
+    })
+
+
 @bp.route('/api/movie/<mid>/cookie', methods=["GET"])
 @login_required
 def show_modified_number_of_cookies(mid):
@@ -568,17 +601,3 @@ def modify_number_of_cookies(mid):
     })
 
 
-@bp.route('/api/movie/photo', methods=['POST'])
-@login_required
-def delete_movie_photo():
-    json = request.get_json()
-    id = json.get('id')
-    movie = Movie.query.get(id)
-    movie.photo = None
-    db.session.commit()
-
-    return jsonify({
-        'isConfirmed': 'success',
-        'id': id,
-        'movies': Movie.query.all()
-    })
