@@ -14,6 +14,10 @@ def unique_filename(filename):
     return time.strftime("%d-%m-%Y") + '-' + uuid.uuid4().hex[:8] + '-' + filename
 
 
+def unique_apiname():
+    return uuid.uuid4().hex[:6]
+
+
 @bp.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
