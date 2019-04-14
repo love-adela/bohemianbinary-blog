@@ -1,4 +1,3 @@
-from marshmallow import Schema, fields, validate
 from flask_marshmallow import Marshmallow
 
 from sqlalchemy import create_engine
@@ -13,8 +12,6 @@ from app import login
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from app import db
-
-ma = Marshmallow()
 
 engine = create_engine('sqlite:///memory:', echo=True)
 Base = declarative_base()
@@ -69,30 +66,6 @@ class Movie(db.Model):
 
     def __repr__(self):
         return "<Movie('%s', ('%s'))>" % (self.name_en, self.name_kr)
-
-
-class DirectorSchema(ma.Schema):
-    id = fields.Integer()
-    name_en = fields.String(required=True)
-    name_kr = fields.String(required=True)
-
-
-class ActorSchema(ma.Schema):
-    id = fields.Integer()
-    name_en = fields.String(required=True)
-    name_kr = fields.String(required=True)
-
-
-class MovieSchema(ma.Schema):
-    id = fields.Integer(dump_only=True)
-    key = fields.UUID(required=True)
-    photo = fields.String(required=True, validate=validate.Length(1))
-    name_kr = fields.String(required=True, validate=validate.Length(1))
-    name_en = fields.String(required=True, validate=validate.Length(1))
-    rank = fields.Integer(required=True)
-    number_of_cookies = fields.Integer(required=True)
-    director_id = fields.Integer(required=True)
-    actor_id = fields.Integer(required=True)
 
 
 class Admin(UserMixin, db.Model):
