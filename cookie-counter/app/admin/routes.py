@@ -3,7 +3,6 @@ import time
 import uuid
 from flask import current_app, jsonify, flash, render_template, request, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
-
 from app import db
 from app.admin import bp
 from app.admin.forms import ActorForm, DirectorForm, MovieForm, LoginForm, RegistrationForm
