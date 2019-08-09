@@ -1,0 +1,42 @@
+{% load static %}
+<html>
+    <head>
+        <title>Adela Blog</title>
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <meta name="keywords" content="HTML, CSS, XML, XHTML, JavaScript">
+        <meta name="description" content="Description of what is contained on the Website">
+        <meta name="author" content="Adela Chung">
+    </head>
+    <body>
+        <!-- header -->
+        <div class="header">
+            <div class="header-list">
+                <ul>
+                    <li class="header-logo">
+                        <h1><a href="">Adela</a></h1>
+                    </li>
+                    <li class="header-week">
+                        <h3>Week 1</h3>
+                    </li>
+                    <li class="header-date">
+                        <h3>August 2019</h3>
+                    </li>
+                    <li class="header-search">
+                        <button>돋보기</button>
+                    </li>
+                    <li class="header-options">
+                        <button>최신순</button>
+                    </li>
+                    <li class="header-profile">
+                        <div><img src=""></img></div>
+                    </li>
+                </ul>                    
+            </div>
+        </div>
+        <div>
+        <!-- main : post list -->
+        {% block content %}
+        {% endblock %}
+        </div>
+    </body>
+</html>
