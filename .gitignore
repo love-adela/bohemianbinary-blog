@@ -182,3 +182,6 @@ fabric.properties
 
 # for unit test
 test.db
+
+# VSCode
+.vscode/
