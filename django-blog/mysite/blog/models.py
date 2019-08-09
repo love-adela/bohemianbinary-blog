@@ -11,9 +11,11 @@ except ImportError:
 
 
 class Tag(models.Model):
+    # tag_id = models.BigIntegerField()
     text = models.CharField(max_length=250)
     slug = models.SlugField(unique=True, max_length=200)
     created_date = models.DateTimeField(auto_now=False, auto_now_add=True)
+    # published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     class Meta:
@@ -26,11 +28,10 @@ class Tag(models.Model):
         pass
 
 class Post(models.Model):
+    title = models.CharField(max_length=200, help_text='title of message.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
-    title = models.CharField(max_length=200)
-    text = models.TextField()
-
+    text = models.TextField(help_text='무슨 생각을 하고 계세요?')
     draft  = models.BooleanField(default=False)
     # image = models.ImageField(upload_to="", null=True, blank=True)
     
