@@ -1,7 +1,7 @@
 {% load static %}
 <html>
     <head>
-        <title>Adela Blog</title>
+        <title>Adela Chung</title>
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
         <meta name="keywords" content="HTML, CSS, XML, XHTML, JavaScript">
         <meta name="description" content="Description of what is contained on the Website">
@@ -12,9 +12,10 @@
         <div class="header">
             <div class="header-list">
                 <ul>
-                    <li class="header-logo">
-                        <h1><a href="">Adela</a></h1>
+                    <li class="header-name">
+                        <a href="#"><h1>Adela</h1></a>
                     </li>
+                    <li><a href="#"><h2>정지윤</h2></a></li>
                     <li class="header-week">
                         <h3>Week 1</h3>
                     </li>
@@ -22,10 +23,15 @@
                         <h3>August 2019</h3>
                     </li>
                     <li class="header-search">
-                        <button>돋보기</button>
+                        <button>검색</button>
                     </li>
                     <li class="header-options">
                         <button>최신순</button>
+                    </li>
+                    <li class="header-add-post">
+                        <a href="{% url 'post_new' %}">
+                            <button>글 쓰기</button>
+                        </a>
                     </li>
                     <li class="header-profile">
                         <div><img src=""></img></div>
