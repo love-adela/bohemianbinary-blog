@@ -1,7 +1,9 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.html import mark_safe
-from markdownx.models import MarkdownxField
+from django.urls import reverse_lazy
+import misaka
+import logging
 
 try:
     from unicode import unicode
@@ -23,11 +25,21 @@ class Tag(models.Model):
         pass
     
 
+class BaseFormatter:
+    def format(self, text):
+        pass
+
+class FormatterMisaka(BaseFormatter):
+    
+    def format(self, text):
+        return misaka.html(text)
+
 class Post(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, help_text='title of message.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     slug = models.SlugField()
-    text = models.TextField()
+    text = models.TextField(help_text='무슨 생각을 하고 계세요?')
+    formatter = FormatterMisaka()
     draft = models.BooleanField(default=False)
     tag = models.ManyToManyField(Tag)
     created_date = models.DateTimeField(default=timezone.now)
@@ -44,18 +56,6 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
-
-class BaseFormatter:
-    def __init__(self, post):
-        self.post = post
-
-    def format(self):
-        return BaseFormatter.format(self.post.text)
-
-class FormatterA(BaseFormatter):
-    formatter = MarkdownxField()
-
-# Todo : markdown() 라이브러리 추가
-# class FormatterB(BaseFormatter):
-#     formatter = FormatterBLib
-
+    def formatted_text(self):
+        logging.error(self.text)
+        return self.formatter.format(self.text)
