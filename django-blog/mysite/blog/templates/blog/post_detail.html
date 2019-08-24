@@ -13,6 +13,10 @@
         <a href="{% url 'post_edit' pk=post.pk %}">
             <button>글 수정</button>
         </a>
-        <p>{{ post.formatted_text|linebreaksbr }}</p>
+        <p>
+            {% autoescape off %}
+                {{ post.formatted_text|linebreaksbr }}
+            {% endautoescape %}
+        </p>
     </div>
 {% endblock %}
