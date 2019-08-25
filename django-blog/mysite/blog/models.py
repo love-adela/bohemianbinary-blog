@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.html import mark_safe
 from django.urls import reverse_lazy
-import misaka
+import misaka, hoedown, mistune
 import logging
 
 try:
@@ -34,12 +34,23 @@ class FormatterMisaka(BaseFormatter):
     def format(self, text):
         return misaka.html(text)
 
+class FormatterHoedown(BaseFormatter):
+    def format(self, text):
+        return hoedown.html(text)
+
+class FormatterMistune(BaseFormatter):
+    def format(self, text):
+        return mistune.markdown(text)
+
 class Post(models.Model):
     title = models.CharField(max_length=200, help_text='title of message.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     slug = models.SlugField()
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
-    formatter = FormatterMisaka()
+    # Here are Markdown Parsers
+    # formatter = FormatterMisaka()
+    # formatter = FormatterHoedown()
+    formatter = FormatterMistune()
     draft = models.BooleanField(default=False)
     tag = models.ManyToManyField(Tag)
     created_date = models.DateTimeField(default=timezone.now)
