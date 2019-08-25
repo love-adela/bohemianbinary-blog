@@ -14,9 +14,7 @@
             <button>글 수정</button>
         </a>
         <p>
-            {% autoescape off %}
-                {{ post.formatted_text|linebreaksbr }}
-            {% endautoescape %}
+            {{ post.formatted_text|safe|linebreaksbr }}
         </p>
     </div>
 {% endblock %}

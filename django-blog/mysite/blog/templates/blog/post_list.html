@@ -9,9 +9,7 @@
                 <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
                 <p>published: {{ post.published_date }}</p>
                 <p>
-                    {% autoescape off %}
-                        {{ post.formatted_text|linebreaksbr }}
-                    {% endautoescape %}
+                    {{ post.formatted_text|safe|linebreaksbr }}
                 </p>
             </li>
         </ul>
