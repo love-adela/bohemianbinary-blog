@@ -1,7 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.utils.html import mark_safe
-from django.urls import reverse_lazy
 import misaka, hoedown, mistune
 import logging
 
@@ -15,32 +13,40 @@ except ImportError:
 
 class Tag(models.Model):
     text = models.CharField(max_length=250)
+    # slug = models.SlugField(unique=True, max_length=200)
     created_date = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     class Meta:
         ordering = ('created_date',)
 
+    # def __str__(self):
+    #     return self.slug
+
     def get_absolute_url(self):
         pass
-    
+
 
 class BaseFormatter:
     def format(self, text):
         pass
 
+
 class FormatterMisaka(BaseFormatter):
-    
+
     def format(self, text):
         return misaka.html(text)
+
 
 class FormatterHoedown(BaseFormatter):
     def format(self, text):
         return hoedown.html(text)
 
+
 class FormatterMistune(BaseFormatter):
     def format(self, text):
         return mistune.markdown(text)
+
 
 class Post(models.Model):
     title = models.CharField(max_length=200, help_text='title of message.')
