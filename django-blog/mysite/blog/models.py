@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from django.utils.html import mark_safe
-from django.urls import reverse_lazy
-import misaka, hoedown, mistune
+# import misaka, hoedown, mistune
+from .utils import FormatterMisaka, FormatterHoedown, FormatterMistune
 import logging
 
 try:
@@ -15,32 +14,19 @@ except ImportError:
 
 class Tag(models.Model):
     text = models.CharField(max_length=250)
+    # slug = models.SlugField(unique=True, max_length=200)
     created_date = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     class Meta:
         ordering = ('created_date',)
 
+    # def __str__(self):
+    #     return self.slug
+
     def get_absolute_url(self):
         pass
-    
 
-class BaseFormatter:
-    def format(self, text):
-        pass
-
-class FormatterMisaka(BaseFormatter):
-    
-    def format(self, text):
-        return misaka.html(text)
-
-class FormatterHoedown(BaseFormatter):
-    def format(self, text):
-        return hoedown.html(text)
-
-class FormatterMistune(BaseFormatter):
-    def format(self, text):
-        return mistune.markdown(text)
 
 class Post(models.Model):
     title = models.CharField(max_length=200, help_text='title of message.')
@@ -48,11 +34,12 @@ class Post(models.Model):
     slug = models.SlugField()
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
     # Here are Markdown Parsers
-    # formatter = FormatterMisaka()
+    formatter = FormatterMisaka()
     # formatter = FormatterHoedown()
-    formatter = FormatterMistune()
+    # formatter = FormatterMistune()
     draft = models.BooleanField(default=False)
     tag = models.ManyToManyField(Tag)
+
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
