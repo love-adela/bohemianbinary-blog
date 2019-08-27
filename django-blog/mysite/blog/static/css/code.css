@@ -1,0 +1,45 @@
+/* hljs에 빠진 색*/
+
+code {
+    background-color: #EFF0F1;
+    padding: 1px 4px;
+  }
+  
+pre code {
+/* shape and position */
+display: inline-block;
+width: 100%;
+padding-top: 12px;
+padding-bottom: 12px;
+padding-left: 12px;
+padding-right: auto;
+margin: 0;
+
+/* colors */
+background-color: #F7F7F7;
+border-color: #CFCFCF;
+border-width: 1px;
+border-style: solid;
+}
+
+pre code span.hljs-keyword {
+font-weight: bold;
+color: #008000;
+}
+
+pre code span.hljs-title {
+color: #0101FF;
+}
+
+pre code span.hljs-string {
+color: #BA2121;
+}
+
+pre code span.hljs-number {
+color: #080;
+}
+
+pre code span.hljs-comment {
+font-style: italic;
+color: #408080;
+}

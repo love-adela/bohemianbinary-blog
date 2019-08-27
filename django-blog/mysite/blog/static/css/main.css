@@ -1,0 +1,28 @@
+body {
+    
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 100px;  /* shift content down from underneath banner */
+  
+    /* style */
+    color: #111;
+  
+    /* font */
+    font-size: 100%;
+  
+  }
+
+ul {
+  /* list-style-type: none; */
+  columns: 3;
+  -webkit-columns: 3;
+  -moz-columns: 3;
+}
+
+  
+a {
+  text-decoration: inherit; /* no underline */
+}
+
+
