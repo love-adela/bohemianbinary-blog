@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+import misaka, hoedown, mistune
 # import misaka, hoedown, mistune
 from .utils import FormatterMisaka, FormatterHoedown, FormatterMistune
 import logging
@@ -28,15 +29,36 @@ class Tag(models.Model):
         pass
 
 
+class BaseFormatter:
+    def format(self, text):
+        pass
+
+
+class FormatterMisaka(BaseFormatter):
+
+    def format(self, text):
+        return misaka.html(text)
+
+
+class FormatterHoedown(BaseFormatter):
+    def format(self, text):
+        return hoedown.html(text)
+
+
+class FormatterMistune(BaseFormatter):
+    def format(self, text):
+        return mistune.markdown(text)
+
+
 class Post(models.Model):
     title = models.CharField(max_length=200, help_text='title of message.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     slug = models.SlugField()
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
     # Here are Markdown Parsers
-    formatter = FormatterMisaka()
+    # formatter = FormatterMisaka()
     # formatter = FormatterHoedown()
-    # formatter = FormatterMistune()
+    formatter = FormatterMistune()
     draft = models.BooleanField(default=False)
     tag = models.ManyToManyField(Tag)
 
