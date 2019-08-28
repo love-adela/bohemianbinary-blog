@@ -1,7 +1,5 @@
 from django.db import models
 from django.utils import timezone
-import misaka, hoedown, mistune
-# import misaka, hoedown, mistune
 from .utils import FormatterMisaka, FormatterHoedown, FormatterMistune
 import logging
 
@@ -27,28 +25,6 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         pass
-
-
-class BaseFormatter:
-    def format(self, text):
-        pass
-
-
-class FormatterMisaka(BaseFormatter):
-
-    def format(self, text):
-        return misaka.html(text)
-
-
-class FormatterHoedown(BaseFormatter):
-    def format(self, text):
-        return hoedown.html(text)
-
-
-class FormatterMistune(BaseFormatter):
-    def format(self, text):
-        return mistune.markdown(text)
-
 
 class Post(models.Model):
     title = models.CharField(max_length=200, help_text='title of message.')
