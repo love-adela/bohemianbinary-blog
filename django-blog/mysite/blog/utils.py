@@ -1,6 +1,5 @@
 import misaka, hoedown, mistune
 
-
 class BaseFormatter:
     def format(self, text):
         pass
