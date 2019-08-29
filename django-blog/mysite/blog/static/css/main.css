@@ -1,9 +1,7 @@
 body {
-    
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-    padding-top: 100px;  /* shift content down from underneath banner */
+    margin-left: 50px;
+    margin-right: 100px; 
+    padding-top: 50px;  
   
     /* style */
     color: #111;
@@ -13,14 +11,20 @@ body {
   
   }
 
-ul {
-  /* list-style-type: none; */
-  columns: 3;
-  -webkit-columns: 3;
-  -moz-columns: 3;
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 820px;
+  margin: 0px auto;
+  padding: 24px;
 }
 
-  
+ul {
+  list-style-type: none;
+}
+
+
 a {
   text-decoration: inherit; /* no underline */
 }
