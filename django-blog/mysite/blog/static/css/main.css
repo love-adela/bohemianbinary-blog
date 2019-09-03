@@ -11,6 +11,10 @@ body {
   
   }
 
+  p {
+    text-align: justify;
+  }
+
 .layout-wrapper {
   display: flex;
   flex-direction: column;
