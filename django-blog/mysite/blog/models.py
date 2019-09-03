@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from .utils import FormatterMisaka, FormatterHoedown, FormatterMistune
+# from .utils import FormatterMisaka
+from .utils import FormatterMistune
 import logging
 
 try:
@@ -52,6 +53,9 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
+    # TODO : get_absolute_url() 만들기
+    # def get_absolute_url(self):
+    #   return f"/{self.published_date.year}/{self.published_date.month}/{self.slug}"
+
     def formatted_text(self):
-        logging.error(self.text)
         return self.formatter.format(self.text)
