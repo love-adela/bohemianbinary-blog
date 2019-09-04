@@ -1,9 +1,10 @@
 {% load static %}
+
 <html>
     <head>
         <title>Adela Chung</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/code.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/highlight.css' %}"/>
         <meta charset="UTF-8">
         <meta name="author" content="Adela Chung">
         <meta name="description" content="Blog for Adela">
@@ -41,7 +42,7 @@
                 </ul>                    
             </div>
         </div>
-        <div class="layout-wrapper]">
+        <div class="layout-wrapper">
         <!-- main : post list -->
         {% block content %}
         {% endblock %}
