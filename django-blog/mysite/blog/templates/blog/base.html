@@ -33,10 +33,9 @@
                     </li>
                     <li class="header-add-post">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'post_new' %}">
+                            <a href="{% url 'post_new' %}"><button>글 쓰기</button></a>
+                            <a href="{% url 'post_draft_list' %}"></a>
                         {% endif %}
-                            <button>글 쓰기</button>
-                        </a>
                     </li>
                     <li class="header-profile">
                         <div><img src=""></div>
