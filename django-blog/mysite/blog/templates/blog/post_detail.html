@@ -16,7 +16,7 @@
         {% endif %}
         {% if user.is_authenticated %}
             <a href="{% url 'post_edit' pk=post.pk %}"><button>글 수정</button></a>
-            <a href="{% url 'post_remove' pk=post.pk %}"><button>글 삭제</button></a>
+            <a href="{% url 'post_remove' pk=post.pk %}"><button>글 삭제</button>g</a>
         {% endif %}
         {{ post.formatted_text | safe | linebreaksbr }}
     </div>
