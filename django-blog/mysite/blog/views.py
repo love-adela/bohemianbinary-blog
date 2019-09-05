@@ -50,6 +50,12 @@ def post_publish(request, pk):
     return redirect('post_detail', pk=pk)
 
 
+def post_remove(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('post_list')
+
+
 def tag_list(request):
     tags = Tag.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     return render(request, 'blog/tag_list.html', {'tags': tags})
