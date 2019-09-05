@@ -13,8 +13,9 @@
                 <p>
                     {{ post.formatted_text | safe | linebreaksbr }}
                 </p>
+                <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
             </li>
         </ul>
     </main>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

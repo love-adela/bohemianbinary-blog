@@ -33,4 +33,6 @@ a {
   text-decoration: inherit; /* no underline */
 }
 
-
+.comment {
+  margin: 20px 0px 20px 20px;
+}
