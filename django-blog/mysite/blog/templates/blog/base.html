@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>Adela Chung</title>
+        <title>{% block title %}Adela Chung{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/highlight.css' %}"/>
         <meta charset="UTF-8">
@@ -32,12 +32,14 @@
                         <button>최신순</button>
                     </li>
                     <li class="header-add-post">
-                        <a href="{% url 'post_new' %}">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'post_new' %}">
+                        {% endif %}
                             <button>글 쓰기</button>
                         </a>
                     </li>
                     <li class="header-profile">
-                        <div><img src=""></img></div>
+                        <div><img src=""></div>
                     </li>
                 </ul>                    
             </div>
