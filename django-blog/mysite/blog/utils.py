@@ -102,5 +102,4 @@ class FileValidator:
                 'allowed_size': filesizeformat(self.min_size)
             }
             raise ValidationError(message)
-    
         
