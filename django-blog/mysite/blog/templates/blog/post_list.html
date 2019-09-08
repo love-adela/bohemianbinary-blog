@@ -1,4 +1,6 @@
 {% extends 'blog/base.html' %}
+{% block title %}Home{% endblock %}
+{% load static %}
 
 {% block content %}
     {% for post in posts %}
@@ -9,10 +11,11 @@
                 <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
                 <p>published: {{ post.published_date }}</p>
                 <p>
-                    {{ post.formatted_text|safe|linebreaksbr }}
+                    {{ post.formatted_text | safe | linebreaksbr }}
                 </p>
+                <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
             </li>
         </ul>
     </main>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

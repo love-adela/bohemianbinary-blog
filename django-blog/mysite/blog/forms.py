@@ -4,13 +4,13 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CheckboxSelectMultiple
 
-from .models import Post, Image
+from .models import Post, Comment, Image
 from .utils import RE_MARKDOWN_IMG
 
 import logging
 
-class PostForm(forms.ModelForm):
 
+class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ['id']
@@ -19,7 +19,7 @@ class PostForm(forms.ModelForm):
             'images': CheckboxSelectMultiple(),
         }
         fields = ('title', 'text',)
-        
+
     def clean(self):
         """ Checks whether set(linked files) == set(referenced files) """
         linked_images = {img.filename for img in self.cleaned_data['images']}
@@ -50,6 +50,11 @@ class ImageForm(ModelForm):
         if purported_ext != actual_ext:
             raise ValidationError(
                 "Filename extension must match uploaded file: '{ext}'"
-                .format(ext=actual_ext))
+                    .format(ext=actual_ext))
         return self.cleaned_data
-    
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('author', 'text',)
