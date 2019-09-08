@@ -1,11 +1,14 @@
 {% load static %}
+
 <html>
     <head>
         <title>Adela Chung</title>
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-        <meta name="keywords" content="HTML, CSS, XML, XHTML, JavaScript">
-        <meta name="description" content="Description of what is contained on the Website">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/highlight.css' %}"/>
+        <meta charset="UTF-8">
         <meta name="author" content="Adela Chung">
+        <meta name="description" content="Blog for Adela">
+        
     </head>
     <body>
         <!-- header -->
@@ -39,7 +42,7 @@
                 </ul>                    
             </div>
         </div>
-        <div>
+        <div class="layout-wrapper">
         <!-- main : post list -->
         {% block content %}
         {% endblock %}

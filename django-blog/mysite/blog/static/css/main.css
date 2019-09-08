@@ -1,0 +1,36 @@
+body {
+    margin-left: 50px;
+    margin-right: 100px; 
+    padding-top: 50px;  
+  
+    /* style */
+    color: #111;
+  
+    /* font */
+    font-size: 100%;
+  
+  }
+
+  p {
+    text-align: justify;
+  }
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 820px;
+  margin: 0px auto;
+  padding: 24px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+
+a {
+  text-decoration: inherit; /* no underline */
+}
+
+

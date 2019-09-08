@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="post">
@@ -13,8 +14,6 @@
         <a href="{% url 'post_edit' pk=post.pk %}">
             <button>글 수정</button>
         </a>
-        <p>
-            {{ post.formatted_text|safe|linebreaksbr }}
-        </p>
+        {{ post.formatted_text | safe | linebreaksbr }}
     </div>
 {% endblock %}

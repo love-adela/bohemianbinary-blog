@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-import misaka, hoedown, mistune
+from .utils import FormatterMisaka
+from .utils import FormatterMistune
 import logging
 
 try:
@@ -26,28 +27,6 @@ class Tag(models.Model):
     def get_absolute_url(self):
         pass
 
-
-class BaseFormatter:
-    def format(self, text):
-        pass
-
-
-class FormatterMisaka(BaseFormatter):
-
-    def format(self, text):
-        return misaka.html(text)
-
-
-class FormatterHoedown(BaseFormatter):
-    def format(self, text):
-        return hoedown.html(text)
-
-
-class FormatterMistune(BaseFormatter):
-    def format(self, text):
-        return mistune.markdown(text)
-
-
 class Post(models.Model):
     title = models.CharField(max_length=200, help_text='title of message.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -59,6 +38,7 @@ class Post(models.Model):
     formatter = FormatterMistune()
     draft = models.BooleanField(default=False)
     tag = models.ManyToManyField(Tag)
+
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
@@ -73,6 +53,9 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
+    # TODO : get_absolute_url() 만들기
+    # def get_absolute_url(self):
+    #   return f"/{self.published_date.year}/{self.published_date.month}/{self.slug}"
+
     def formatted_text(self):
-        logging.error(self.text)
         return self.formatter.format(self.text)

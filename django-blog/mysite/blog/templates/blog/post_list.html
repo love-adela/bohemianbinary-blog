@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 
 {% block content %}
     {% for post in posts %}
@@ -9,7 +10,7 @@
                 <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
                 <p>published: {{ post.published_date }}</p>
                 <p>
-                    {{ post.formatted_text|safe|linebreaksbr }}
+                    {{ post.formatted_text | safe | linebreaksbr }}
                 </p>
             </li>
         </ul>
