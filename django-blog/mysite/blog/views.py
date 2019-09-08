@@ -47,7 +47,7 @@ def post_edit(request, pk):
 @login_required
 def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
-    return render(request, 'blog/post_draft_list.html', {'posts':posts})
+    return render(request, 'blog/post_draft_list.html', {'posts': posts})
 
 
 @login_required
@@ -76,13 +76,14 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
-        
+
 
 @login_required
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_detail', pk=comment.post.pk)
+
 
 @login_required
 def comment_remove(request, pk):
