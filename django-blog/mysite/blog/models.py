@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-# from .utils import FormatterMisaka
+from .utils import FormatterMisaka
 from .utils import FormatterMistune
 import logging
 
