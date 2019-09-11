@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from . import views
 
@@ -12,4 +14,4 @@ urlpatterns = [
     path('drafts/', views.post_draft_list, name='post_draft_list'),
     path('comment/<int:pk>/approve/', views.comment_approve, name='comment_approve'),
     path('comment/<int:pk>/remove', views.comment_remove, name='comment_remove'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
