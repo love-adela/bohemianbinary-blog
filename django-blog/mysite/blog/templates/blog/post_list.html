@@ -16,10 +16,9 @@
                 <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
                 <div class="tag-list">
                     {% if post.tags.count %}
-                        Tags:
+                        <h2>Tags</h2>
                         {% for tag in post.tags.all %}
-                                &nbsp;
-                            <a href="/">{{ tag.title }}</a>
+                            <a class="" href="/">{{ tag.title }}</a>
                         {% endfor %}
                     {% endif %}
                 </div>
