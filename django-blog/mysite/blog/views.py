@@ -6,7 +6,8 @@ from .forms import PostForm, CommentForm
 
 
 def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = Post.objects.filter(
+        published_date__lte=timezone.now()).order_by('published_date')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 
@@ -92,6 +93,6 @@ def comment_remove(request, pk):
     return redirect('post_detail', pk=comment.post.pk)
 
 
-def tag_list(request):
-    tags = Tag.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/tag_list.html', {'tags': tags})
+def tag_list(request, tag_name):
+    tags = get_object_or_404(Tag, name=tag_name)
+    return render(request, 'blog/tag_list.html', {'tag': tags})

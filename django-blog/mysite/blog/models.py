@@ -12,32 +12,23 @@ except ImportError:
 
 
 class Tag(models.Model):
-    text = models.CharField(max_length=250)
-    # slug = models.SlugField(unique=True, max_length=200)
-    created_date = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
+    title = models.CharField(
+        max_length=30, unique=True, null=False)
 
-    class Meta:
-        ordering = ('created_date',)
-
-    # def __str__(self):
-    #     return self.slug
-
-    def get_absolute_url(self):
-        pass
+    def __str__(self):
+        return str(self.title) if self.title else ''
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=200, help_text='title of message.')
+    title = models.CharField(max_length=200, help_text='제목을 입력하세요.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    slug = models.SlugField()
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
     # Here are Markdown Parsers
     # formatter = FormatterMisaka()
     # formatter = FormatterHoedown()
     formatter = FormatterMistune()
     draft = models.BooleanField(default=False)
-    tag = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag)
 
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
