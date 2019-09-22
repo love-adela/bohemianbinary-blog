@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.urls import reverse_lazy
 from django.views import generic
 from .models import Post, Tag, Comment
 from .forms import PostForm, CommentForm
@@ -91,11 +92,11 @@ def add_comment_to_post(request, pk):
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
 
 
-@login_required
-def comment_approve(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    comment.approve()
-    return redirect('post_detail', pk=comment.post.pk)
+class CommentApproveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
+        comment.approve()
+        return reverse_lazy('post_detail', args=(comment.post.pk,))
 
 
 @login_required
