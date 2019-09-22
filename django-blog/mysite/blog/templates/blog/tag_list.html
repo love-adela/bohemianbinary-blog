@@ -1,0 +1,30 @@
+{% extends "blog/base.html" %}
+
+{% block head %}
+<meta name="keywords" content="{{ tag.title }}">
+{% endblock %}
+
+{% block content %}
+<div class="tag">
+    <h1>{{ tag.title }}</h1>
+    <hr>
+    {% if tag.post_set.all %}
+        {% for post in tag.post_set.all %}
+        <ul class="post-list">
+            <li class="post-lst">
+                <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+                <p>published: {{ post.published_date }}</p>
+                <p>
+                    {{ post.formatted_text | safe | linebreaksbr }}
+                </p>
+                <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>    
+            </li>
+            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
+        </ul>
+        <hr>
+        {% endfor %} 
+    {% else %}
+        <p>No posts are available.</p>
+    {% endif %}
+</div>
+{% endblock %}
