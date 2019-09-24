@@ -64,11 +64,19 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
         return posts
 
 
-@login_required
-def post_publish(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.publish()
-    return redirect('post_detail', pk=pk)
+class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
+    permanent = False
+    query_string = True
+    pattern_name = 'post-publish'
+
+    def get_redirect_url(self, *args, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs['pk'])
+    # def post_publish(request, pk):
+        # post = get_object_or_404(Post, pk=pk)
+        post.publish()
+        return reverse_lazy('post_detail', args=(post.post.pk))
+        # return super(PostPublishRedriectView, self).get_redirect_url(*args, **kwargs)
+        # return redirect('post_detail', pk=pk)
 
 
 @login_required
