@@ -74,7 +74,7 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
     # def post_publish(request, pk):
         # post = get_object_or_404(Post, pk=pk)
         post.publish()
-        return reverse_lazy('post_detail', args=(post.post.pk))
+        return reverse_lazy('post_detail', args=(post.pk,))
         # return super(PostPublishRedriectView, self).get_redirect_url(*args, **kwargs)
         # return redirect('post_detail', pk=pk)
 
