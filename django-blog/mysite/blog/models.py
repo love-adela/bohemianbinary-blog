@@ -71,7 +71,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200, help_text='제목을 입력하세요.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
-    image = models.ManyToManyField(Image, blank=True)
+    images = models.ManyToManyField(Image, blank=True)
     # Here are Markdown Parsers
     # formatter = FormatterMisaka()
     # formatter = FormatterHoedown()
