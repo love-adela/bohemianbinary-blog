@@ -15,7 +15,7 @@ class PostForm(forms.ModelForm):
         fields = ('title', 'text',)
 
 
-class ImageForm(ModelForm):
+class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         exclude = ['id']
