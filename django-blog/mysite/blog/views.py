@@ -75,11 +75,12 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
         return reverse_lazy('post_detail', args=(post.pk,))
 
 
-@login_required
-def post_remove(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.delete()
-    return redirect('post_list')
+class PostRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs['pk'])
+        post.delete()
+        return reverse_lazy('post_list')
 
 
 def add_comment_to_post(request, pk):
@@ -103,11 +104,12 @@ class CommentApproveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
         return reverse_lazy('post_detail', args=(comment.post.pk,))
 
 
-@login_required
-def comment_remove(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    comment.delete()
-    return redirect('post_detail', pk=comment.post.pk)
+class CommentRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
+        post = comment.post
+        comment.delete()
+        return reverse_lazy('post_detail', args=(post.pk,))
 
 
 class TagIndexView(generic.ListView):
