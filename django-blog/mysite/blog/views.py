@@ -39,19 +39,17 @@ def post_new(request):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 
-@login_required
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
+    model = Post
+    fields = ('title', 'text')
+    template_name = 'blog/post_edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user
+        # TODO : self.request.user != author일 경우 에러 발생시키기
+        post.save()
+        return redirect('post_detail', pk=post.pk)
 
 
 class DraftIndexView(LoginRequiredMixin, generic.ListView):
