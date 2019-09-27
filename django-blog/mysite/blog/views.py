@@ -25,18 +25,16 @@ class DetailView(generic.DetailView):
     context_object_name = 'post'
 
 
-@login_required
-def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm()
-    return render(request, 'blog/post_edit.html', {'form': form})
+class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
+    model = Post
+    fields = ('title', 'text')
+    template_name = 'blog/post_edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user
+        post.save()
+        return redirect('post_detail', pk=post.pk)
 
 
 class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
