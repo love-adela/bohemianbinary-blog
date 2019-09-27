@@ -25,18 +25,16 @@ class DetailView(generic.DetailView):
     context_object_name = 'post'
 
 
-@login_required
-def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm()
-    return render(request, 'blog/post_edit.html', {'form': form})
+class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
+    model = Post
+    fields = ('title', 'text')
+    template_name = 'blog/post_edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user
+        post.save()
+        return redirect('post_detail', pk=post.pk)
 
 
 class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
@@ -81,18 +79,17 @@ class PostRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
         return reverse_lazy('post_list')
 
 
-def add_comment_to_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = CommentForm()
-    return render(request, 'blog/add_comment_to_post.html', {'form': form})
+class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
+    model = Comment
+    fields = ('author', 'text')
+    template_name = 'blog/add_comment_to_post.html'
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        comment.post = post
+        comment.save()
+        return redirect('post_detail', pk=post.pk)
 
 
 class CommentApproveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
