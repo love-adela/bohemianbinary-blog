@@ -28,8 +28,8 @@
             <div class="comment">
                 <div class="comment-date">
                     {{ comment.created_date }}
+                    <a href="{% url 'comment_remove' pk=comment.pk %}"><button>댓글 삭제</button></a>
                     {% if not comment.approved_comment %}
-                        <a href="{% url 'comment_remove' pk=comment.pk %}"><button>댓글 삭제</button></a>
                         <a href="{% url 'comment_approve' pk=comment.pk %}"><button>댓글 승인</button></a>
                     {% endif %}
                 </div>

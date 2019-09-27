@@ -4,11 +4,11 @@ import uuid
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
-from .utils import FormatterMisaka
+
+# from .utils import MarkdownRenderer\
+from .utils import FileValidator, RE_FILENAME_IMG
+# from .utils import FormatterMisaka
 from .utils import FormatterMistune
-
-from .utils import MarkdownRenderer, FileValidator, RE_FILENAME_IMG
-
 
 # validators
 post_validator = RegexValidator(
@@ -37,7 +37,7 @@ def upload_to(model, filename):
     ext = os.path.splitext(filename)[1].lower() # e.g. 'photo.JPG' -> '.jpg'
     filepath = f'{prefix}{uuid.uuid4()}{ext}'
     return filepath
-    
+
 
 class Image(models.Model):
     filename = models.CharField(
@@ -46,7 +46,7 @@ class Image(models.Model):
     file = models.FileField(
         unique=True, blank=False, null=False, upload_to=upload_to,
         validators=[image_validator])
-    
+
     def __str__(self):
         return self.filename
 
@@ -71,7 +71,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200, help_text='제목을 입력하세요.')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
-    image = models.ManyToManyField(Image, blank=True)
+    images = models.ManyToManyField(Image, blank=True)
     # Here are Markdown Parsers
     # formatter = FormatterMisaka()
     # formatter = FormatterHoedown()
