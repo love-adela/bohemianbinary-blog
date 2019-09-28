@@ -5,9 +5,9 @@
 {% block content %}
     {% for post in posts %}
     <main>
-        <ul class="post-list">
+        <div class="post-list">
             <hr>
-            <li class="post-lst">
+            <div class="post-lst">
                 <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
                 <p>published: {{ post.published_date }}</p>
                 <p>
@@ -28,8 +28,8 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     </main>
     {% endfor %}
 {% endblock content %}

@@ -10,17 +10,17 @@
     <hr>
     {% if tag.post_set.all %}
         {% for post in tag.post_set.all %}
-        <ul class="post-list">
-            <li class="post-lst">
+        <div class="tag-list">
+            <div class="tag-lst">
                 <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
                 <p>published: {{ post.published_date }}</p>
                 <p>
                     {{ post.formatted_text | safe | linebreaksbr }}
                 </p>
                 <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>    
-            </li>
-            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
-        </ul>
+            </div>
+            <div><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></div>
+        </div>
         <hr>
         {% endfor %} 
     {% else %}
