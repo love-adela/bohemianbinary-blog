@@ -16,7 +16,7 @@
 
                 {% for image in post.image_set.all %}
                     <div>
-                        <p>{{ image.file.path }}</p> <!-- path가 아니라 다른 것(로컬 말고)으로 바꾸자. -->
+                        <p>{{ image.file.url }}</p>> <!-- image 파일 크기 수정 후 <img src=''>-->
                     </div>
                 {% endfor %}
                 <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
