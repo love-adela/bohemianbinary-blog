@@ -13,6 +13,12 @@
                 <p>
                     {{ post.formatted_text | safe | linebreaksbr }}
                 </p>
+
+                {% for image in post.image_set.all %}
+                    <div>
+                        <p>{{ image.file.path }}</p> <!-- path가 아니라 다른 것(로컬 말고)으로 바꾸자. -->
+                    </div>
+                {% endfor %}
                 <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
                 <div class="tag-list">
                     {% if post.tags.count %}

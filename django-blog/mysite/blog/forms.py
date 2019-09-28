@@ -18,7 +18,7 @@ class PostForm(forms.ModelForm):
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        exclude = ['id']
+        fields = ['file']
 
 
 class CommentForm(forms.ModelForm):
