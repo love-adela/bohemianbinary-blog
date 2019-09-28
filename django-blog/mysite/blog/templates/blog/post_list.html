@@ -5,14 +5,20 @@
 {% block content %}
     {% for post in posts %}
     <main>
-        <ul class="post-list">
+        <div class="post-list">
             <hr>
-            <li class="post-lst">
+            <div class="post-lst">
                 <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
                 <p>published: {{ post.published_date }}</p>
                 <p>
                     {{ post.formatted_text | safe | linebreaksbr }}
                 </p>
+
+                {% for image in post.image_set.all %}
+                    <div>
+                        <p>{{ image.file.url }}</p>> <!-- image 파일 크기 수정 후 <img src=''>-->
+                    </div>
+                {% endfor %}
                 <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
                 <div class="tag-list">
                     {% if post.tags.count %}
@@ -22,8 +28,8 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     </main>
     {% endfor %}
 {% endblock content %}

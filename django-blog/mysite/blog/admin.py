@@ -1,12 +1,17 @@
 from django.contrib import admin
 from .models import Image, Comment, Post, Tag
-from .forms import PostForm, ImageForm
+from .forms import ImageForm
 
 # Register your models here.
 admin.site.register(Comment)
-admin.site.register(Post)
 admin.site.register(Tag)
 
-@admin.register(Image)
-class ImageAdmin(admin.ModelAdmin):
-    form = ImageForm
+
+class ImageAdmin(admin.StackedInline):
+    model = Image
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    fieldsets = ((None, {'fields': ['title']}), )
+    inlines = [ImageAdmin, ]

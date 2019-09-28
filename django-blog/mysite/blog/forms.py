@@ -1,13 +1,7 @@
-import os
-
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CheckboxSelectMultiple
 
 from .models import Post, Comment, Image
-from .utils import RE_MARKDOWN_IMG
-
-import logging
 
 
 class PostForm(forms.ModelForm):
@@ -21,10 +15,10 @@ class PostForm(forms.ModelForm):
         fields = ('title', 'text',)
 
 
-class ImageForm(ModelForm):
+class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        exclude = ['id']
+        fields = ['file']
 
 
 class CommentForm(forms.ModelForm):
