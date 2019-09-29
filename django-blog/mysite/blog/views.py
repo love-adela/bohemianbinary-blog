@@ -25,8 +25,8 @@ class DetailView(generic.DetailView):
     context_object_name = 'post'
 
     def get_object(self):
-        posts = Post.objects.filter(uuid=self.kwargs.get('post_id'))[0]
-        return posts
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id'))[0]
+        return post
 
 
 class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
@@ -38,7 +38,7 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         post.save()
-        return redirect('post_detail', pk=post.pk)
+        return redirect('post_detail', post_id=post.uuid)
 
 
 class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
@@ -67,10 +67,10 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
 class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
     permanent = False
     query_string = True
-    pattern_name = 'post-publish'
+    pattern_name = 'post_publish'
 
     def get_redirect_url(self, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['pk'])
+        post = Post.objects.filter(uuid=kwargs.get('post_id'))[0]
         post.publish()
         return reverse_lazy('post_detail', args=(post.uuid,))
 
