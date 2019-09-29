@@ -25,7 +25,7 @@ class DetailView(generic.DetailView):
     context_object_name = 'post'
 
     def get_object(self):
-        post = Post.objects.filter(uuid=self.kwargs.get('post_id'))[0]
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         return post
 
 
@@ -75,7 +75,7 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
     pattern_name = 'post_publish'
 
     def get_redirect_url(self, *args, **kwargs):
-        post = Post.objects.filter(uuid=kwargs.get('post_id'))[0]
+        post = Post.objects.filter(uuid=kwargs.get('post_id')).first()
         post.publish()
         return reverse_lazy('post_detail', args=(post.uuid,))
 
@@ -83,7 +83,7 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
 class PostRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        post = Post.objects.filter(uuid=kwargs.get('post_id'))[0]
+        post = Post.objects.filter(uuid=kwargs.get('post_id')).first()
         post.delete()
         return reverse_lazy('post_list')
 
@@ -95,7 +95,7 @@ class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
     def form_valid(self, form):
         comment = form.save(commit=False)
-        post = Post.objects.filter(uuid=self.kwargs.get('post_id'))[0]
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         comment.post = post
         comment.save()
         return redirect('post_detail', post_id=post.uuid)
@@ -104,8 +104,9 @@ class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
 class CommentApproveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         comment = get_object_or_404(Comment, pk=kwargs['pk'])
+        post = comment.post
         comment.approve()
-        return reverse_lazy('post_detail', args=(comment.post.pk,))
+        return reverse_lazy('post_detail', args=(post.uuid,))
 
 
 class CommentRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
