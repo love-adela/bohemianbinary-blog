@@ -51,7 +51,12 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
         post.author = self.request.user
         # TODO : self.request.user != author일 경우 에러 발생시키기
         post.save()
-        return redirect('post_detail', pk=post.pk)
+        return redirect('post_detail', post_id=post.uuid)
+
+    def get_object(self):
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        logging.error(post)
+        return post
 
 
 class DraftIndexView(LoginRequiredMixin, generic.ListView):
