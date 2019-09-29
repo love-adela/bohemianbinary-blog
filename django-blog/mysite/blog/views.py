@@ -24,6 +24,10 @@ class DetailView(generic.DetailView):
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
+    def get_object(self):
+        posts = Post.objects.filter(uuid=self.kwargs.get('post_id'))[0]
+        return posts
+
 
 class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Post
@@ -68,7 +72,7 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         post = get_object_or_404(Post, pk=kwargs['pk'])
         post.publish()
-        return reverse_lazy('post_detail', args=(post.pk,))
+        return reverse_lazy('post_detail', args=(post.uuid,))
 
 
 class PostRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
