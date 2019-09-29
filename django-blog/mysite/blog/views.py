@@ -78,7 +78,7 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
 class PostRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['pk'])
+        post = Post.objects.filter(uuid=kwargs.get('post_id'))[0]
         post.delete()
         return reverse_lazy('post_list')
 
