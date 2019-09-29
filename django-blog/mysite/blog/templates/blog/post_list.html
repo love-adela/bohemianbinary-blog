@@ -8,7 +8,7 @@
         <div class="post-list">
             <hr>
             <div class="post-lst">
-                <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+                <h2><a href="{% url 'post_detail' post_id=post.uuid %}">{{ post.title }}</a></h2>
                 <p>published: {{ post.published_date }}</p>
                 <p>
                     {{ post.formatted_text | safe | linebreaksbr }}
@@ -16,10 +16,10 @@
 
                 {% for image in post.image_set.all %}
                     <div>
-                        <p>{{ image.file.url }}</p>> <!-- image 파일 크기 수정 후 <img src=''>-->
+                        <p>{{ image.file.url }}</p>> <!-- image 파일 크기 수정 후 <img src=''>로 수정-->
                     </div>
                 {% endfor %}
-                <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+                <a href="{% url 'post_detail' post_id=post.uuid %}">Comments: {{ post.approved_comments.count }}</a>
                 <div class="tag-list">
                     {% if post.tags.count %}
                         <h3>Tags</h3>

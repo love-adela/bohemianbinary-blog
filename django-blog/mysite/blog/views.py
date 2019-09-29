@@ -24,6 +24,10 @@ class DetailView(generic.DetailView):
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
+    def get_object(self):
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        return post
+
 
 class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Post
@@ -34,7 +38,7 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         post.save()
-        return redirect('post_detail', pk=post.pk)
+        return redirect('post_detail', post_id=post.uuid)
 
 
 class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
@@ -47,7 +51,12 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
         post.author = self.request.user
         # TODO : self.request.user != author일 경우 에러 발생시키기
         post.save()
-        return redirect('post_detail', pk=post.pk)
+        return redirect('post_detail', post_id=post.uuid)
+
+    def get_object(self):
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        logging.error(post)
+        return post
 
 
 class DraftIndexView(LoginRequiredMixin, generic.ListView):
@@ -63,18 +72,18 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
 class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
     permanent = False
     query_string = True
-    pattern_name = 'post-publish'
+    pattern_name = 'post_publish'
 
     def get_redirect_url(self, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['pk'])
+        post = Post.objects.filter(uuid=kwargs.get('post_id')).first()
         post.publish()
-        return reverse_lazy('post_detail', args=(post.pk,))
+        return reverse_lazy('post_detail', args=(post.uuid,))
 
 
 class PostRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['pk'])
+        post = Post.objects.filter(uuid=kwargs.get('post_id')).first()
         post.delete()
         return reverse_lazy('post_list')
 
@@ -86,17 +95,18 @@ class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
     def form_valid(self, form):
         comment = form.save(commit=False)
-        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         comment.post = post
         comment.save()
-        return redirect('post_detail', pk=post.pk)
+        return redirect('post_detail', post_id=post.uuid)
 
 
 class CommentApproveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         comment = get_object_or_404(Comment, pk=kwargs['pk'])
+        post = comment.post
         comment.approve()
-        return reverse_lazy('post_detail', args=(comment.post.pk,))
+        return reverse_lazy('post_detail', args=(post.uuid,))
 
 
 class CommentRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
@@ -104,7 +114,7 @@ class CommentRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
         comment = get_object_or_404(Comment, pk=kwargs['pk'])
         post = comment.post
         comment.delete()
-        return reverse_lazy('post_detail', args=(post.pk,))
+        return reverse_lazy('post_detail', args=(post.uuid,))
 
 
 class TagIndexView(generic.ListView):
