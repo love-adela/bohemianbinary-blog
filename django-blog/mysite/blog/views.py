@@ -90,10 +90,10 @@ class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
     def form_valid(self, form):
         comment = form.save(commit=False)
-        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id'))[0]
         comment.post = post
         comment.save()
-        return redirect('post_detail', pk=post.pk)
+        return redirect('post_detail', post_id=post.uuid)
 
 
 class CommentApproveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
