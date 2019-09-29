@@ -108,7 +108,7 @@ class CommentRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
         comment = get_object_or_404(Comment, pk=kwargs['pk'])
         post = comment.post
         comment.delete()
-        return reverse_lazy('post_detail', args=(post.pk,))
+        return reverse_lazy('post_detail', args=(post.uuid,))
 
 
 class TagIndexView(generic.ListView):
