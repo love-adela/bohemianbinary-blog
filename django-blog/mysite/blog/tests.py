@@ -3,9 +3,24 @@ import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .models import Tag, Post, Comment
+from .models import Image, Tag, Post, Comment, upload_to
 
 from .utils import FormatterMistune
+
+
+class ImageModelTests(TestCase):
+    def test_is_image(self):
+        Image.objects.create(file='img/pig1.jpg')
+        i1 = Image.objects.first()
+        image = upload_to(i1, 'img/pig1.jpg')
+        self.assertIn('img/', image)
+        self.assertIn('.jpg', image)
+        Tag.objects.create(title='이미지가아님')
+        t1 = Tag.objects.first()
+        try:
+            fake_image = upload_to(t1, 'img/fake.jpg')
+        except:
+            pass
 
 
 class TagModelTests(TestCase):
@@ -59,3 +74,18 @@ class PostModelTests(TestCase):
         post.save()
         c2 = post.approved_comments().first()
         self.assertEqual(c2.text, '와아 축하해요!')
+
+    # string 포함 테스트
+    def test_is_contained(self):
+        Image.objects.create(file='img/pig1.jpg')
+        i1 = Image.objects.first()
+        self.assertIn(str(i1), '/Users/adela/workspace/bohemian-binary/django-blog/mysite/media/img/pig1.jpg')
+        Tag.objects.create(title='java')
+        t1 = Tag.objects.first()
+        self.assertIn(str(t1), 'java')
+        author = self.create_user()
+        post = Post.objects.create(title='이거슨 테스트', author=author)
+        p1 = Post.objects.first()
+        self.assertIn(str(p1), '이거슨 테스트')
+        c1 = post.comments.create(author='test', text='이거슨 댓글테스트')
+        self.assertIn(str(c1), '이거슨 댓글테스트')
