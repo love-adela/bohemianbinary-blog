@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import Image, Tag, Post, Comment, upload_to
 
 from .utils import FormatterMistune
+import logging
 
 
 class ImageModelTests(TestCase):
@@ -43,10 +44,12 @@ def create_user():
     return User.objects.first()
 
 
+# test_user = create_user()
 def create_post(title=None, text=None, days=None):
     """
     post 초기화
     """
+    # TODO : create_user 독립
     author = create_user()
     post = Post.objects.create(author=author)
     if title is not None:
@@ -109,11 +112,7 @@ class PostModelTests(TestCase):
 
 
 class PostIndexViewTests(TestCase):
-    def test_no_post(self):
-        """
-        If no post exists, an appropriate message is displayed.
-        """
-        client = Client()
+    def test_is_post(self):
         response = self.client.get(reverse('post_list'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['posts'], [])
@@ -125,14 +124,118 @@ class PostDetailViewTests(TestCase):
         """
         post = create_post(title='테스트 포스트 1.')
         post = Post.objects.filter(uuid=post.uuid).first()
-        client = Client()
         response = self.client.get(
             reverse('post_detail', args=(post.uuid,)))
         self.assertEqual(
-            response.context['post'], post
-        )
+            response.context['post'], post)
+
+
+def create_user_and_sign_in(client):
+    create_user()
+    credential = {
+        'username': 'testuser',
+        'password': '1234'
+    }
+    response = client.post('/accounts/login/', credential, follow=True)
+
+
+# TODO: Login 해주는 method 별도로 만들고
+class LoginTestCase(TestCase):
+    def test_login(self):
+        create_user()
+        credential = {
+            'username': 'testuser',
+            'password': '1234'
+        }
+        response = self.client.get(reverse('post_new'))
+        self.assertRedirects(response, '/accounts/login/?next=/post/new/')
+        response = self.client.post('/accounts/login/', credential, follow=True)
+        response = self.client.get(reverse('post_new'))
+        self.assertTrue(response.context['user'].is_active)
+        self.assertEqual(response.status_code, 200)
 
 
 class PostCreateViewTests(TestCase):
     def test_is_form_valid(self):
-        post = create_post()
+        create_user_and_sign_in(self.client)
+        form_data = {
+            'title': 'test용 title',
+            'text': '음하하하 이것은 테스트입니다.'
+        }
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['post'].title, form_data['title'])
+
+
+class PostUpdateViewTests(TestCase):
+    def test_is_form_valid(self):
+        create_user_and_sign_in(self.client)
+        form_data = {
+            'title': 'test용 title',
+            'text': '음하하하 이것은 테스트입니다.'
+        }
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True
+            )
+        uuid = response.context['post'].uuid
+        form_data = {
+            'title': '수정 test용 title',
+            'text': '음하하하 이것은 수정 테스트입니다.'
+        }
+        response = self.client.post(
+            reverse('post_edit', args=(uuid,)), form_data, follow=True
+            )
+        logging.error(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['post'].title, form_data['title'])
+
+
+class DraftIndexViewTests(TestCase):
+    def test_is_draft(self):
+        create_user_and_sign_in(self.client)
+        response = self.client.get(reverse('post_draft_list'))
+        self.assertEqual(response.status_code, 200)
+
+        # draft에 글 없는지 검사
+        self.assertQuerysetEqual(response.context['posts'], [])
+
+        # draft 글 생성
+        form_data = {
+            'title': 'draft test용 title',
+            'text': '음하하하 이것은 draft 테스트입니다.'
+        }
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True
+        )
+
+        # draft에 글 있는지 검사 && post_list에는 없는지 검사
+        response = self.client.get(reverse('post_draft_list'))
+        post = response.context['posts'].first()
+        self.assertEqual(post.title, form_data['title'])
+        self.assertEqual(post.text, form_data['text'])
+        uuid = post.uuid
+
+        response = self.client.get(reverse('post_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['posts'], [])
+
+        # publish
+        response = self.client.get(
+            reverse('post_publish', args=(uuid,)), follow=True
+            )  # Redirect 되기 때문에
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(post.title, form_data['title'])
+        self.assertEqual(post.text, form_data['text'])
+
+        # draft에는 글 없는지 검사 && post_list에는 있는지 검사
+        response = self.client.get(reverse('post_draft_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['posts'], [])
+
+        response = self.client.get(reverse('post_list'))
+        self.assertEqual(response.status_code, 200)
+        post = response.context['posts'].first()
+        self.assertEqual(post.title, form_data['title'])
+        self.assertEqual(post.text, form_data['text'])
