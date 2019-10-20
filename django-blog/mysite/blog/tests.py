@@ -31,6 +31,7 @@ class TagModelTests(TestCase):
         Tag.objects.create(title='java')
         t1 = Tag.objects.first()
         self.assertEquals(t1.title, 'java')
+        # 대소문자 통과되는지, 공백들어갈건지, '()', '#'가 들어가는지 model 코드에서 validation.
         self.assertNotEquals(t1.title, 'python3')
 
 
@@ -43,8 +44,10 @@ def create_user():
     author.save()
     return User.objects.first()
 
+    # username 에 admin이 들어가있지 않는지 validation
+    # username 형식도 테스트 - URL에 쓸 수 있는 형식으로 이메일에 '/'가 들어가야하는지, username이 url의 일부로 쓰이는지.
 
-# test_user = create_user()
+
 def create_post(title=None, text=None, days=None):
     """
     post 초기화
@@ -59,7 +62,27 @@ def create_post(title=None, text=None, days=None):
     if days is not None:
         post.created_date = days
     return post
-    # time = timezone.now() + datetime.timedelta(days=days)
+
+
+def create_comment(client):
+    create_user_and_sign_in(client)
+    post_form_data = {
+        'title': 'dazac',
+        'text': 'This is a sample post content for comment test.'
+    }
+    response = client.post(
+        reverse('post_new'), post_form_data, follow=True
+    )
+
+    uuid = response.context['post'].uuid
+    comment_form_data = {
+        'author': 'polyglot',
+        'text': 'women rule the world'
+    }
+    response = client.post(
+        reverse('add_comment_to_post', args=(uuid,)), comment_form_data, follow=True
+    )
+    return response
 
 
 class PostModelTests(TestCase):
@@ -187,7 +210,6 @@ class PostUpdateViewTests(TestCase):
         response = self.client.post(
             reverse('post_edit', args=(uuid,)), form_data, follow=True
             )
-        logging.error(response)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['post'].title, form_data['title'])
 
@@ -209,7 +231,7 @@ class DraftIndexViewTests(TestCase):
         response = self.client.post(
             reverse('post_new'), form_data, follow=True
         )
-
+        # client = Client()
         # draft에 글 있는지 검사 && post_list에는 없는지 검사
         response = self.client.get(reverse('post_draft_list'))
         post = response.context['posts'].first()
@@ -239,3 +261,42 @@ class DraftIndexViewTests(TestCase):
         post = response.context['posts'].first()
         self.assertEqual(post.title, form_data['title'])
         self.assertEqual(post.text, form_data['text'])
+
+
+class PostRemoveRedirectViewTests(TestCase):
+    def test_delete_post(self):
+        create_user_and_sign_in(self.client)
+        response = self.client.get(reverse('post_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['posts'], [])
+
+        form_data = {
+            'title': 'lambda island',
+            'text': 'Go Java'
+        }
+
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True)
+        uuid = response.context['post'].uuid
+        response = self.client.get(reverse('post_publish', args=(uuid,)), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['post'].title, form_data['title'])
+
+        response = self.client.post(reverse('post_remove', args=(uuid,)), follow=True)
+        response = self.client.get(reverse('post_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['posts'].exists())
+
+
+class CommentCreateViewTest(TestCase):
+    def test_is_comment_form_valid(self):
+        response = create_comment(self.client)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'polyglot')
+        self.assertContains(response, 'women rule the world')
+
+
+class CommentApproveRedirectViewTest(TestCase):
+    def test_redirect_comment_url(self):
+        response = create_comment(self.client)
+        self.assertEqual(response.status_code, 200)
