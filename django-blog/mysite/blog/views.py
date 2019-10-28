@@ -63,8 +63,8 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        posts = Post.objects.filter(
-            published_date__isnull=True).order_by('-created_date')
+        posts = Post.objects.filter(published_date__isnull=True)
+        .order_by('-created_date')
         return posts
 
 
