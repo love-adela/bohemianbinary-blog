@@ -123,7 +123,7 @@ class PostModelTests(TestCase):
         """
         Image.objects.create(file='img/pig1.jpg')
         i1 = Image.objects.first()
-        self.assertIn(str(i1), '/Users/adela/workspace/bohemian-binary/django-blog/mysite/media/img/pig1.jpg')
+        self.assertIn('django-blog/mysite/media/img/pig1.jpg', str(i1))
         Tag.objects.create(title='java')
         t1 = Tag.objects.first()
         self.assertIn(str(t1), 'java')
