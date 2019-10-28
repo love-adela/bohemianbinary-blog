@@ -187,8 +187,7 @@ class PostCreateViewTests(TestCase):
             'text': '음하하하 이것은 테스트입니다.'
         }
         response = self.client.post(
-            reverse('post_new'), form_data, follow=True
-            )
+            reverse('post_new'), form_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['post'].title, form_data['title'])
 
@@ -201,16 +200,14 @@ class PostUpdateViewTests(TestCase):
             'text': '음하하하 이것은 테스트입니다.'
         }
         response = self.client.post(
-            reverse('post_new'), form_data, follow=True
-            )
+            reverse('post_new'), form_data, follow=True)
         uuid = response.context['post'].uuid
         form_data = {
             'title': '수정 test용 title',
             'text': '음하하하 이것은 수정 테스트입니다.'
         }
         response = self.client.post(
-            reverse('post_edit', args=(uuid,)), form_data, follow=True
-            )
+            reverse('post_edit', args=(uuid,)), form_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['post'].title, form_data['title'])
 
@@ -246,8 +243,7 @@ class DraftIndexViewTests(TestCase):
 
         # publish
         response = self.client.get(
-            reverse('post_publish', args=(uuid,)), follow=True
-            )  # Redirect 되기 때문에
+            reverse('post_publish', args=(uuid,)), follow=True)  # Redirect 되기 때문에
         self.assertEqual(response.status_code, 200)
         self.assertEqual(post.title, form_data['title'])
         self.assertEqual(post.text, form_data['text'])
