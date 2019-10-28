@@ -300,7 +300,7 @@ class CommentApproveRedirectViewTest(TestCase):
         comment.approve()
         self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse('comment_approve', args=(comment.pk,)), follow=True)
-        
+
 
 class CommentRemoveRedirectViewTest(TestCase):
     def test_is_comment_removed(self):
@@ -314,10 +314,11 @@ class CommentRemoveRedirectViewTest(TestCase):
 
 class TagIndexViewTest(TestCase):
     def test_is_tag(self):
-        pass
-        # tag = 
-        # response = self.client.get(reverse('tag_list'), args=(tag.))
-        # logging.error(response)
-        # self.assertEqual(response.status_code, 200)
-        # logging.error(response.context['tag'].title)
-        # self.assertQuerysetEqual(response.context['tag'], [])
+        post = create_post()
+        tag = Tag.objects.create(title='java')
+        post.tags.add(tag)
+        post.save()
+        response = self.client.get(reverse('tag_list', args=('java',)))
+        self.assertEqual(response.status_code, 200)
+        logging.error(response.context['tag'].title)
+        self.assertEqual(response.context['tag'].title, 'java') 
