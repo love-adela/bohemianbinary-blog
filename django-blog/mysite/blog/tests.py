@@ -12,8 +12,8 @@ import logging
 
 class ImageModelTests(TestCase):
     def test_is_image(self):
-        Image.objects.create(file='img/pig1.jpg')
-        i1 = Image.objects.first()
+        i1 = Image.objects.create(file='img/pig1.jpg')
+        i1.save()
         image = upload_to(i1, 'img/pig1.jpg')
         self.assertIn('img/', image)
         self.assertIn('.jpg', image)
@@ -42,7 +42,7 @@ def create_user():
     author = User.objects.create(username='testuser')
     author.set_password('1234')
     author.save()
-    return User.objects.first()
+    return author
 
     # username 에 admin이 들어가있지 않는지 validation
     # username 형식도 테스트 - URL에 쓸 수 있는 형식으로 이메일에 '/'가 들어가야하는지, username이 url의 일부로 쓰이는지.
