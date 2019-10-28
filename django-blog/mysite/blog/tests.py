@@ -28,8 +28,8 @@ class ImageModelTests(TestCase):
 class TagModelTests(TestCase):
     # Tag 모델 가져오는지 테스트 .. 현재(2019-10-02) 모델 중 가장 작은 단위기 때문에.
     def test_with_title(self):
-        Tag.objects.create(title='java')
-        t1 = Tag.objects.first()
+        t1 = Tag.objects.create(title='java')
+        t1.save()
         self.assertEquals(t1.title, 'java')
         # 대소문자 통과되는지, 공백들어갈건지, '()', '#'가 들어가는지 model 코드에서 validation.
         self.assertNotEquals(t1.title, 'python3')
