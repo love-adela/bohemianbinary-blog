@@ -64,27 +64,6 @@ def create_post(title=None, text=None, days=None):
     return post
 
 
-def create_comment(client):
-    create_user_and_sign_in(client)
-    post_form_data = {
-        'title': 'dazac',
-        'text': 'This is a sample post content for comment test.'
-    }
-    response = client.post(
-        reverse('post_new'), post_form_data, follow=True
-    )
-
-    uuid = response.context['post'].uuid
-    comment_form_data = {
-        'author': 'polyglot',
-        'text': 'women rule the world'
-    }
-    response = client.post(
-        reverse('add_comment_to_post', args=(uuid,)), comment_form_data, follow=True
-    )
-    return response
-
-
 class PostModelTests(TestCase):
     # method 테스트
     def test_publish(self):
@@ -160,6 +139,28 @@ def create_user_and_sign_in(client):
         'password': '1234'
     }
     response = client.post('/accounts/login/', credential, follow=True)
+    return response
+
+
+def create_comment(client):
+    create_user_and_sign_in(client)
+    post_form_data = {
+        'title': 'dazac',
+        'text': 'This is a sample post content for comment test.'
+    }
+    response = client.post(
+        reverse('post_new'), post_form_data, follow=True
+    )
+
+    uuid = response.context['post'].uuid
+    comment_form_data = {
+        'author': 'polyglot',
+        'text': 'women rule the world'
+    }
+    response = client.post(
+        reverse('add_comment_to_post', args=(uuid,)), comment_form_data, follow=True
+    )
+    return response
 
 
 # TODO: Login 해주는 method 별도로 만들고
@@ -297,6 +298,30 @@ class CommentCreateViewTest(TestCase):
 
 
 class CommentApproveRedirectViewTest(TestCase):
-    def test_redirect_comment_url(self):
+    def test_is_comment_approved(self):
         response = create_comment(self.client)
+        comment = Comment.objects.first()
+        comment.approve()
         self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse('comment_approve', args=(comment.pk,)), follow=True)
+        
+
+class CommentRemoveRedirectViewTest(TestCase):
+    def test_is_comment_removed(self):
+        response = create_comment(self.client)
+        # logging.error(response.context)
+        comment = Comment.objects.first()
+        # logging.error(comment.pk) # 왜 pk가 3?
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse('comment_remove', args=(comment.pk,)), follow=True)
+
+
+class TagIndexViewTest(TestCase):
+    def test_is_tag(self):
+        pass
+        # tag = 
+        # response = self.client.get(reverse('tag_list'), args=(tag.))
+        # logging.error(response)
+        # self.assertEqual(response.status_code, 200)
+        # logging.error(response.context['tag'].title)
+        # self.assertQuerysetEqual(response.context['tag'], [])
