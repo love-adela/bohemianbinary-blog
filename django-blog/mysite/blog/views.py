@@ -15,7 +15,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         posts = Post.objects.filter(
-            published_date__lte=timezone.now()).order_by('published_date')
+            published_date__lte=timezone.now()).order_by('-published_date')
         return posts
 
 
@@ -55,7 +55,6 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
 
     def get_object(self):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
-        logging.error(post)
         return post
 
 
@@ -64,8 +63,8 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        posts = Post.objects.filter(
-            published_date__isnull=True).order_by('created_date')
+        posts = Post.objects.filter(published_date__isnull=True) \
+                .order_by('-created_date')
         return posts
 
 
