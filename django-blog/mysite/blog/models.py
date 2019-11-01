@@ -72,7 +72,9 @@ class Tag(models.Model):
 
 class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE,)
+    last_contributor = models.ForeignKey('auth.User', on_delete=models.CASCADE,
+                                        null=True, related_name='last_contributor')
     title = models.CharField(max_length=200, help_text='제목을 입력하세요.')
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
     # Here are Markdown Parsers
@@ -117,6 +119,17 @@ class Comment(models.Model):
     def approve(self):
         self.approved_comment = True
         self.save()
+
+    def __str__(self):
+        return self.text
+
+
+class Revision(models.Model):
+    post = models.ForeignKey('blog.Post',
+                            on_delete=models.CASCADE, related_name='revisions')
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    text = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.text
