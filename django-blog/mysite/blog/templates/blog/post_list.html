@@ -9,6 +9,7 @@
             <hr>
             <div class="post-lst">
                 <h2><a href="{% url 'post_detail' post_id=post.uuid %}">{{ post.title }}</a></h2>
+                <a href="{% url 'revision_list' post_id=post.uuid %}"><button>수정 내역</button></a>
                 <p>published: {{ post.published_date }}</p>
                 <p>
                     {{ post.formatted_text | safe | linebreaksbr }}
