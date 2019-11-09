@@ -4,14 +4,14 @@
 
 {% block content %}
     <h3>Revisions</h3>
+    <div class="revision-list">
     {% for revision in revisions %}
-        <div class="revision-list">
-            <hr>
-            <div class="revision-post">
-                <a href="#">{{ revision.text }}</a>
-                <p>{{ revision.author }}</p>
-                <p>{{ revision.created_date }}</p>
-            </div>
+        <hr>
+        <div class="revision-post">
+            <a href="{% url 'revision_detail' %}">{{ revision.text }}</a>
+            <p>{{ revision.author }}</p>
+            <p>{{ revision.created_date }}</p>
         </div>
     {% endfor %}
+    </div>  
 {% endblock %}
