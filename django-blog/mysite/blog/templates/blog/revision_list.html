@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+{% block title %}Revision{% endblock %}
+{% load static %}
+
+{% block content %}
+    <h3>Revisions</h3>
+    {% for revision in revisions %}
+        <div class="revision-list">
+            <hr>
+            <div class="revision-post">
+                <a href="#">{{ revision.text }}</a>
+                <p>{{ revision.author }}</p>
+                <p>{{ revision.created_date }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
