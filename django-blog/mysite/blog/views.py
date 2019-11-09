@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import Post, Tag, Comment
+from .models import Post, Tag, Comment, Revision
 from .forms import PostForm, CommentForm
 import logging
 
@@ -38,6 +38,11 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         post.save()
+        revision = Revision.objects.create(post=post,
+                                           author=post.author,
+                                           text=post.text,
+                                           created_date=post.created_date)
+
         return redirect('post_detail', post_id=post.uuid)
 
 
@@ -51,10 +56,23 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
         post.author = self.request.user
         # TODO : self.request.user != author일 경우 에러 발생시키기
         post.save()
+        last_revision = Revision.objects.filter(post_id=post.pk) \
+                                .order_by('-revision_id').first()
+        new_revision_id = last_revision.revision_id + 1
+        Revision.objects.create(revision_id=new_revision_id,
+                                post=post,
+                                author=post.author,
+                                text=post.text,
+                                created_date=post.created_date)
         return redirect('post_detail', post_id=post.uuid)
 
     def get_object(self):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        if len(post.revisions.all()) == 0:
+            Revision.objects.create(post=post,
+                                    author=post.author,
+                                    text=post.text,
+                                    created_date=post.created_date)
         return post
 
 
@@ -63,7 +81,7 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        posts = Post.objects.filter(published_date__isnull=True) \
+        posts = Post.objects.filter(created_date__isnull=True) \
                 .order_by('-created_date')
         return posts
 
@@ -80,11 +98,20 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
 
 
 class PostRemoveRedirectView(LoginRequiredMixin, generic.base.RedirectView):
-
     def get_redirect_url(self, *args, **kwargs):
         post = Post.objects.filter(uuid=kwargs.get('post_id')).first()
         post.delete()
         return reverse_lazy('post_list')
+
+
+class RevisionIndexView(generic.ListView):
+    template_name = 'blog/revision_list.html'
+    context_object_name = 'revisions'
+
+    def get_queryset(self):
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        revisions = Revision.objects.filter(post=post)
+        return revisions
 
 
 class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
