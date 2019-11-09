@@ -125,6 +125,7 @@ class Comment(models.Model):
 
 
 class Revision(models.Model):
+    revision_id = models.IntegerField(default=1)
     post = models.ForeignKey('blog.Post',
                             on_delete=models.CASCADE, related_name='revisions')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
