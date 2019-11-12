@@ -128,6 +128,7 @@ class Revision(models.Model):
     revision_id = models.IntegerField(default=1)
     post = models.ForeignKey('blog.Post',
                             on_delete=models.CASCADE, related_name='revisions')
+    title = models.CharField(max_length=200, help_text='제목을 입력하세요', null=True) 
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
