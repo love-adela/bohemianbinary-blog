@@ -63,7 +63,7 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
                                 post=post,
                                 author=post.author,
                                 text=post.text,
-                                created_date=post.created_date)
+                                created_date=timezone.now())
         return redirect('post_detail', post_id=post.uuid)
 
     def get_object(self):
@@ -110,8 +110,23 @@ class RevisionIndexView(generic.ListView):
 
     def get_queryset(self):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
-        revisions = Revision.objects.filter(post=post)
+        revisions = Revision.objects.filter(post=post).order_by('-created_date')
         return revisions
+    
+    
+class RevisionDetailView(generic.DetailView):
+    model = Revision
+    template_name = 'blog/revision_detail.html'
+    context_object_name = 'revisions'
+
+    def get_object(self):
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        current = Revision.objects.filter(revision_id=self.kwargs.get('revision_id')).first()
+        previous = Revision.objects.filter(post=post).filter(created_date__lte=current.created_date).order_by('-created_date').first()
+        logging.error(previous)
+        logging.error(current)
+        
+        return current 
 
 
 class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):

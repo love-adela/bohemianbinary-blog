@@ -8,7 +8,10 @@
     {% for revision in revisions %}
         <hr>
         <div class="revision-post">
-            <a href="{% url 'revision_detail' %}">{{ revision.text }}</a>
+            <a href="{% url 'revision_detail' post_id=revision.post.uuid revision_id=revision.revision_id %}">
+                {{ revision.title }}
+            </a>
+            <p>{{ revision.text }}</p>
             <p>{{ revision.author }}</p>
             <p>{{ revision.created_date }}</p>
         </div>
