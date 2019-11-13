@@ -60,6 +60,7 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
                                 .order_by('-revision_id').first()
         new_revision_id = last_revision.revision_id + 1
         Revision.objects.create(revision_id=new_revision_id,
+                                title=post.title,
                                 post=post,
                                 author=post.author,
                                 text=post.text,
