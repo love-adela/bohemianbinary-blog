@@ -38,7 +38,8 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         post.save()
-        revision = Revision.objects.create(post=post,
+        revision = Revision.objects.create(title=post.title,
+                                           post=post,
                                            author=post.author,
                                            text=post.text,
                                            created_date=post.created_date)
