@@ -10,15 +10,6 @@
         <h2>{{ current.title }}</h2>
         <p>{{ current.author }}</p>
         <p>{{ current.created_date }}</p>
-        <p>{{ current.text }}</p>
-    </div>
-    <div class="original-post">
-        {% if previous %}
-            <!-- TODO: previous가 있을 때만 출력되도록 하자. -->
-            <h2>{{ previous.title }}</h2>
-            <p>{{ previous.author }}</p>
-            <p>{{ previous.created_date }}</p>
-            <p>{{ previous.text }}</p>
-        {% endif %}
+        <p>{{ diff | linebreaksbr }}</p>
     </div>
 {% endblock %}

@@ -7,6 +7,7 @@ from django.views import generic
 from .models import Post, Tag, Comment, Revision
 from .forms import PostForm, CommentForm
 import logging
+from difflib import Differ
 
 
 class IndexView(generic.ListView):
@@ -114,26 +115,35 @@ class RevisionIndexView(generic.ListView):
         post = Post.objects.filter(                                                                                                                                                                                                                                                                                                                                 uuid=self.kwargs.get('post_id')).first()
         revisions = Revision.objects.filter(post=post).order_by('-created_date')
         return revisions
-    
-    
+
+
+def diff(original_text, current_text):
+    original = original_text.splitlines(keepends=True)
+    current = current_text.splitlines(keepends=True)
+    d = Differ()
+    return '\n'.join(d.compare(original, current))
+
+
 class RevisionDetailView(generic.DetailView):
     model = Revision
     template_name = 'blog/revision_detail.html'
     context_object_name = 'current'
 
+    
     def get_object(self):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         post_revisions = Revision.objects.filter(post=post)
         current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
         self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
+        # TODO: 맨 첫번째 글에서는 모든 텍스트가 +로 뜰 수 있게 수정
+        self.diff = diff(self.previous.text, current.text)
         return current
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["previous"] = self.previous
-        logging.error(context)
+        context['previous'] = self.previous
+        context['diff'] = self.diff
         return context
-    
 
 
 class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
