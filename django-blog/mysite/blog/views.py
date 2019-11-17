@@ -125,7 +125,7 @@ class RevisionDetailView(generic.DetailView):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         post_revisions = Revision.objects.filter(post=post)
         current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
-        self.previous = post_revisions.filter(created_date__lte=current.created_date).filter().order_by('-created_date').first()
+        self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
         return current
     
     def get_context_data(self, **kwargs):
