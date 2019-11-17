@@ -1,9 +1,15 @@
 {% extends 'blog/base.html' %}
-{% block title %}Revision: 변경내역{% endblock %}
+{% block title %}Revision: 상세 변경내역{% endblock %}
 {% load static %}
 
 {% block content %}
-    <div class="original-post">
+    <div class="header">
+        <h2>{{ current.title }}</h2>
+        <p>{{ current.author }}</p>
+        <p>{{ current.created_date }}</p>
+        <p>{{ current.text }}</p>
+    </div>
+    <div class="current-post">
     </div>
     <div class="changed-post">
     </div>

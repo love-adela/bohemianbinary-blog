@@ -83,7 +83,7 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        posts = Post.objects.filter(created_date__isnull=True) \
+        posts = Post.objects.filter(draft=True) \
                 .order_by('-created_date')
         return posts
 
@@ -111,7 +111,7 @@ class RevisionIndexView(generic.ListView):
     context_object_name = 'revisions'
 
     def get_queryset(self):
-        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        post = Post.objects.filter(                                                                                                                                                                                                                                                                                                                                 uuid=self.kwargs.get('post_id')).first()
         revisions = Revision.objects.filter(post=post).order_by('-created_date')
         return revisions
     
@@ -119,16 +119,21 @@ class RevisionIndexView(generic.ListView):
 class RevisionDetailView(generic.DetailView):
     model = Revision
     template_name = 'blog/revision_detail.html'
-    context_object_name = 'revisions'
+    context_object_name = 'current'
 
     def get_object(self):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
-        current = Revision.objects.filter(revision_id=self.kwargs.get('revision_id')).first()
-        previous = Revision.objects.filter(post=post).filter(created_date__lte=current.created_date).order_by('-created_date').first()
-        logging.error(previous)
-        logging.error(current)
-        
-        return current 
+        post_revisions = Revision.objects.filter(post=post)
+        current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
+        self.previous = post_revisions.filter(created_date__lte=current.created_date).filter().order_by('-created_date').first()
+        return current
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["previous"] = self.previous
+        logging.error(context)
+        return context
+    
 
 
 class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
