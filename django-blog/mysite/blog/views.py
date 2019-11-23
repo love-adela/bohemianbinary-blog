@@ -7,6 +7,7 @@ from django.views import generic
 from .models import Post, Tag, Comment, Revision
 from .forms import PostForm, CommentForm
 import logging
+from difflib import Differ
 
 
 class IndexView(generic.ListView):
@@ -38,7 +39,8 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         post.save()
-        revision = Revision.objects.create(post=post,
+        revision = Revision.objects.create(title=post.title,
+                                           post=post,
                                            author=post.author,
                                            text=post.text,
                                            created_date=post.created_date)
@@ -60,10 +62,11 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
                                 .order_by('-revision_id').first()
         new_revision_id = last_revision.revision_id + 1
         Revision.objects.create(revision_id=new_revision_id,
+                                title=post.title,
                                 post=post,
                                 author=post.author,
                                 text=post.text,
-                                created_date=post.created_date)
+                                created_date=timezone.now())
         return redirect('post_detail', post_id=post.uuid)
 
     def get_object(self):
@@ -81,7 +84,7 @@ class DraftIndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        posts = Post.objects.filter(created_date__isnull=True) \
+        posts = Post.objects.filter(draft=True) \
                 .order_by('-created_date')
         return posts
 
@@ -109,9 +112,38 @@ class RevisionIndexView(generic.ListView):
     context_object_name = 'revisions'
 
     def get_queryset(self):
-        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
-        revisions = Revision.objects.filter(post=post)
+        post = Post.objects.filter(                                                                                                                                                                                                                                                                                                                                 uuid=self.kwargs.get('post_id')).first()
+        revisions = Revision.objects.filter(post=post).order_by('-created_date')
         return revisions
+
+
+def diff(original_text, current_text):
+    original = original_text.splitlines(keepends=True)
+    current = current_text.splitlines(keepends=True)
+    d = Differ()
+    return '\n'.join(d.compare(original, current))
+
+
+class RevisionDetailView(generic.DetailView):
+    model = Revision
+    template_name = 'blog/revision_detail.html'
+    context_object_name = 'current'
+
+    
+    def get_object(self):
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+        post_revisions = Revision.objects.filter(post=post)
+        current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
+        self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
+        previous_text = self.previous.text if self.previous is not None else ''
+        self.diff = diff(previous_text, current.text)
+        return current
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['previous'] = self.previous
+        context['diff'] = self.diff
+        return context
 
 
 class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):

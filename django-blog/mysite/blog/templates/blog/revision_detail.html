@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+{% block title %}Revision: 상세 변경내역{% endblock %}
+{% load static %}
+
+{% block content %}
+    <div class="header">
+        <h1>지금 글의 변동사항은 여기 있돠!</h1>
+    </div>
+    <div class="current-post">
+        <h2>{{ current.title }}</h2>
+        <p>{{ current.author }}</p>
+        <p>{{ current.created_date }}</p>
+        <p>{{ diff | linebreaksbr }}</p>
+    </div>
+{% endblock %}
