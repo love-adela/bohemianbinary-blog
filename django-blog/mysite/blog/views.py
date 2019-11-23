@@ -135,8 +135,11 @@ class RevisionDetailView(generic.DetailView):
         post_revisions = Revision.objects.filter(post=post)
         current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
         self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
-        # TODO: 맨 첫번째 글에서는 모든 텍스트가 +로 뜰 수 있게 수정
-        self.diff = diff(self.previous.text, current.text)
+        
+        if self.previous is None:
+            self.diff = diff('', current.text)
+        else:
+            self.diff = diff(self.previous.text, current.text)
         return current
     
     def get_context_data(self, **kwargs):
