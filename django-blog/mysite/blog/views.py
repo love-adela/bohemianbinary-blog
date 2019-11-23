@@ -135,11 +135,8 @@ class RevisionDetailView(generic.DetailView):
         post_revisions = Revision.objects.filter(post=post)
         current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
         self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
-        
-        if self.previous is None:
-            self.diff = diff('', current.text)
-        else:
-            self.diff = diff(self.previous.text, current.text)
+        previous_text = self.previous.text if self.previous is not None else ''
+        self.diff = diff(previous_text, current.text)
         return current
     
     def get_context_data(self, **kwargs):
