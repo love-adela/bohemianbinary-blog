@@ -338,4 +338,3 @@ class TagIndexViewTest(TestCase):
 #         response = self.client.get(
 #             reverse('revision_detail', args=(revision.uuid,))
 #         )
-        
