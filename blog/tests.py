@@ -226,6 +226,7 @@ class DraftIndexViewTests(TestCase):
         create_user_and_sign_in(self.client)
         response = self.client.get(reverse('post_draft_list'))
         self.assertEqual(response.status_code, 200)
+        # draft에 글 없는지 검사
         self.assertQuerysetEqual(response.context['posts'], [])
 
     def test_is_draft_when_create_and_edit_post(self):
@@ -236,6 +237,8 @@ class DraftIndexViewTests(TestCase):
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
+        
+        # draft에 글 있는지 검사 && post_list에는 없는지 검사
         response = self.client.get(reverse('post_draft_list'))
         post = response.context['posts'].first()
         self.assertEqual(post.draft, True)
@@ -278,6 +281,11 @@ class DraftIndexViewTests(TestCase):
         draft = response.context['posts'].first()
         self.assertEqual(draft, None)
 
+        response = self.client.get(reverse('post_list'))
+        self.assertEqual(response.status_code, 200)
+        post = response.context['posts'].first()
+        self.assertEqual(post.title, form_data['title'])
+        self.assertEqual(post.text, form_data['text'])
 
 
 class PostRemoveRedirectViewTests(TestCase):
@@ -325,9 +333,7 @@ class CommentApproveRedirectViewTest(TestCase):
 class CommentRemoveRedirectViewTest(TestCase):
     def test_is_comment_removed(self):
         response = create_comment(self.client)
-        # logging.error(response.context)
         comment = Comment.objects.first()
-        # logging.error(comment.pk) # 왜 pk가 3?
         self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse('comment_remove', args=(comment.pk,)), follow=True)
 
@@ -340,5 +346,4 @@ class TagIndexViewTest(TestCase):
         post.save()
         response = self.client.get(reverse('tag_list', args=('java',)))
         self.assertEqual(response.status_code, 200)
-        logging.error(response.context['tag'].title)
         self.assertEqual(response.context['tag'].title, 'java') 
