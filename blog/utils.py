@@ -1,9 +1,10 @@
-# import houdini
+#import houdini
 import misaka, hoedown, mistune
 import mimetypes
 import os
 import re
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import filesizeformat
 from django.utils.deconstruct import deconstructible
@@ -46,16 +47,16 @@ class MarkdownRenderer:
         return html
 
 
-class HighlighterRenderer(misaka.HtmlRenderer):
-    def blockcode(self, text, lang):
-        try:
-            lexer = get_lexer_by_name(lang, stripall=True)
-        except ClassNotFound:
-            lexer = None
-        if lexer:
-            formatter = HtmlFormatter(cssclass="highlight")
-            return highlight(text, lexer, formatter)
-        return f'\n<pre><code>{houdini.escape_html(text.strip())}</code></pre>\n'
+# class HighlighterRenderer(misaka.HtmlRenderer):
+#     def blockcode(self, text, lang):
+#         try:
+#             lexer = get_lexer_by_name(lang, stripall=True)
+#         except ClassNotFound:
+#             lexer = None
+#         if lexer:
+#             formatter = HtmlFormatter(cssclass="highlight")
+#             return highlight(text, lexer, formatter)
+#         return f'\n<pre><code>{houdini.escape_html(text.strip())}</code></pre>\n'
 
 
 class HighlightRenderer(mistune.Renderer):
@@ -79,11 +80,11 @@ class BaseFormatter:
         pass
 
 
-class FormatterMisaka(BaseFormatter):
-    def format(self, text):
-        renderer = HighlighterRenderer()
-        markdown = misaka.Markdown(renderer, extensions=('fenced-code',))
-        return markdown(text)
+# class FormatterMisaka(BaseFormatter):
+#     def format(self, text):
+#         renderer = HighlighterRenderer()
+#         markdown = misaka.Markdown(renderer, extensions=('fenced-code',))
+#         return markdown(text)
 
 
 # class FormatterHoedown(BaseFormatter):

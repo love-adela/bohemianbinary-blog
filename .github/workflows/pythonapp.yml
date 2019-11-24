@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
-    - name: Set up MySql stuffs.
+    - name: Set up MySql stuff.
       run: |
         sudo apt-get update
         sudo apt-get install libmysqlclient-dev
@@ -35,5 +35,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Django test
       run: |
-        python manage.py migrate
-        python manage.py test
+        python manage.py migrate --setting=mysite.settings.unittest
+        python manage.py test --setting=mysite.settings.unittest
