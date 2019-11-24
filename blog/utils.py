@@ -4,6 +4,7 @@ import mimetypes
 import os
 import re
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import filesizeformat
 from django.utils.deconstruct import deconstructible
