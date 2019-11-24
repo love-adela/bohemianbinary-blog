@@ -122,6 +122,8 @@ class PostIndexViewTests(TestCase):
 
 class PostDetailViewTests(TestCase):
     def test_is_post(self):
+        """
+        """
         post = create_post(title='테스트 포스트 1.')
         post = Post.objects.filter(uuid=post.uuid).first()
         response = self.client.get(
@@ -190,7 +192,7 @@ class PostCreateViewTests(TestCase):
 
         # Draft 글 있는지 검사
         self.assertEqual(response.context['post'].draft, True)
-    
+
 
 class PostUpdateViewTests(TestCase):
     def test_is_form_valid(self):
@@ -201,7 +203,7 @@ class PostUpdateViewTests(TestCase):
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
-        
+
         post_uuid=response.context['post'].uuid
         post = Post.objects.filter(uuid=post_uuid).first()
         response = self.client.get(
@@ -230,7 +232,7 @@ class DraftIndexViewTests(TestCase):
         create_user_and_sign_in(self.client)
         form_data = {
             'title': 'draft test용 title',
-            'text': '음하하하 이것은 draft 테스트입니다.', 
+            'text': '음하하하 이것은 draft 테스트입니다.',
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
@@ -258,7 +260,7 @@ class DraftIndexViewTests(TestCase):
         form_data = {
             'title': 'draft test용 타이틀입니다. 플스 타이틀 아님.',
             'text': '여기는 테라로사. 건조하다. 춥고.'
-        } 
+        }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
         uuid = response.context['post'].uuid
@@ -275,7 +277,8 @@ class DraftIndexViewTests(TestCase):
         response = self.client.get(reverse('post_draft_list'))
         draft = response.context['posts'].first()
         self.assertEqual(draft, None)
-        
+
+
 
 class PostRemoveRedirectViewTests(TestCase):
     def test_delete_post(self):
@@ -322,7 +325,9 @@ class CommentApproveRedirectViewTest(TestCase):
 class CommentRemoveRedirectViewTest(TestCase):
     def test_is_comment_removed(self):
         response = create_comment(self.client)
+        # logging.error(response.context)
         comment = Comment.objects.first()
+        # logging.error(comment.pk) # 왜 pk가 3?
         self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse('comment_remove', args=(comment.pk,)), follow=True)
 
@@ -335,4 +340,5 @@ class TagIndexViewTest(TestCase):
         post.save()
         response = self.client.get(reverse('tag_list', args=('java',)))
         self.assertEqual(response.status_code, 200)
+        logging.error(response.context['tag'].title)
         self.assertEqual(response.context['tag'].title, 'java') 
