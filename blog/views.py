@@ -38,12 +38,14 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.author = self.request.user
+        post.draft = True
         post.save()
         revision = Revision.objects.create(title=post.title,
                                            post=post,
                                            author=post.author,
                                            text=post.text,
-                                           created_date=post.created_date)
+                                           created_date=post.created_date,
+                                           )
 
         return redirect('post_detail', post_id=post.uuid)
 
@@ -61,6 +63,7 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
         last_revision = Revision.objects.filter(post_id=post.pk) \
                                 .order_by('-revision_id').first()
         new_revision_id = last_revision.revision_id + 1
+        post.draft = True
         Revision.objects.create(revision_id=new_revision_id,
                                 title=post.title,
                                 post=post,
@@ -96,6 +99,7 @@ class PostPublishRedriectView(LoginRequiredMixin, generic.base.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         post = Post.objects.filter(uuid=kwargs.get('post_id')).first()
+        post.draft = False
         post.publish()
         return reverse_lazy('post_detail', args=(post.uuid,))
 
@@ -112,7 +116,7 @@ class RevisionIndexView(generic.ListView):
     context_object_name = 'revisions'
 
     def get_queryset(self):
-        post = Post.objects.filter(                                                                                                                                                                                                                                                                                                                                 uuid=self.kwargs.get('post_id')).first()
+        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         revisions = Revision.objects.filter(post=post).order_by('-created_date')
         return revisions
 

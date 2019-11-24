@@ -216,31 +216,36 @@ class DraftIndexViewTests(TestCase):
         create_user_and_sign_in(self.client)
         response = self.client.get(reverse('post_draft_list'))
         self.assertEqual(response.status_code, 200)
-
         # draft에 글 없는지 검사
         self.assertQuerysetEqual(response.context['posts'], [])
 
         # draft 글 생성
         form_data = {
             'title': 'draft test용 title',
-            'text': '음하하하 이것은 draft 테스트입니다.'
+            'text': '음하하하 이것은 draft 테스트입니다.', 
         }
         response = self.client.post(
-            reverse('post_new'), form_data, follow=True
-        )
-        # client = Client()
+            reverse('post_new'), form_data, follow=True)
+        
         # draft에 글 있는지 검사 && post_list에는 없는지 검사
         response = self.client.get(reverse('post_draft_list'))
         post = response.context['posts'].first()
         self.assertEqual(post.title, form_data['title'])
         self.assertEqual(post.text, form_data['text'])
-        uuid = post.uuid
 
         response = self.client.get(reverse('post_list'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['posts'], [])
 
         # publish
+        form_data = {
+            'title': 'draft test용 title',
+            'text': '음하하하 이것은 draft 테스트입니다.', 
+        }
+        response = self.client.get(
+            reverse('post_detail', args=(post.uuid,)))
+        
+        uuid = response.context['post'].uuid
         response = self.client.get(
             reverse('post_publish', args=(uuid,)), follow=True)  # Redirect 되기 때문에
         self.assertEqual(response.status_code, 200)
@@ -304,9 +309,7 @@ class CommentApproveRedirectViewTest(TestCase):
 class CommentRemoveRedirectViewTest(TestCase):
     def test_is_comment_removed(self):
         response = create_comment(self.client)
-        # logging.error(response.context)
         comment = Comment.objects.first()
-        # logging.error(comment.pk) # 왜 pk가 3?
         self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse('comment_remove', args=(comment.pk,)), follow=True)
 
@@ -319,5 +322,20 @@ class TagIndexViewTest(TestCase):
         post.save()
         response = self.client.get(reverse('tag_list', args=('java',)))
         self.assertEqual(response.status_code, 200)
-        logging.error(response.context['tag'].title)
         self.assertEqual(response.context['tag'].title, 'java') 
+
+# class RevisionIndexView(TestCase):
+#     def test_is_revision(self):
+#         response = self.client.get(reverse('revision_list'))
+#         self.assertEqual(response.status_code, 200)
+#         self.assertQuerysetEqual(response.context['posts'], [])
+
+
+# class RevisionDetailView(TestCase):
+#     def test_is_revision(self):
+#         revision = create_post(title='lambda island')
+#         revision = Revision.objects.filter(uuid=post.uuid).first()
+#         response = self.client.get(
+#             reverse('revision_detail', args=(revision.uuid,))
+#         )
+        
