@@ -4,7 +4,7 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
-from .models import Image, Tag, Post, Comment, upload_to
+from .models import Image, Tag, Post, Revision, Comment, upload_to
 
 from .utils import FormatterMistune
 import logging
@@ -102,7 +102,7 @@ class PostModelTests(TestCase):
         """
         Image.objects.create(file='img/pig1.jpg')
         i1 = Image.objects.first()
-        self.assertIn('django-blog/mysite/media/img/pig1.jpg', str(i1))
+        self.assertIn('media/img/pig1.jpg', str(i1))
         Tag.objects.create(title='java')
         t1 = Tag.objects.first()
         self.assertIn(str(t1), 'java')
@@ -163,7 +163,6 @@ def create_comment(client):
     return response
 
 
-# TODO: Login 해주는 method 별도로 만들고
 class LoginTestCase(TestCase):
     def test_login(self):
         create_user()
