@@ -13,5 +13,5 @@ class ImageAdmin(admin.StackedInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': ['title']}), )
+     fieldsets = ((None, {'fields': ['title']}), )
     inlines = [ImageAdmin, ]
