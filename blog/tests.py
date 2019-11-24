@@ -4,7 +4,7 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
-from .models import Image, Tag, Post, Revision, Comment, upload_to
+from .models import Image, Tag, Post, Comment, upload_to
 
 from .utils import FormatterMistune
 import logging
