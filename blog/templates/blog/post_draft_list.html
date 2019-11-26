@@ -3,8 +3,8 @@
 {% block content %}
     {% for post in posts %}
         <div class="post">
-            <h1><a href="{% url 'post_detail' post_id=post.uuid %}">{{ post.title }}</a></h1>
             <p class="date">created: {{ post.created_date|date:'d-m-Y'}}</p>
+            <h1><a href="{% url 'post_detail' post_id=post.uuid %}">{{ post.title }}</a></h1>
             <p>{{ post.text|truncatechars:200 }}</p>
         </div>
     {% endfor %}
