@@ -323,19 +323,3 @@ class TagIndexViewTest(TestCase):
         response = self.client.get(reverse('tag_list', args=('java',)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['tag'].title, 'java') 
-
-# class RevisionIndexView(TestCase):
-#     def test_is_revision(self):
-#         response = self.client.get(reverse('revision_list'))
-#         self.assertEqual(response.status_code, 200)
-#         self.assertQuerysetEqual(response.context['posts'], [])
-
-
-# class RevisionDetailView(TestCase):
-#     def test_is_revision(self):
-#         revision = create_post(title='lambda island')
-#         revision = Revision.objects.filter(uuid=post.uuid).first()
-#         response = self.client.get(
-#             reverse('revision_detail', args=(revision.uuid,))
-#         )
-        
