@@ -122,8 +122,6 @@ class PostIndexViewTests(TestCase):
 
 class PostDetailViewTests(TestCase):
     def test_is_post(self):
-        """
-        """
         post = create_post(title='테스트 포스트 1.')
         post = Post.objects.filter(uuid=post.uuid).first()
         response = self.client.get(
@@ -190,6 +188,9 @@ class PostCreateViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['post'].title, form_data['title'])
 
+        # Draft 글 있는지 검사
+        self.assertEqual(response.context['post'].draft, True)
+    
 
 class PostUpdateViewTests(TestCase):
     def test_is_form_valid(self):
@@ -200,6 +201,13 @@ class PostUpdateViewTests(TestCase):
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
+        
+        post_uuid=response.context['post'].uuid
+        post = Post.objects.filter(uuid=post_uuid).first()
+        response = self.client.get(
+            reverse('post_edit', args=(post.uuid,)))
+        self.assertEqual(response.context['post'], post)
+
         uuid = response.context['post'].uuid
         form_data = {
             'title': '수정 test용 title',
