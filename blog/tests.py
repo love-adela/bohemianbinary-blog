@@ -220,57 +220,62 @@ class PostUpdateViewTests(TestCase):
 
 
 class DraftIndexViewTests(TestCase):
-    def test_is_draft(self):
+    def test_is_draft_when_create_post(self):
         create_user_and_sign_in(self.client)
         response = self.client.get(reverse('post_draft_list'))
         self.assertEqual(response.status_code, 200)
-        # draft에 글 없는지 검사
         self.assertQuerysetEqual(response.context['posts'], [])
 
-        # draft 글 생성
+    def test_is_draft_when_create_and_edit_post(self):
+        create_user_and_sign_in(self.client)
         form_data = {
             'title': 'draft test용 title',
             'text': '음하하하 이것은 draft 테스트입니다.', 
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
-        
-        # draft에 글 있는지 검사 && post_list에는 없는지 검사
         response = self.client.get(reverse('post_draft_list'))
         post = response.context['posts'].first()
-        self.assertEqual(post.title, form_data['title'])
-        self.assertEqual(post.text, form_data['text'])
+        self.assertEqual(post.draft, True)
 
-        response = self.client.get(reverse('post_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['posts'], [])
-
-        # publish
+    def test_is_not_draft_when_publish_post(self):
+        create_user_and_sign_in(self.client)
         form_data = {
             'title': 'draft test용 title',
-            'text': '음하하하 이것은 draft 테스트입니다.', 
+            'text': '음하하하 이것은 draft 테스트입니다.'
         }
-        response = self.client.get(
-            reverse('post_detail', args=(post.uuid,)))
-        
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True)
         uuid = response.context['post'].uuid
         response = self.client.get(
-            reverse('post_publish', args=(uuid,)), follow=True)  # Redirect 되기 때문에
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(post.title, form_data['title'])
-        self.assertEqual(post.text, form_data['text'])
-
-        # draft에는 글 없는지 검사 && post_list에는 있는지 검사
+            reverse('post_publish', args=(uuid,)), follow=True)
         response = self.client.get(reverse('post_draft_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['posts'], [])
+        draft = response.context['posts'].first()
+        self.assertEqual(draft, None)
 
-        response = self.client.get(reverse('post_list'))
-        self.assertEqual(response.status_code, 200)
-        post = response.context['posts'].first()
-        self.assertEqual(post.title, form_data['title'])
-        self.assertEqual(post.text, form_data['text'])
-
+    def test_is_not_draft_when_publish_and_edit(self):
+        create_user_and_sign_in(self.client)
+        form_data = {
+            'title': 'draft test용 타이틀입니다. 플스 타이틀 아님.',
+            'text': '여기는 테라로사. 건조하다. 춥고.'
+        } 
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True)
+        uuid = response.context['post'].uuid
+        response = self.client.get(
+            reverse('post_publish', args=(uuid,)), follow=True)
+        form_data = {
+            'title': '수정된 draft test용 타이틀',
+            'text': '여기는 테라로사. 건조하다. 춥고. 레모네이드를 시켰다. 얼어죽어도 아이슨가.'
+        }
+        response = self.client.post(
+            reverse('post_edit', args=(uuid,)), form_data, follow=True)
+        response = self.client.get(
+            reverse('post_publish', args=(uuid,)), follow=True)
+        response = self.client.get(reverse('post_draft_list'))
+        draft = response.context['posts'].first()
+        self.assertEqual(draft, None)
+        
 
 class PostRemoveRedirectViewTests(TestCase):
     def test_delete_post(self):
