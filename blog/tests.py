@@ -188,16 +188,9 @@ class PostCreateViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['post'].title, form_data['title'])
 
-<<<<<<< HEAD
-        # Draft 글 있는지 검사
-        self.assertEqual(response.context['post'].draft, True)
-
-||||||| merged common ancestors
-=======
         # Draft 글 있는지 검사
         self.assertEqual(response.context['post'].draft, True)
     
->>>>>>> Draft가 정상적으로 입력되고 지워지는지 테스트
 
 class PostUpdateViewTests(TestCase):
     def test_is_form_valid(self):
@@ -208,16 +201,6 @@ class PostUpdateViewTests(TestCase):
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
-<<<<<<< HEAD
-
-        post_uuid=response.context['post'].uuid
-        post = Post.objects.filter(uuid=post_uuid).first()
-        response = self.client.get(
-            reverse('post_edit', args=(post.uuid,)))
-        self.assertEqual(response.context['post'], post)
-
-||||||| merged common ancestors
-=======
         
         post_uuid=response.context['post'].uuid
         post = Post.objects.filter(uuid=post_uuid).first()
@@ -225,7 +208,6 @@ class PostUpdateViewTests(TestCase):
             reverse('post_edit', args=(post.uuid,)))
         self.assertEqual(response.context['post'], post)
 
->>>>>>> Draft가 정상적으로 입력되고 지워지는지 테스트
         uuid = response.context['post'].uuid
         form_data = {
             'title': '수정 test용 title',
@@ -242,19 +224,16 @@ class DraftIndexViewTests(TestCase):
         create_user_and_sign_in(self.client)
         response = self.client.get(reverse('post_draft_list'))
         self.assertEqual(response.status_code, 200)
-        # draft에 글 없는지 검사
         self.assertQuerysetEqual(response.context['posts'], [])
 
     def test_is_draft_when_create_and_edit_post(self):
         create_user_and_sign_in(self.client)
         form_data = {
             'title': 'draft test용 title',
-            'text': '음하하하 이것은 draft 테스트입니다.',
+            'text': '음하하하 이것은 draft 테스트입니다.'
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
-        
-        # draft에 글 있는지 검사 && post_list에는 없는지 검사
         response = self.client.get(reverse('post_draft_list'))
         post = response.context['posts'].first()
         self.assertEqual(post.draft, True)
@@ -297,12 +276,14 @@ class DraftIndexViewTests(TestCase):
         draft = response.context['posts'].first()
         self.assertEqual(draft, None)
 
+        draft = response.context['posts'].first()
+        self.assertEqual(draft, None)
+
         response = self.client.get(reverse('post_list'))
         self.assertEqual(response.status_code, 200)
         post = response.context['posts'].first()
         self.assertEqual(post.title, form_data['title'])
         self.assertEqual(post.text, form_data['text'])
-
 
 class PostRemoveRedirectViewTests(TestCase):
     def test_delete_post(self):
