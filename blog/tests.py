@@ -102,7 +102,7 @@ class PostModelTests(TestCase):
         """
         Image.objects.create(file='img/pig1.jpg')
         i1 = Image.objects.first()
-        self.assertIn('django-blog/mysite/media/img/pig1.jpg', str(i1))
+        self.assertIn('media/img/pig1.jpg', str(i1))
         Tag.objects.create(title='java')
         t1 = Tag.objects.first()
         self.assertIn(str(t1), 'java')
@@ -122,8 +122,6 @@ class PostIndexViewTests(TestCase):
 
 class PostDetailViewTests(TestCase):
     def test_is_post(self):
-        """
-        """
         post = create_post(title='테스트 포스트 1.')
         post = Post.objects.filter(uuid=post.uuid).first()
         response = self.client.get(
@@ -163,7 +161,6 @@ def create_comment(client):
     return response
 
 
-# TODO: Login 해주는 method 별도로 만들고
 class LoginTestCase(TestCase):
     def test_login(self):
         create_user()
@@ -191,6 +188,9 @@ class PostCreateViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['post'].title, form_data['title'])
 
+        # Draft 글 있는지 검사
+        self.assertEqual(response.context['post'].draft, True)
+    
 
 class PostUpdateViewTests(TestCase):
     def test_is_form_valid(self):
@@ -201,6 +201,13 @@ class PostUpdateViewTests(TestCase):
         }
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
+        
+        post_uuid=response.context['post'].uuid
+        post = Post.objects.filter(uuid=post_uuid).first()
+        response = self.client.get(
+            reverse('post_edit', args=(post.uuid,)))
+        self.assertEqual(response.context['post'], post)
+
         uuid = response.context['post'].uuid
         form_data = {
             'title': '수정 test용 title',
@@ -213,52 +220,62 @@ class PostUpdateViewTests(TestCase):
 
 
 class DraftIndexViewTests(TestCase):
-    def test_is_draft(self):
+    def test_is_draft_when_create_post(self):
         create_user_and_sign_in(self.client)
         response = self.client.get(reverse('post_draft_list'))
         self.assertEqual(response.status_code, 200)
-
-        # draft에 글 없는지 검사
         self.assertQuerysetEqual(response.context['posts'], [])
 
-        # draft 글 생성
+    def test_is_draft_when_create_and_edit_post(self):
+        create_user_and_sign_in(self.client)
+        form_data = {
+            'title': 'draft test용 title',
+            'text': '음하하하 이것은 draft 테스트입니다.', 
+        }
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True)
+        response = self.client.get(reverse('post_draft_list'))
+        post = response.context['posts'].first()
+        self.assertEqual(post.draft, True)
+
+    def test_is_not_draft_when_publish_post(self):
+        create_user_and_sign_in(self.client)
         form_data = {
             'title': 'draft test용 title',
             'text': '음하하하 이것은 draft 테스트입니다.'
         }
         response = self.client.post(
-            reverse('post_new'), form_data, follow=True
-        )
-        # client = Client()
-        # draft에 글 있는지 검사 && post_list에는 없는지 검사
-        response = self.client.get(reverse('post_draft_list'))
-        post = response.context['posts'].first()
-        self.assertEqual(post.title, form_data['title'])
-        self.assertEqual(post.text, form_data['text'])
-        uuid = post.uuid
-
-        response = self.client.get(reverse('post_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['posts'], [])
-
-        # publish
+            reverse('post_new'), form_data, follow=True)
+        uuid = response.context['post'].uuid
         response = self.client.get(
-            reverse('post_publish', args=(uuid,)), follow=True)  # Redirect 되기 때문에
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(post.title, form_data['title'])
-        self.assertEqual(post.text, form_data['text'])
-
-        # draft에는 글 없는지 검사 && post_list에는 있는지 검사
+            reverse('post_publish', args=(uuid,)), follow=True)
         response = self.client.get(reverse('post_draft_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['posts'], [])
+        draft = response.context['posts'].first()
+        self.assertEqual(draft, None)
 
-        response = self.client.get(reverse('post_list'))
-        self.assertEqual(response.status_code, 200)
-        post = response.context['posts'].first()
-        self.assertEqual(post.title, form_data['title'])
-        self.assertEqual(post.text, form_data['text'])
-
+    def test_is_not_draft_when_publish_and_edit(self):
+        create_user_and_sign_in(self.client)
+        form_data = {
+            'title': 'draft test용 타이틀입니다. 플스 타이틀 아님.',
+            'text': '여기는 테라로사. 건조하다. 춥고.'
+        } 
+        response = self.client.post(
+            reverse('post_new'), form_data, follow=True)
+        uuid = response.context['post'].uuid
+        response = self.client.get(
+            reverse('post_publish', args=(uuid,)), follow=True)
+        form_data = {
+            'title': '수정된 draft test용 타이틀',
+            'text': '여기는 테라로사. 건조하다. 춥고. 레모네이드를 시켰다. 얼어죽어도 아이슨가.'
+        }
+        response = self.client.post(
+            reverse('post_edit', args=(uuid,)), form_data, follow=True)
+        response = self.client.get(
+            reverse('post_publish', args=(uuid,)), follow=True)
+        response = self.client.get(reverse('post_draft_list'))
+        draft = response.context['posts'].first()
+        self.assertEqual(draft, None)
+        
 
 class PostRemoveRedirectViewTests(TestCase):
     def test_delete_post(self):
@@ -305,9 +322,7 @@ class CommentApproveRedirectViewTest(TestCase):
 class CommentRemoveRedirectViewTest(TestCase):
     def test_is_comment_removed(self):
         response = create_comment(self.client)
-        # logging.error(response.context)
         comment = Comment.objects.first()
-        # logging.error(comment.pk) # 왜 pk가 3?
         self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse('comment_remove', args=(comment.pk,)), follow=True)
 
@@ -320,5 +335,4 @@ class TagIndexViewTest(TestCase):
         post.save()
         response = self.client.get(reverse('tag_list', args=('java',)))
         self.assertEqual(response.status_code, 200)
-        logging.error(response.context['tag'].title)
         self.assertEqual(response.context['tag'].title, 'java') 
