@@ -9,6 +9,7 @@ from django.utils import timezone
 from .utils import FileValidator, RE_FILENAME_IMG
 # from .utils import FormatterMisaka
 from .utils import FormatterMistune
+from difflib import Differ
 
 # validators
 post_validator = RegexValidator(
@@ -130,8 +131,15 @@ class Revision(models.Model):
                             on_delete=models.CASCADE, related_name='revisions')
     title = models.CharField(max_length=200, help_text='제목을 입력하세요', null=True) 
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    text = models.TextField()
+    original_text = models.TextField(default='')
+    current_text = models.TextField(default='')
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.text
+
+    def diff(self):
+        original = self.original_text.splitlines(keepends=True)
+        current = self.current_text.splitlines(keepends=True)
+        d = Differ()
+        return '\n'.join(d.compare(original, current))
