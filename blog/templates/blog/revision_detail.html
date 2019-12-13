@@ -10,6 +10,6 @@
         <h2>{{ current.title }}</h2>
         <p>{{ current.author }}</p>
         <p>{{ current.created_date }}</p>
-        <p>{{ diff | linebreaksbr }}</p>
+        <p>{{ current.diff | safe | linebreaksbr }}</p>
     </div>
 {% endblock %}
