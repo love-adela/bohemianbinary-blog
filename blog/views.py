@@ -121,11 +121,11 @@ class RevisionIndexView(generic.ListView):
         return revisions
 
 
-def diff(original_text, current_text):
-    original = original_text.splitlines(keepends=True)
-    current = current_text.splitlines(keepends=True)
-    d = Differ()
-    return '\n'.join(d.compare(original, current))
+# def diff(original_text, current_text):
+#     original = original_text.splitlines(keepends=True)
+#     current = current_text.splitlines(keepends=True)
+#     d = Differ()
+#     return '\n'.join(d.compare(original, current))
 
 
 class RevisionDetailView(generic.DetailView):
@@ -133,21 +133,21 @@ class RevisionDetailView(generic.DetailView):
     template_name = 'blog/revision_detail.html'
     context_object_name = 'current'
 
-    
+
     def get_object(self):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         post_revisions = Revision.objects.filter(post=post)
         current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
-        self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
-        previous_text = self.previous.text if self.previous is not None else ''
-        self.diff = diff(previous_text, current.text)
+        # self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
+        # previous_text = self.previous.text if self.previous is not None else ''
+        # self.diff = diff(previous_text, current.text)
         return current
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['previous'] = self.previous
-        context['diff'] = self.diff
-        return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['previous'] = self.previous
+    #     context['diff'] = self.diff
+    #     return context
 
 
 class CommentCreateView(LoginRequiredMixin, generic.edit.CreateView):
