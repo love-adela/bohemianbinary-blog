@@ -15,9 +15,7 @@ class IndexView(generic.ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        posts = Post.objects.filter(
-            published_date__lte=timezone.now()).order_by('-published_date')
-        return posts
+        return Post.objects.posts()
 
 
 class DetailView(generic.DetailView):
@@ -26,8 +24,7 @@ class DetailView(generic.DetailView):
     context_object_name = 'post'
 
     def get_object(self):
-        post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
-        return post
+        return Post.objects.detail_post(self.kwargs.get('post_id'))
 
 
 class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
@@ -138,6 +135,7 @@ class RevisionDetailView(generic.DetailView):
         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
         post_revisions = Revision.objects.filter(post=post)
         current = post_revisions.filter(revision_id=self.kwargs.get('revision_id')).first()
+        # manager로 빼기
         # self.previous = post_revisions.filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
         # previous_text = self.previous.text if self.previous is not None else ''
         # self.diff = diff(previous_text, current.text)

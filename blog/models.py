@@ -10,6 +10,8 @@ from .utils import FileValidator, RE_FILENAME_IMG
 # from .utils import FormatterMisaka
 from .utils import FormatterMistune
 
+import logging
+
 # validators
 post_validator = RegexValidator(
     regex='^(?:new|edit|test|preview)*$',
@@ -70,6 +72,26 @@ class Tag(models.Model):
         return self.title
 
 
+class PostQuerySet(models.QuerySet):
+    def posts(self):
+        return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    
+    def detail_post(self, post_id):
+        # return self.filter(uuid=self.kwargs.get('post_id')).first()
+        # logging.error(self.posts().first().uuid)
+        return self.filter(uuid=post_id).first()
+
+class PostManager(models.Manager):
+    def get_queryset(self):
+        return PostQuerySet(self.model, using=self._db)
+    
+    def posts(self):
+        return self.get_queryset().posts()
+    
+    def detail_post(self, post_id):
+        return self.get_queryset().detail_post(post_id)
+
+
 class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE,)
@@ -83,10 +105,13 @@ class Post(models.Model):
     formatter = FormatterMistune()
     draft = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
-
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
+    
+    # Calling Custom QuerySet methods from the manager
+    objects = PostManager()
+    
 
     class Meta:
         ordering = ['-published_date', ]
@@ -124,6 +149,15 @@ class Comment(models.Model):
         return self.text
 
 
+        
+# class PreviousPostManager(models.Manager):
+#     def previous_text(self, uuid):
+#         post = 
+#         return self.filter(post=post)
+        
+# post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+#         post_revisions = Revision.objects.filter(post=post)
+
 class Revision(models.Model):
     revision_id = models.IntegerField(default=1)
     post = models.ForeignKey('blog.Post',
@@ -132,6 +166,17 @@ class Revision(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
+    revisions = models.Manager()
+    # previous_post = PreviousPostManager()
+
 
     def __str__(self):
         return self.text
+    
+    def diff(self):
+        current = self.created_date
+        previous = self.created_date
+        # previous = previous.text.splitlines(keepends=True)
+        # current = current.splitlines(keepends=True)
+        # d = Differ()
+        # return '\n'.join(d.compare(previous, current))
