@@ -64,9 +64,30 @@ except ImportError:
         return tag
 
 
+class TagQuerySet(models.QuerySet):
+    def tags(self):
+        return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    
+    def detail_post(self, post_id):
+        # return self.filter(uuid=self.kwargs.get('post_id')).first()
+        # logging.error(self.posts().first().uuid)
+        return self.filter(uuid=post_id).first()
+
+
+class TagManager(models.Manager):
+    def get_queryset(self):
+        return TagQuerySet(self.model, using=self._db)
+    
+    def tags(self):
+        return self.get_queryset().tags()
+
+
 class Tag(models.Model):
     title = models.CharField(
         max_length=30, unique=True, null=False)
+    
+    # Calling Custom QuerySet methods from the manager
+    objects = PostManager()
 
     def __str__(self):
         return self.title
@@ -80,6 +101,10 @@ class PostQuerySet(models.QuerySet):
         # return self.filter(uuid=self.kwargs.get('post_id')).first()
         # logging.error(self.posts().first().uuid)
         return self.filter(uuid=post_id).first()
+    
+    def drafts(self):
+        return self.filter(draft=True).order_by('-created_date')
+
 
 class PostManager(models.Manager):
     def get_queryset(self):
@@ -91,6 +116,10 @@ class PostManager(models.Manager):
     def detail_post(self, post_id):
         return self.get_queryset().detail_post(post_id)
 
+    def drafts(self):
+        return self.get_queryset().drafts()
+    
+    
 
 class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
