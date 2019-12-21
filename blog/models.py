@@ -64,30 +64,9 @@ except ImportError:
         return tag
 
 
-class TagQuerySet(models.QuerySet):
-    def tags(self):
-        return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
-    
-    def detail_post(self, post_id):
-        # return self.filter(uuid=self.kwargs.get('post_id')).first()
-        # logging.error(self.posts().first().uuid)
-        return self.filter(uuid=post_id).first()
-
-
-class TagManager(models.Manager):
-    def get_queryset(self):
-        return TagQuerySet(self.model, using=self._db)
-    
-    def tags(self):
-        return self.get_queryset().tags()
-
-
 class Tag(models.Model):
     title = models.CharField(
         max_length=30, unique=True, null=False)
-    
-    # Calling Custom QuerySet methods from the manager
-    objects = PostManager()
 
     def __str__(self):
         return self.title
@@ -98,8 +77,6 @@ class PostQuerySet(models.QuerySet):
         return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
     
     def detail_post(self, post_id):
-        # return self.filter(uuid=self.kwargs.get('post_id')).first()
-        # logging.error(self.posts().first().uuid)
         return self.filter(uuid=post_id).first()
     
     def drafts(self):
@@ -137,8 +114,6 @@ class Post(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
-    
-    # Calling Custom QuerySet methods from the manager
     objects = PostManager()
     
 
@@ -178,14 +153,35 @@ class Comment(models.Model):
         return self.text
 
 
-        
-# class PreviousPostManager(models.Manager):
-#     def previous_text(self, uuid):
-#         post = 
-#         return self.filter(post=post)
-        
-# post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
-#         post_revisions = Revision.objects.filter(post=post)
+class RevisionQuerySet(models.QuerySet):
+    def revisions(self, post):
+        return self.filter(post=post)
+
+    def recent_ordered_revisions(self, post):
+        return self.revisions(post).order_by('-created_date')
+
+    def current_revision(self, post, revision_id):
+        return self.revisions(post).filter(revision_id=revision_id).first()
+
+    def previous_revision(self, post, current):
+        return self.revisions(post).filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
+
+
+class RevisionManager(models.Manager):
+    def get_queryset(self):
+        return RevisionQuerySet(self.model, using=self._db)
+    
+    def revisions(self, post):
+        return self.get_queryset().revisions(post) 
+
+    def recent_ordered_revisions(self, post):
+        return self.get_queryset().recent_ordered_revisions(post)
+    
+    def current_revision(self, post, revision_id):
+        return self.get_queryset().current_revision(post, revision_id)
+
+    def previous_revision(self, post, current):
+        return self.get_queryset().previous_revision(post, current)
 
 class Revision(models.Model):
     revision_id = models.IntegerField(default=1)
@@ -195,17 +191,7 @@ class Revision(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
-    revisions = models.Manager()
-    # previous_post = PreviousPostManager()
-
+    objects = RevisionManager()
 
     def __str__(self):
         return self.text
-    
-    def diff(self):
-        current = self.created_date
-        previous = self.created_date
-        # previous = previous.text.splitlines(keepends=True)
-        # current = current.splitlines(keepends=True)
-        # d = Differ()
-        # return '\n'.join(d.compare(previous, current))
