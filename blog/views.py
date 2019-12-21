@@ -132,7 +132,7 @@ class RevisionDetailView(generic.DetailView):
         post = Post.objects.detail_post(self.kwargs.get('post_id'))
         current = Revision.objects.current_revision(post, self.kwargs.get('revision_id'))
         self.previous = Revision.objects.previous_revision(post, current)
-        previous_text = self.previous.text if self.previous is not None else ''
+        previous_text = self.previous.text if self.previous else ''
         self.diff = diff(previous_text, current.text)
         return current
 
