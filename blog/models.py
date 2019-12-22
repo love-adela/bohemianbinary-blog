@@ -10,6 +10,8 @@ from .utils import FileValidator, RE_FILENAME_IMG
 # from .utils import FormatterMisaka
 from .utils import FormatterMistune
 
+import logging
+
 # validators
 post_validator = RegexValidator(
     regex='^(?:new|edit|test|preview)*$',
@@ -70,6 +72,32 @@ class Tag(models.Model):
         return self.title
 
 
+class PostQuerySet(models.QuerySet):
+    def posts(self):
+        return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    
+    def detail_post(self, post_id):
+        return self.filter(uuid=post_id).first()
+    
+    def drafts(self):
+        return self.filter(draft=True).order_by('-created_date')
+
+
+class PostManager(models.Manager):
+    def get_queryset(self):
+        return PostQuerySet(self.model, using=self._db)
+    
+    def posts(self):
+        return self.get_queryset().posts()
+    
+    def detail_post(self, post_id):
+        return self.get_queryset().detail_post(post_id)
+
+    def drafts(self):
+        return self.get_queryset().drafts()
+    
+    
+
 class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE,)
@@ -83,10 +111,11 @@ class Post(models.Model):
     formatter = FormatterMistune()
     draft = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
-
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
+    objects = PostManager()
+    
 
     class Meta:
         ordering = ['-published_date', ]
@@ -124,6 +153,36 @@ class Comment(models.Model):
         return self.text
 
 
+class RevisionQuerySet(models.QuerySet):
+    def revisions(self, post):
+        return self.filter(post=post)
+
+    def recent_ordered_revisions(self, post):
+        return self.revisions(post).order_by('-created_date')
+
+    def current_revision(self, post, revision_id):
+        return self.revisions(post).filter(revision_id=revision_id).first()
+
+    def previous_revision(self, post, current):
+        return self.revisions(post).filter(created_date__lt=current.created_date).filter().order_by('-created_date').first()
+
+
+class RevisionManager(models.Manager):
+    def get_queryset(self):
+        return RevisionQuerySet(self.model, using=self._db)
+    
+    def revisions(self, post):
+        return self.get_queryset().revisions(post) 
+
+    def recent_ordered_revisions(self, post):
+        return self.get_queryset().recent_ordered_revisions(post)
+    
+    def current_revision(self, post, revision_id):
+        return self.get_queryset().current_revision(post, revision_id)
+
+    def previous_revision(self, post, current):
+        return self.get_queryset().previous_revision(post, current)
+
 class Revision(models.Model):
     revision_id = models.IntegerField(default=1)
     post = models.ForeignKey('blog.Post',
@@ -132,6 +191,7 @@ class Revision(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
+    objects = RevisionManager()
 
     def __str__(self):
         return self.text
