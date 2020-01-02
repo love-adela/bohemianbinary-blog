@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+{% block container %}
+
+<h1>회원가입</h1>
+
+<form method="POST"> 
+    {% csrf_token %}
+    {{ signup_form }}
+    <input type="submit" name="Submit"/>
+</form>
+
+{% endblock %}

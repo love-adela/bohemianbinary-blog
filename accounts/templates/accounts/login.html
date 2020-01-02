@@ -1,0 +1,10 @@
+{% extends 'blog/base.html' %}
+{% block container %}
+<h1>로그인</h1>
+
+<form action="POST">
+    {% csrf_token %}
+    {{ login_form }}
+    <input type="submit" value="Submit"/>
+</form>
+{% endblock %}
