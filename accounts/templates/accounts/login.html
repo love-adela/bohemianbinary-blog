@@ -1,10 +1,10 @@
 {% extends 'blog/base.html' %}
-{% block container %}
+{% block content %}
 <h1>로그인</h1>
 
-<form action="POST">
+<form method="POST">
     {% csrf_token %}
-    {{ login_form }}
+    {{ login_form.as_p }}
     <input type="submit" value="Submit"/>
 </form>
 {% endblock %}
