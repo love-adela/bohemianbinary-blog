@@ -8,13 +8,17 @@ from django.views import generic
 
 import logging
 
+
 class AccountCreateView(generic.edit.CreateView):
     def post(self, request):
+        redirect_to = request.GET.get('next', '')
+        if not redirect_to:
+            redirect_to = default.LOGIN_REDIRECT_URL
         signup_form = UserCreationForm(request.POST)
         if signup_form.is_valid():
             user = signup_form.save()
             auth_login(request, user)
-            return redirect('post_list') 
+            return redirect('redirect_to') 
         return render(request, 'accounts/signup.html', {'signup_form':signup_form})
 
     def get(self, request):
@@ -24,10 +28,13 @@ class AccountCreateView(generic.edit.CreateView):
 
 class LoginCreateView(generic.edit.CreateView):
     def post(self, request):
+        redirect_to = request.GET.get('next', '')
+        if not redirect_to:
+            redirect_to = default.LOGIN_REDIRECT_URL
         login_form = AuthenticationForm(request, request.POST)
         if login_form.is_valid():
             auth_login(request, login_form.get_user())
-            return redirect('post_list')
+            return redirect('redirect_to')
         return render(request, 'accounts/login.html', {'login_form': login_form})
 
     def get(self, request):
