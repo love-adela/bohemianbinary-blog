@@ -169,6 +169,7 @@ class LoginTestCase(TestCase):
             'password': '1234'
         }
         response = self.client.get(reverse('post_new'))
+        # FIXME
         # logging.error(response)
         # self.assertContains(response, '/accounts/login/?next=/post/new/')
         response = self.client.post(reverse('login'), credential, follow=True)
