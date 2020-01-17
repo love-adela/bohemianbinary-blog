@@ -45,7 +45,7 @@ class LoginCreateView(generic.edit.CreateView):
 
 class LogoutRedirectView(LoginRequiredMixin, generic.base.RedirectView):
     permanent = False
-    url = '/auth/login/'
+    url = '/login/'
 
     def get(self, request, *args, **kwargs):
         auth_logout(request)
