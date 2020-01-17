@@ -13,8 +13,6 @@ import logging
 class AccountCreateView(generic.edit.CreateView):
     def post(self, request):
         redirect_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
-        if not redirect_url:
-            redirect_url = settings.LOGIN_REDIRECT_URL
         signup_form = UserCreationForm(request.POST)
         if signup_form.is_valid():
             user = signup_form.save()
@@ -30,8 +28,6 @@ class AccountCreateView(generic.edit.CreateView):
 class LoginCreateView(generic.edit.CreateView):
     def post(self, request):
         redirect_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
-        if not redirect_url:
-            redirect_url = settings.LOGIN_REDIRECT_URL
         login_form = AuthenticationForm(request, request.POST)
         if login_form.is_valid():
             auth_login(request, login_form.get_user())
