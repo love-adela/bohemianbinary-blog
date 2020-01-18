@@ -11,6 +11,8 @@ import logging
 
 
 class AccountCreateView(generic.edit.CreateView):
+    success_url = reverse_lazy('/')
+    
     def post(self, request):
         redirect_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
         signup_form = UserCreationForm(request.POST)
@@ -26,6 +28,8 @@ class AccountCreateView(generic.edit.CreateView):
 
 
 class LoginCreateView(generic.edit.CreateView):
+    success_url = '/'
+    
     def post(self, request):
         redirect_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
         login_form = AuthenticationForm(request, request.POST)
@@ -37,12 +41,3 @@ class LoginCreateView(generic.edit.CreateView):
     def get(self, request):
         login_form = AuthenticationForm()
         return render(request, 'accounts/login.html', {'login_form': login_form})
-
-
-class LogoutRedirectView(LoginRequiredMixin, generic.base.RedirectView):
-    permanent = False
-    url = 'accounts/login/'
-
-    def get(self, request, *args, **kwargs):
-        auth_logout(request)
-        return super(LogoutRedirectView, self).get(request, *args, **kwargs)
