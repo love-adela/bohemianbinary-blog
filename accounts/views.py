@@ -45,4 +45,4 @@ class LogoutRedirectView(LoginRequiredMixin, generic.base.RedirectView):
 
     def get(self, request, *args, **kwargs):
         auth_logout(request)
-            return super(LogoutRedirectView, self).get(request, *args, **kwargs)
+        return super(LogoutRedirectView, self).get(request, *args, **kwargs)
