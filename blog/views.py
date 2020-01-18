@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.urls import reverse_lazy
@@ -31,6 +32,7 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Post
     fields = ('title', 'text')
     template_name = 'blog/post_edit.html'
+    login_url = settings.LOGIN_URL
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -51,6 +53,7 @@ class PostUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
     model = Post
     fields = ('title', 'text')
     template_name = 'blog/post_edit.html'
+    login_url = settings.LOGIN_URL
 
     def form_valid(self, form):
         post = form.save(commit=False)
