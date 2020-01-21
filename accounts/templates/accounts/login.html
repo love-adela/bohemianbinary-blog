@@ -4,10 +4,8 @@
 
 <form method="POST">
     {% csrf_token %}
-    <input type="hidden" name="next" value="" />
     {{ login_form.as_p }}
     <button type="submit">로그인</button>
 </form>
-<br>
-<p>아이디가 없으신가요?<a href="{% url 'signup' %}">회원가입</a></p>
+<a href="{% url 'signup' %}"><button>회원가입</button></a>
 {% endblock %}
