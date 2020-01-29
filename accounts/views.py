@@ -1,16 +1,9 @@
-from django.conf import settings
-from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views import generic
-from django import forms
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, LoginForm
 
 
 class AccountCreateView(generic.edit.CreateView):
