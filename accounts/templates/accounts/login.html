@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<h1>로그인</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    <button type="submit">로그인</button>
+</form>
+<a href="{% url 'signup' %}"><button>회원가입</button></a>
+{% endblock %}
