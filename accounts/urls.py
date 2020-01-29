@@ -1,5 +1,4 @@
 from mysite import settings
-from django.conf import settings
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
