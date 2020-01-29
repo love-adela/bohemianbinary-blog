@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.views import LoginView
@@ -50,7 +51,7 @@ class AccountCreateView(generic.edit.CreateView):
 
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
-    
+
     def form_invalid(self, form):
         messages.error(self, request, '로그인에 실패하였습니다.', extra_tags='danger')
         return super().form_invalid(form)
