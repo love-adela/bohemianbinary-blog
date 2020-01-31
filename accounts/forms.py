@@ -1,4 +1,5 @@
 from django import forms
+
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import EmailField
@@ -20,4 +21,4 @@ class CreateUserForm(UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
-    username = EmailField(widget=forms.EmailInput(attrs={'autofocus': True}))
+    email = EmailField(widget=forms.EmailInput(attrs={'autofocus': True}))
