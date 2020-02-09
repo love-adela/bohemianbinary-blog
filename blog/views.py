@@ -28,6 +28,58 @@ class DetailView(generic.DetailView):
         return Post.objects.detail_post(self.kwargs.get('post_id'))
 
 
+# @transaction.atomic
+# class ProfileUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
+#     model = Profile
+#     fields = ('bio', 'location')
+#     template_name = 'blog/profile.html'
+
+#     def update_profile(request):
+#         if request.method == 'POST':
+#             user_form = UserForm(request.POST, instance=request.user)
+#             profile_form = ProfileForm(requeset.POST, instance=request.user.profile)
+#             if user_form.is_valid() and profile_form.is_valid():
+#                 user_form.save()
+#                 profile_form.save()
+#                 messages.success(request, _('Your profile was successfully updated!'))
+#                 return redirect('settings:profile')
+#             else:
+#                 messages.error(request, _('다시 입력하세요.'))
+#         else:
+#             user_form = UserForm(instance=request.user)
+#             profile_form = ProfileForm(instance=request.user.profile)
+#         return render(request, 'profiles/profile.html', {
+#             'user_form': user_form,
+#             'profile_form': profile_form
+#         })
+
+#     def form_valid(self, form):
+#         post = form.save(commit=False)
+#         post.author = self.request.user
+#         # TODO : self.request.user != author일 경우 에러 발생시키기
+#         post.save()
+#         last_revision = Revision.objects.filter(post_id=post.pk) \
+#                                 .order_by('-revision_id').first()
+#         new_revision_id = last_revision.revision_id + 1
+#         post.draft = True
+#         Revision.objects.create(revision_id=new_revision_id,
+#                                 title=post.title,
+#                                 post=post,
+#                                 author=post.author,
+#                                 text=post.text,
+#                                 created_date=timezone.now())
+#         return redirect('post_detail', post_id=post.uuid)
+
+#     def get_object(self):
+#         post = Post.objects.filter(uuid=self.kwargs.get('post_id')).first()
+#         user = User.objects.all().select_related('profile'
+#         if len(post.revisions.all()) == 0:
+#             Revision.objects.create(post=post,
+#                                     author=post.author,
+#                                     text=post.text,
+#                                     created_date=post.created_date)
+#         return post
+
 class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Post
     fields = ('title', 'text')

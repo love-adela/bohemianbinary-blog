@@ -2,7 +2,11 @@ import os
 import uuid
 
 from django.core.validators import RegexValidator
+from django.contrib import admin
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 # from .utils import MarkdownRenderer
@@ -72,6 +76,23 @@ class Tag(models.Model):
         return self.title
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+        
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
 class PostQuerySet(models.QuerySet):
     def posts(self):
         return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
@@ -100,9 +121,12 @@ class PostManager(models.Manager):
 
 class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE,)
-    last_contributor = models.ForeignKey('auth.User', on_delete=models.CASCADE,
-                                        null=True, related_name='last_contributor')
+    # author = models.ForeignKey('auth.User', on_delete=models.CASCADE,)
+    author = models.ForeignKey('blog.Profile', on_delete=models.CASCADE,)
+    # last_contributor = models.ForeignKey('auth.User', on_delete=models.CASCADE,
+                                        # null=True, related_name='last_contributor')
+    last_contributor = models.ForeignKey('blog.Profile', on_delete=models.CASCADE,
+                                         null=True, related_name='last_contributor')                                    
     title = models.CharField(max_length=200, help_text='제목을 입력하세요.')
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
     # Here are Markdown Parsers
@@ -188,7 +212,8 @@ class Revision(models.Model):
     post = models.ForeignKey('blog.Post',
                             on_delete=models.CASCADE, related_name='revisions')
     title = models.CharField(max_length=200, help_text='제목을 입력하세요', null=True) 
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    # author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    author = models.ForeignKey('blog.Profile', on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     objects = RevisionManager()
