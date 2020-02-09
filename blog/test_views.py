@@ -2,6 +2,8 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest
 from django.test import TestCase, RequestFactory
+from factory import Sequence, SubFactory
+from factory.django import DjangoModelFactory
 
 import factory
 
@@ -90,8 +92,9 @@ class PostDetailViewTest(TestCase):
             'post_detail.html',
             {'error': 'The book was not found or you do not have permission to access the post.'}
             )
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(respone.content.decode('utf-8'), rendered)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(respone.content.decode('utf-8'), rendered)
+
 # class DraftIndexViewTests(TestCase):
 #     def setUp(self):
 #         self.factory = RequestFactory()
