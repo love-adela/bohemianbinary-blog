@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm, CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple
 
 from .models import Post, Comment, Image
 
