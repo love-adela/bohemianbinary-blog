@@ -20,3 +20,10 @@ class UserLoginView(LoginView):
     def form_invalid(self, form):
         messages.error(self.request, '로그인에 실패하였습니다.', extra_tags='danger')
         return super().form_invalid(form)
+
+    def get_redirect_url(self):
+        url = super().get_redirect_url()
+        if url == reverse_lazy('login') or url == reverse_lazy('signup'):
+            return ''
+        else:
+            return url
