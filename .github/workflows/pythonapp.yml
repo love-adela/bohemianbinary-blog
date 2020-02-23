@@ -6,22 +6,12 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.7
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
-    - name: Set up MySql stuff.
-      run: |
-        sudo apt-get update
-        sudo apt-get install libmysqlclient-dev
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -35,5 +25,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Django test
       run: |
-        python manage.py migrate --setting=mysite.settings.unittest
-        python manage.py test --setting=mysite.settings.unittest
+        python manage.py migrate --settings=mysite.settings.unittest
+        python manage.py test --settings=mysite.settings.unittest
