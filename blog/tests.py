@@ -1,13 +1,10 @@
-import datetime
-
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 from .models import Image, Tag, Post, Comment, upload_to
 
 from .utils import FormatterMistune
-import logging
 
 
 class ImageModelTests(TestCase):
@@ -20,8 +17,8 @@ class ImageModelTests(TestCase):
         Tag.objects.create(title='이미지가아님')
         t1 = Tag.objects.first()
         try:
-            fake_image = upload_to(t1, 'img/fake.jpg')
-        except:
+            upload_to(t1, 'img/fake.jpg')
+        except NotImplementedError:
             pass
 
 
@@ -39,13 +36,17 @@ def create_user():
     """
     author 초기화
     """
-    author = User.objects.create(username='testuser')
+    author = User.objects.create(
+        username='testuser',
+        email='example@example.com',)
     author.set_password('1234')
     author.save()
     return author
 
     # username 에 admin이 들어가있지 않는지 validation
-    # username 형식도 테스트 - URL에 쓸 수 있는 형식으로 이메일에 '/'가 들어가야하는지, username이 url의 일부로 쓰이는지.
+    # username 형식도 테스트
+    # - URL에 쓸 수 있는 형식으로 이메일에 '/'가 들어가야하는지
+    # - username이 url의 일부로 쓰이는지.
 
 
 def create_post(title=None, text=None, days=None):
@@ -149,7 +150,6 @@ def create_comment(client):
     response = client.post(
         reverse('post_new'), post_form_data, follow=True
     )
-    
     uuid = response.context['post'].uuid
     comment_form_data = {
         'author': 'polyglot',
@@ -166,12 +166,9 @@ class LoginTestCase(TestCase):
         create_user()
         credential = {
             'username': 'testuser',
-            'password': '1234'
+            'password': '1234',
         }
         response = self.client.get(reverse('post_new'))
-        # FIXME
-        # logging.error(response)
-        # self.assertContains(response, '/accounts/login/?next=/post/new/')
         response = self.client.post(reverse('login'), credential, follow=True)
         response = self.client.get(reverse('post_new'))
         self.assertTrue(response.context['user'].is_active)
@@ -204,7 +201,7 @@ class PostUpdateViewTests(TestCase):
         response = self.client.post(
             reverse('post_new'), form_data, follow=True)
 
-        post_uuid=response.context['post'].uuid
+        post_uuid = response.context['post'].uuid
         post = Post.objects.filter(uuid=post_uuid).first()
         response = self.client.get(
             reverse('post_edit', args=(post.uuid,)))
@@ -337,4 +334,4 @@ class TagIndexViewTest(TestCase):
         post.save()
         response = self.client.get(reverse('tag_list', args=('java',)))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['tag'].title, 'java') 
+        self.assertEqual(response.context['tag'].title, 'java')
