@@ -25,5 +25,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Django test
       run: |
-        python manage.py migrate --setting=mysite.settings.unittest
-        python manage.py test --setting=mysite.settings.unittest
+        python manage.py migrate --settings=mysite.settings.unittest
+        python manage.py test --settings=mysite.settings.unittest
