@@ -4,7 +4,8 @@
 <h1>회원가입</h1>
 <form method="POST"> 
     {% csrf_token %}
-    {{ signup_form.as_p }}
+    <input type="hidden" name="next" value="" />
+    {{ form.as_p }}
     <input type="submit" value="회원가입">
 </form>
 {% endblock %}
