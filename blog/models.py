@@ -10,8 +10,6 @@ from .utils import FileValidator, RE_FILENAME_IMG
 # from .utils import FormatterMisaka
 from .utils import FormatterMistune
 
-import logging
-
 # validators
 post_validator = RegexValidator(
     regex='^(?:new|edit|test|preview)*$',
@@ -22,11 +20,14 @@ post_validator = RegexValidator(
 image_validator = FileValidator(
     restricted_basename=False,
     allowed_extensions=('jpg', 'png', 'svg', 'gif'),
-    allowed_mimetypes=('image/jpeg', 'image/png', 'image/svg', 'image/svg+xml', 'image/gif'),
+    allowed_mimetypes=('image/jpeg', 'image/png',
+                       'image/svg', 'image/svg+xml', 'image/gif'),
 )
 image_filename_validator = RegexValidator(
     regex=RE_FILENAME_IMG,
-    message="Please use a filename using lowercase letters, digits and underscores. Valid extensions are: 'jpg', 'png', 'svg' or 'gif'",
+    message="Please use a filename using lowercase letters,"
+            "digits and underscores."
+            "Valid extensions are: 'jpg', 'png', 'svg' or 'gif'",
     code='invalid_name',
     inverse_match=True,
 )
@@ -36,8 +37,9 @@ def upload_to(model, filename):
     if isinstance(model, Image):
         prefix = 'img/'
     else:
-        raise NotImplementedError("upload_to is only implemented for Image models")
-    ext = os.path.splitext(filename)[1].lower() # e.g. 'photo.JPG' -> '.jpg'
+        raise NotImplementedError(
+            "upload_to is only implemented for Image models")
+    ext = os.path.splitext(filename)[1].lower()  # e.g. 'photo.JPG' -> '.jpg'
     filepath = f'{prefix}{uuid.uuid4()}{ext}'
     return filepath
 
@@ -75,10 +77,10 @@ class Tag(models.Model):
 class PostQuerySet(models.QuerySet):
     def posts(self):
         return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
-    
+
     def detail_post(self, post_id):
         return self.filter(uuid=post_id).first()
-    
+
     def drafts(self):
         return self.filter(draft=True).order_by('-created_date')
 
@@ -86,23 +88,22 @@ class PostQuerySet(models.QuerySet):
 class PostManager(models.Manager):
     def get_queryset(self):
         return PostQuerySet(self.model, using=self._db)
-    
+
     def posts(self):
         return self.get_queryset().posts()
-    
+
     def detail_post(self, post_id):
         return self.get_queryset().detail_post(post_id)
 
     def drafts(self):
         return self.get_queryset().drafts()
-    
-    
+
 
 class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE,)
     last_contributor = models.ForeignKey('auth.User', on_delete=models.CASCADE,
-                                        null=True, related_name='last_contributor')
+                                         null=True, related_name='last_contributor')
     title = models.CharField(max_length=200, help_text='제목을 입력하세요.')
     text = models.TextField(help_text='무슨 생각을 하고 계세요?')
     # Here are Markdown Parsers
@@ -115,7 +116,6 @@ class Post(models.Model):
     published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
     objects = PostManager()
-    
 
     class Meta:
         ordering = ['-published_date', ]
@@ -139,7 +139,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(
+        'blog.Post', on_delete=models.CASCADE, related_name='comments')
     author = models.CharField(max_length=200)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
@@ -170,24 +171,25 @@ class RevisionQuerySet(models.QuerySet):
 class RevisionManager(models.Manager):
     def get_queryset(self):
         return RevisionQuerySet(self.model, using=self._db)
-    
+
     def revisions(self, post):
-        return self.get_queryset().revisions(post) 
+        return self.get_queryset().revisions(post)
 
     def recent_ordered_revisions(self, post):
         return self.get_queryset().recent_ordered_revisions(post)
-    
+
     def current_revision(self, post, revision_id):
         return self.get_queryset().current_revision(post, revision_id)
 
     def previous_revision(self, post, current):
         return self.get_queryset().previous_revision(post, current)
 
+
 class Revision(models.Model):
     revision_id = models.IntegerField(default=1)
     post = models.ForeignKey('blog.Post',
-                            on_delete=models.CASCADE, related_name='revisions')
-    title = models.CharField(max_length=200, help_text='제목을 입력하세요', null=True) 
+                             on_delete=models.CASCADE, related_name='revisions')
+    title = models.CharField(max_length=200, help_text='제목을 입력하세요', null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)

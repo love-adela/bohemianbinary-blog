@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Image, Comment, Post, Tag
-from .forms import ImageForm
 
 # Register your models here.
 admin.site.register(Comment)

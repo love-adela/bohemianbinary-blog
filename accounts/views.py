@@ -1,9 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import CreateUserForm, LoginForm
+from .forms import CreateUserForm
 
 
 class AccountCreateView(generic.edit.CreateView):
@@ -13,7 +14,7 @@ class AccountCreateView(generic.edit.CreateView):
 
 
 class UserLoginView(LoginView):
-    authentication_form = LoginForm
+    authentication_form = AuthenticationForm
     template_name = 'accounts/login.html'
 
     def form_invalid(self, form):

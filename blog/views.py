@@ -1,13 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import Post, Tag, Comment, Revision
-from .forms import PostForm, CommentForm
-import logging
 from difflib import Differ
 
 
@@ -39,12 +36,12 @@ class PostCreateView(LoginRequiredMixin, generic.edit.CreateView):
         post.author = self.request.user
         post.draft = True
         post.save()
-        revision = Revision.objects.create(title=post.title,
-                                           post=post,
-                                           author=post.author,
-                                           text=post.text,
-                                           created_date=post.created_date,
-                                           )
+        Revision.objects.create(title=post.title,
+                                post=post,
+                                author=post.author,
+                                text=post.text,
+                                created_date=post.created_date,
+                                )
 
         return redirect('post_detail', post_id=post.uuid)
 
@@ -130,10 +127,10 @@ class RevisionDetailView(generic.DetailView):
     template_name = 'blog/revision_detail.html'
     context_object_name = 'current'
 
-
     def get_object(self):
         post = Post.objects.detail_post(self.kwargs.get('post_id'))
-        current = Revision.objects.current_revision(post, self.kwargs.get('revision_id'))
+        current = Revision.objects.current_revision(
+            post, self.kwargs.get('revision_id'))
         self.previous = Revision.objects.previous_revision(post, current)
         previous_text = self.previous.text if self.previous else ''
         self.diff = diff(previous_text, current.text)
