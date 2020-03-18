@@ -3,9 +3,11 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Adela Chung{% endblock %}</title>
+        <title>{% block title %}Bohemian{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/highlight.css' %}"/>
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR|Do+Hyeon|Nanum+Gothic|Roboto&display=swap" rel="stylesheet"> 
         <meta name="author" content="Adela Chung">
 
         <meta name="description" content="Blog for Adela">
@@ -13,45 +15,41 @@
     </head>
     <body>
         <!-- header -->
-        <div class="header">
-            <div class="header-list">
-                <ul>
-                    <li class="header-name">
-                        <a href="/"><h1>Adela</h1></a>
-                    </li>
-                    <li><a href="/"><h2>정지윤</h2></a></li>
-                    <li class="header-week">
-                        <h3>Week 1</h3>
-                    </li>
-                    <li class="header-date">
-                        <h3>August 2019</h3>
-                    </li>
-                    <li class="header-search">
-                        <button>검색</button>
-                    </li>
-                    <li class="header-options">
-                        <button>최신순</button>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="header-add-post">
-                        {% if not user.is_authenticated %}
-                        <a href="{% url 'signup' %}"><button>회원가입</button></a>
-                        {% endif %}
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'post_new' %}"><button>글 쓰기</button></a>
-                        <a href="{% url 'post_draft_list' %}"><button>작성하던 글 목록</button></a>
-                        <p>Signed in as {{ user.username }}<a href="{% url 'logout' %}"><button>Log out</button></a></p>
-                        {% else %}
-                        <a href="{% url 'login' %}?next={{request.path}}"><button>로그인</button></a>
-                        {% endif %}
-                    </li>
-                    <li class="header-profile">
-                        <div><img src=""></div>
-                    </li>
-                </ul>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="/"><h1 class="navbar-title">Bohemian</h1></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="true" aria-labeel="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="navbar" class="navbar-collapse collapse show" style="">
+                    <form class="form-inline my-2 my-md-0">
+                        <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                    </form>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            {% if not user.is_authenticated %}
+                            <a href="{% url 'signup' %}"><button>회원가입</button></a>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'post_new' %}"><button>글 쓰기</button></a>
+                            <a href="{% url 'post_draft_list' %}"><button>작성하던 글 목록</button></a>
+                            <a id="dropdown" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{{ user.username }}</a>
+                            <div class="dropdown-menu show" aria-labelledby="dropdown"> <!-- JQuery 사용해서 열어야 함-->
+                                <a href="#">Profile</a>
+                                <a href="{% url 'logout' %}">Log out</a>
+                            </div>
+                            {% else %} 
+                            <a href="{% url 'login' %}?next={{request.path}}"><button>로그인</button></a>
+                            {% endif %}
+                        </li>
+                        <li class="nav-item active">
+                            <button>최신순</button>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </nav>
+        <hr>
         <div class="layout-wrapper">
         <!-- main : post list -->
         {% block content %}

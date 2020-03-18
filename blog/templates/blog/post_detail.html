@@ -34,7 +34,7 @@
                         <a href="{% url 'comment_approve' pk=comment.pk %}"><button>댓글 승인</button></a>
                     {% endif %}
                 </div>
-                <strong>{{ comment.author }}</strong>
+                <strong>📬 {{ comment.author }}</strong>
                 <p>{{ comment.text|linebreaks }}</p>
             </div>
             {% endif %}
