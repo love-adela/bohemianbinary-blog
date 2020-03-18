@@ -4,23 +4,31 @@
 
 {% block content %}
     {% for post in posts %}
-    <main>
+    <main class="posts">
         <div class="post-list">
-            <hr>
+            <!-- <hr class="post-bar"> -->
             <div class="post-lst">
-                <h2><a href="{% url 'post_detail' post_id=post.uuid %}">{{ post.title }}</a></h2>
-                <a href="{% url 'revision_list' post_id=post.uuid %}"><button>수정 내역</button></a>
-                <p>published: {{ post.published_date }}</p>
-                <p>
-                    {{ post.formatted_text | safe | linebreaksbr }}
-                </p>
+                <div class="post-title">
+                    <h2><a href="{% url 'post_detail' post_id=post.uuid %}">✏️ {{ post.title }}</a></h2>
+                </div>
+                <div class="post-history">
+                    <a href="{% url 'revision_list' post_id=post.uuid %}"><button>수정 내역</button></a>
+                </div>
+                <div class="post-date">
+                    <p>published: {{ post.published_date }}</p>
+                </div>
+                <div class="post-text">
+                    <p>
+                        {{ post.formatted_text | safe | linebreaksbr }}
+                    </p>
+                </div>
 
                 {% for image in post.image_set.all %}
                     <div>
                         <p>{{ image.file.url }}</p>> <!-- image 파일 크기 수정 후 <img src=''>로 수정-->
                     </div>
                 {% endfor %}
-                <a href="{% url 'post_detail' post_id=post.uuid %}">Comments: {{ post.approved_comments.count }}</a>
+                <a href="{% url 'post_detail' post_id=post.uuid %}">📬Comments: {{ post.approved_comments.count }}</a>
                 <div class="tag-list">
                     {% if post.tags.count %}
                         <h3>Tags</h3>

@@ -1,19 +1,23 @@
 body {
-    margin-left: 50px;
-    margin-right: 100px; 
-    padding-top: 50px;  
+  margin-left: 50px;
+  margin-right: 100px; 
+  padding-top: 50px;  
+
+  font-family: 'Noto+Sans+KR','Nanum Gothic','Roboto', sans-serif;
   
-    /* style */
-    color: #111;
+
+  /* style */
+  color: #111;
+
+  /* font */
+  font-size: 100%;
   
-    /* font */
-    font-size: 100%;
-  
-  }
+}
 
   p {
-    text-align: justify;
-  }
+  text-align: left;
+  font-weight: 400;
+}
 
 .layout-wrapper {
   display: flex;
@@ -30,9 +34,39 @@ ul {
 
 
 a {
-  text-decoration: inherit; /* no underline */
+  text-decoration: none;
+  color: #111;
 }
 
+a:hover {
+  text-decoration: none;
+  color: #86e394;
+  cursor: pointer;
+}
+.navbar-title {
+  font-family: 'Do Hyeon', sans-serif;
+  color: #86e394;
+}
 .comment {
   margin: 20px 0px 20px 20px;
+}
+.posts {
+  padding: 40px 40px;
+  border-top: 1px solid #86e394;
+}
+
+.post-title {
+  padding: 10px 10px;
+}
+
+.post-history {
+  padding: 10px 10px;
+}
+
+.post-date {
+  padding: 10px 10px;
+}
+
+.post-text {
+  padding: 10px 10px;
 }
